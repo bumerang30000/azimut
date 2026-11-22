@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a0a1c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Азимут — технический разбор</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23171436'/%3E%3Cpath d='M12 44 24 28l9 9 19-21' fill='none' stroke='%23c9a7ff' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/lightweight-charts@4.1.3/dist/lightweight-charts.standalone.production.js" onerror="var s=document.createElement('script');s.src='https://unpkg.com/lightweight-charts@4.1.3/dist/lightweight-charts.standalone.production.js';document.head.appendChild(s)"></script>
+<style>
+:root{color-scheme:dark;--ink:#eef0ff;--mut:rgba(226,230,255,.62);--line:rgba(255,255,255,.13);--up:#3ee6b0;--dn:#ff5f7e;--side:#9fb3ff;--acc:#c9a7ff;--r:22px}
+*{box-sizing:border-box;min-width:0}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100vh;color:var(--ink);font:16px/1.55 Onest,system-ui,-apple-system,sans-serif;background:#07071a;overflow-x:clip;font-variant-numeric:tabular-nums}
+.sky{position:fixed;inset:0;z-index:-1;overflow:hidden;background:radial-gradient(120% 80% at 50% 0%,#141138 0%,#07071a 60%)}
+.sky i{position:absolute;border-radius:50%;filter:blur(70px);opacity:.55;animation:drift 26s ease-in-out infinite alternate}
+.sky i:nth-child(1){width:52vmax;height:52vmax;left:-14vmax;top:-18vmax;background:#5b3cff}
+.sky i:nth-child(2){width:40vmax;height:40vmax;right:-12vmax;top:8vmax;background:#00b3ff;opacity:.38;animation-delay:-8s}
+.sky i:nth-child(3){width:46vmax;height:46vmax;left:20vmax;bottom:-26vmax;background:#ff3d9a;opacity:.3;animation-delay:-15s}
+@keyframes drift{to{transform:translate3d(6vmax,4vmax,0) scale(1.08)}}
+@media (prefers-reduced-motion:reduce){.sky i{animation:none}.spin{animation:none!important}}
+.glass{background:linear-gradient(140deg,rgba(255,255,255,.11),rgba(255,255,255,.035));-webkit-backdrop-filter:blur(22px) saturate(160%);backdrop-filter:blur(22px) saturate(160%);border:1px solid var(--line);border-radius:var(--r);box-shadow:0 18px 50px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.16)}
+.wrap{max-width:1240px;margin:0 auto;padding:max(18px,env(safe-area-inset-top)) max(4vw,14px) max(28px,env(safe-area-inset-bottom))}
+.top{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.logo{width:38px;height:38px;flex:none}
+.top b{font-size:20px;font-weight:700;letter-spacing:-.01em}.top span{color:var(--mut);font-size:14px}
+form{display:flex;gap:8px;padding:7px;border-radius:999px}
+form input{flex:1;background:transparent;border:0;color:var(--ink);font:600 18px Onest,sans-serif;padding:10px 6px 10px 14px;outline:none;text-transform:uppercase}
+form input::placeholder{color:var(--mut);text-transform:none;font-weight:400}
+.go{border:0;border-radius:999px;padding:0 22px;min-height:46px;font:600 16px Onest,sans-serif;color:#120b2a;background:linear-gradient(135deg,#e3d2ff,#9fd8ff);cursor:pointer}
+.go:focus-visible,button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid #9fd8ff;outline-offset:2px}
+#quick{display:flex;gap:8px;overflow-x:auto;padding:12px 2px 4px;scrollbar-width:none}#quick::-webkit-scrollbar{display:none}
+.chip,.tf{flex:none;border:1px solid var(--line);background:rgba(255,255,255,.06);color:var(--ink);border-radius:999px;padding:0 14px;min-height:36px;font:500 14px Onest,sans-serif;cursor:pointer}
+.chip.on,.tf.on{background:rgba(201,167,255,.22);border-color:rgba(201,167,255,.55)}
+.tf:disabled{opacity:.35}
+.status{margin-top:16px;padding:16px 18px;display:flex;gap:12px;align-items:center;color:var(--mut)}
+.status.err{color:#ffd0da;border-color:rgba(255,95,126,.4)}
+.spin{width:18px;height:18px;flex:none;border-radius:50%;border:2px solid rgba(255,255,255,.2);border-top-color:var(--acc);animation:sp 1s linear infinite}@keyframes sp{to{transform:rotate(1turn)}}
+#out{margin-top:18px;display:grid;gap:14px}
+.board{padding:16px 16px 10px}
+#hero{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
+.h-id h2{margin:4px 0 0;font-size:clamp(26px,5vw,40px);line-height:1.05;letter-spacing:-.02em}
+.h-id p{margin:2px 0 0;color:var(--mut);font-size:14px}
+.badge{display:inline-block;font-size:13px;color:var(--acc);background:rgba(201,167,255,.12);border:1px solid rgba(201,167,255,.3);padding:2px 10px;border-radius:999px}
+.h-px{text-align:right}.h-px b{display:block;font-size:clamp(26px,5vw,40px);line-height:1.05;letter-spacing:-.02em;white-space:nowrap}
+.h-px span{font-size:14px;white-space:nowrap}
+.pos{color:var(--up)}.neg{color:var(--dn)}
+.bar{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin:14px 0 8px}
+.bar>div{display:flex;gap:6px;flex-wrap:wrap}
+#chart{height:min(62vh,560px);min-height:340px;margin:0 -6px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;color:var(--mut);font-size:13px;padding:8px 2px 2px}
+.legend i{display:inline-block;width:16px;height:0;border-top:2px solid;vertical-align:middle;margin-right:6px}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
+.card{padding:18px}
+.card h4{margin:0 0 10px;font-size:17px;font-weight:600}
+.mut{color:var(--mut);font-size:14px;margin:6px 0}
+.verdict .kick{font-size:13px;color:var(--mut)}
+.verdict h3{margin:6px 0 14px;font-size:clamp(22px,3.6vw,32px);line-height:1.12;letter-spacing:-.015em;text-wrap:balance}
+.verdict.up h3{color:#c8ffec}.verdict.down h3{color:#ffd3dc}
+.tri{display:flex;height:12px;border-radius:999px;overflow:hidden;background:rgba(255,255,255,.07)}
+.tri i{display:block;height:100%}.tri .u,.dot.u{background:var(--up)}.tri .s,.dot.s{background:var(--side)}.tri .d,.dot.d{background:var(--dn)}
+.tri-l{display:flex;gap:16px;flex-wrap:wrap;font-size:14px;margin-top:8px}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:middle;flex:none}
+.mtf{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:16px}
+.mtf>div{padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08)}
+.mtf>div.cur{border-color:rgba(201,167,255,.5)}
+.mtf small{display:block;color:var(--mut);font-size:13px}.mtf b{display:block;font-size:15px}.mtf span{display:block;font-size:13px;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#scen{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr))}
+.sc header{display:flex;justify-content:space-between;align-items:baseline;color:var(--mut);font-size:13px}
+.sc header b{font-size:26px;color:var(--ink)}
+.sc.up header b{color:var(--up)}.sc.down header b{color:var(--dn)}.sc.side header b{color:var(--side)}
+.sc h4{margin:4px 0 6px}.sc p{margin:0 0 12px;color:var(--mut);font-size:14px}
+.sc ul,.ladder,.fibl,.mas,.nl,.dots{list-style:none;margin:0;padding:0}
+.sc li{display:grid;grid-template-columns:4.6em 1fr auto;gap:2px 8px;padding:8px 0;border-top:1px solid rgba(255,255,255,.08);font-size:15px}
+.sc li b{white-space:nowrap}.sc li em{font-style:normal;color:var(--mut);white-space:nowrap;text-align:right}
+.sc li small{grid-column:2/4;color:var(--mut);font-size:13px}.sc li span{color:var(--mut)}
+.sc li.inv b{color:#fff}
+.ladder li{display:grid;grid-template-columns:3.4em 1fr auto;gap:0 10px;align-items:baseline;padding:8px 10px;border-radius:12px;font-size:15px}
+.ladder li small{grid-column:2/4;color:var(--mut);font-size:13px}
+.ladder li span{font-weight:600}.ladder li em{font-style:normal;color:var(--mut);white-space:nowrap}
+.ladder .r span{color:var(--dn)}.ladder .s span{color:var(--up)}
+.ladder .now{background:rgba(201,167,255,.16);border:1px solid rgba(201,167,255,.35);margin:4px 0}
+.fibl li{display:grid;grid-template-columns:3.4em 1fr auto;gap:10px;align-items:center;padding:5px 0;font-size:14px;color:var(--mut)}
+.fibl li i{height:4px;border-radius:4px;background:rgba(255,214,120,.25);width:var(--w)}
+.fibl li.key{color:var(--ink)}.fibl li.key i{background:rgba(255,214,120,.7)}.fibl li.ext span{color:#ffb45a}
+.fibl b{white-space:nowrap;font-weight:500}
+.big{font-size:18px;font-weight:600;margin:0 0 10px}
+.meter{height:8px;border-radius:8px;background:rgba(255,255,255,.08);overflow:hidden}.meter i{display:block;height:100%;background:linear-gradient(90deg,#9fd8ff,#c9a7ff)}
+.dots{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.dots li{padding:6px 10px;border-radius:12px;background:rgba(201,167,255,.1);border:1px solid rgba(201,167,255,.25);font-size:14px}
+.dots b{color:var(--acc);margin-right:6px}
+.rsi{display:grid;grid-template-columns:4.4em 1fr 2.4em;gap:10px;align-items:center;margin-bottom:10px;font-size:14px}
+.rbar{position:relative;height:8px;border-radius:8px;background:linear-gradient(90deg,var(--up) 0 30%,rgba(255,255,255,.12) 30% 70%,var(--dn) 70%)}
+.rbar i{position:absolute;top:-4px;width:4px;height:16px;border-radius:2px;background:#fff;transform:translateX(-50%)}
+.rsi b{text-align:right}
+.mas li{display:grid;grid-template-columns:8em 1fr auto;gap:8px;padding:7px 0;border-top:1px solid rgba(255,255,255,.08);font-size:14px}
+.mas li span{color:var(--mut)}.mas li em{font-style:normal;white-space:nowrap}
+#story p{margin:0 0 10px;max-width:70ch}
+.nl li{display:grid;grid-template-columns:auto 1fr;gap:2px 0;padding:9px 0;border-top:1px solid rgba(255,255,255,.08)}
+.nl li .dot{margin-top:9px}.nl a{color:var(--ink);text-decoration:none;font-size:15px}.nl a:hover{text-decoration:underline}
+.nl small{grid-column:2;color:var(--mut);font-size:13px;padding-left:14px}
+.foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;align-items:center;color:var(--mut);font-size:13px}
+.foot button{border:1px solid var(--line);background:rgba(255,255,255,.07);color:var(--ink);border-radius:999px;min-height:40px;padding:0 16px;font:500 14px Onest,sans-serif;cursor:pointer}
+details{color:var(--mut);font-size:14px}details summary{cursor:pointer;min-height:32px}
+details input{width:100%;margin-top:8px;background:rgba(0,0,0,.25);border:1px solid var(--line);border-radius:12px;color:var(--ink);padding:10px 12px;font:16px Onest,sans-serif}
+.law{font-size:13px;color:var(--mut);line-height:1.5}
+@media (max-width:600px){.card{padding:15px}.board{padding:12px 10px 8px}.h-px{text-align:left}#hero{align-items:flex-start}.go{padding:0 16px}.mtf span{display:none}}
+</style>
+</head>
+<body>
+<div class="sky" aria-hidden="true"><i></i><i></i><i></i></div>
+<main class="wrap">
+  <div class="top">
+    <svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.18)"/><path d="M12 44 24 28l9 9 19-21" fill="none" stroke="#c9a7ff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="52" cy="16" r="4" fill="#9fd8ff"/></svg>
+    <div><b>Азимут</b><br><span>Волны, Фибоначчи и уровни по любому тикеру</span></div>
+  </div>
+  <form id="f" class="glass" autocomplete="off">
+    <input id="q" name="q" inputmode="text" autocapitalize="characters" spellcheck="false" placeholder="Тикер: BTC, AAPL, SBER…" aria-label="Тикер">
+    <button class="go" type="submit">Разобрать</button>
+  </form>
+  <div id="quick">
+    <button class="chip" data-q="BTC">BTC</button><button class="chip" data-q="ETH">ETH</button><button class="chip" data-q="SOL">SOL</button><button class="chip" data-q="TON">TON</button>
+    <button class="chip" data-q="NVDA">NVDA</button><button class="chip" data-q="AAPL">AAPL</button><button class="chip" data-q="TSLA">TSLA</button>
+    <button class="chip" data-q="SBER">SBER</button><button class="chip" data-q="GAZP">GAZP</button><button class="chip" data-q="GC=F">Золото</button><button class="chip" data-q="^GSPC">S&amp;P 500</button>
+  </div>
+  <div id="status" class="status glass" hidden></div>
+
+  <div id="out" hidden>
+    <section class="board glass">
+      <div id="hero"></div>
+      <div class="bar"><div id="tfs"></div><div id="layers"></div></div>
+      <div id="chart"></div>
+      <div class="legend"><span><i style="border-color:#7cc7ff"></i>SMA 50</span><span><i style="border-color:#b18cff"></i>SMA 200</span><span><i style="border-color:rgba(255,214,120,.85)"></i>EMA 21</span><span><i style="border-color:#d6aaff"></i>Волновая разметка</span><span><i style="border-color:#fff;border-top-style:dashed"></i>Прогнозный путь</span><span><i style="border-color:rgba(160,190,255,.6);border-top-style:dotted"></i>Коридор 1σ</span></div>
+    </section>
+    <section id="verdict" class="card glass verdict"></section>
+    <section id="scen"></section>
+    <div class="grid">
+      <section id="levels" class="card glass"></section>
+      <section id="fib" class="card glass"></section>
+      <section id="wave" class="card glass"></section>
+      <section id="ind" class="card glass"></section>
+    </div>
+    <div class="grid">
+      <section id="story" class="card glass"></section>
+      <section id="news" class="card glass"></section>
+    </div>
+    <section class="card glass">
+      <div class="foot"><span id="src"></span><button id="copy" type="button">Скопировать разбор</button></div>
+      <details><summary>Источник котировок акций</summary>
+        <p>Если приложение открыто как файл, котировки акций идут через публичные шлюзы. Свой адрес можно указать здесь, например https://ваш-сайт.vercel.app/api/proxy?url={url}</p>
+        <input id="proxy" placeholder="Адрес шлюза с {url}" inputmode="url"></details>
+      <p class="law">Материал носит исключительно информационный и аналитический характер и не является индивидуальной инвестиционной рекомендацией. Вероятности — модельные оценки на основе исторической волатильности и технических сигналов, а не гарантия результата. Решения о сделках принимаются самостоятельно с учётом собственных рисков.</p>
+    </section>
+  </div>
+</main>
+<script>/* Аналитический движок: индикаторы, зигзаг, волны Эллиотта, Фибоначчи, уровни, вероятности */
+(function (root) {
+'use strict';
+
+const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
+const mean = a => a.reduce((s, x) => s + x, 0) / (a.length || 1);
+
+function sma(a, n) {
+  const o = new Array(a.length).fill(null); let s = 0;
+  for (let i = 0; i < a.length; i++) { s += a[i]; if (i >= n) s -= a[i - n]; if (i >= n - 1) o[i] = s / n; }
+  return o;
+}
+function ema(a, n) {
+  const o = new Array(a.length).fill(null); const k = 2 / (n + 1); let e = null, cnt = 0, s = 0;
+  for (let i = 0; i < a.length; i++) {
+    const x = a[i]; if (x == null) continue;
+    if (e === null) { s += x; cnt++; if (cnt === n) { e = s / n; o[i] = e; } }
+    else { e = x * k + e * (1 - k); o[i] = e; }
+  }
+  return o;
+}
+function rsi(c, n = 14) {
+  const o = new Array(c.length).fill(null); let g = 0, l = 0;
+  for (let i = 1; i < c.length; i++) {
+    const d = c[i] - c[i - 1], up = Math.max(d, 0), dn = Math.max(-d, 0);
+    if (i <= n) { g += up; l += dn; if (i === n) { g /= n; l /= n; o[i] = l === 0 ? 100 : 100 - 100 / (1 + g / l); } }
+    else { g = (g * (n - 1) + up) / n; l = (l * (n - 1) + dn) / n; o[i] = l === 0 ? 100 : 100 - 100 / (1 + g / l); }
+  }
+  return o;
+}
+function atr(b, n = 14) {
+  const o = new Array(b.length).fill(null); let a = null, s = 0;
+  for (let i = 1; i < b.length; i++) {
+    const tr = Math.max(b[i].h - b[i].l, Math.abs(b[i].h - b[i - 1].c), Math.abs(b[i].l - b[i - 1].c));
+    if (i <= n) { s += tr; if (i === n) { a = s / n; o[i] = a; } }
+    else { a = (a * (n - 1) + tr) / n; o[i] = a; }
+  }
+  return o;
+}
+function macd(c) {
+  const e12 = ema(c, 12), e26 = ema(c, 26);
+  const line = c.map((_, i) => (e12[i] != null && e26[i] != null) ? e12[i] - e26[i] : null);
+  const sig = ema(line, 9);
+  const hist = line.map((x, i) => (x != null && sig[i] != null) ? x - sig[i] : null);
+  return { line, sig, hist };
+}
+
+/* Зигзаг: последний пивот — незавершённый (текущий экстремум) */
+function zigzag(bars, dev) {
+  const piv = []; let dir = 0;
+  let hi = bars[0].h, hiI = 0, lo = bars[0].l, loI = 0;
+  for (let i = 1; i < bars.length; i++) {
+    const b = bars[i];
+    if (dir === 0) {
+      if (b.h > hi) { hi = b.h; hiI = i; }
+      if (b.l < lo) { lo = b.l; loI = i; }
+      if (hi / lo - 1 >= dev) {
+        if (hiI > loI) { piv.push({ i: loI, p: lo, t: 'L' }); dir = 1; }
+        else { piv.push({ i: hiI, p: hi, t: 'H' }); dir = -1; }
+      }
+    } else if (dir === 1) {
+      if (b.h > hi) { hi = b.h; hiI = i; }
+      else if (b.l <= hi * (1 - dev)) { piv.push({ i: hiI, p: hi, t: 'H' }); dir = -1; lo = b.l; loI = i; }
+    } else {
+      if (b.l < lo) { lo = b.l; loI = i; }
+      else if (b.h >= lo * (1 + dev)) { piv.push({ i: loI, p: lo, t: 'L' }); dir = 1; hi = b.h; hiI = i; }
+    }
+  }
+  if (dir === 1) piv.push({ i: hiI, p: hi, t: 'H', tent: true });
+  else if (dir === -1) piv.push({ i: loI, p: lo, t: 'L', tent: true });
+  return piv;
+}
+
+function near(x, ts, tol) {
+  let m = 0;
+  for (const t of ts) { const d = (x - t) / (t * tol); m = Math.max(m, Math.exp(-d * d)); }
+  return m;
+}
+
+/* ---------- Волны Эллиотта ---------- */
+function scoreImpulse(P) {
+  const k = P.length - 1, dir = P[0].t === 'L' ? 1 : -1, v = P.map(x => dir * x.p);
+  const w1 = v[1] - v[0]; if (!(w1 > 0)) return null;
+  const parts = [], ratios = {}; let f = 1;
+  if (k >= 2) { const r2 = (v[1] - v[2]) / w1; if (r2 >= 1 || r2 <= 0.12) return null; parts.push(near(r2, [0.5, 0.618, 0.382], 0.25)); ratios.r2 = r2; }
+  if (k >= 3) { if (v[3] <= v[1]) return null; const q = (v[3] - v[2]) / w1; parts.push(near(q, [1.618, 2.618, 1.272], 0.3)); if (q < 1) f *= 0.6; ratios.q3 = q; }
+  if (k >= 4) {
+    if (v[4] <= v[1]) return null;
+    const r4 = (v[3] - v[4]) / (v[3] - v[2]); if (r4 >= 1 || r4 < 0.1) return null;
+    parts.push(near(r4, [0.382, 0.236, 0.5], 0.3)); ratios.r4 = r4;
+    if ((ratios.r2 > 0.5) !== (r4 > 0.5)) f *= 1.1;
+  }
+  if (k >= 5) {
+    const w3 = v[3] - v[2], w5 = v[5] - v[4];
+    if (w3 < w1 && w3 < w5) return null;
+    if (v[5] <= v[3]) f *= 0.6;
+    parts.push(Math.max(near(w5 / w1, [1, 0.618, 1.618], 0.3), near(w5 / (v[3] - v[0]), [0.618], 0.25)));
+    ratios.q5 = w5 / w1;
+  }
+  const base = parts.length ? mean(parts) : 0.4;
+  return { score: Math.min(1, base * f * (0.55 + 0.09 * k)), dir, ratios };
+}
+function scoreABC(Q) {
+  const d = Q[1].p > Q[0].p ? 1 : -1, v = Q.map(x => d * x.p), a = v[1] - v[0];
+  if (!(a > 0)) return null;
+  const rb = (v[1] - v[2]) / a; if (rb <= 0.2 || rb >= 1) return null;
+  const parts = [near(rb, [0.5, 0.618, 0.382, 0.786], 0.25)], ratios = { rb };
+  if (Q.length === 4) {
+    const c = v[3] - v[2]; ratios.ca = c / a;
+    parts.push(v[3] <= v[1] ? 0.3 : near(c / a, [1, 1.618, 0.618], 0.3));
+  }
+  return { score: mean(parts) * (Q.length === 4 ? 0.8 : 0.68), dir: d, ratios };
+}
+
+function countCandidates(piv, trendDir) {
+  const L = piv.length - 1, out = [];
+  const tb = (d, same) => (d === trendDir ? (same ? 1.2 : 0.75) : (same ? 0.88 : 1.12));
+  for (let k = 2; k <= 5; k++) {
+    const s = L - k; if (s < 0) continue;
+    const P = piv.slice(s, L + 1), r = scoreImpulse(P); if (!r) continue;
+    out.push({ type: 'imp', k, P, dir: r.dir, ratios: r.ratios, score: r.score * (trendDir ? tb(r.dir, true) : 1),
+      labels: P.map((x, j) => ({ ...x, label: String(j) })).slice(1) });
+  }
+  for (let m = 1; m <= 3; m++) {
+    const s = L - 5 - m; if (s < 0) continue;
+    const P = piv.slice(s, s + 6), imp = scoreImpulse(P); if (!imp) continue;
+    const rest = piv.slice(s + 6, L + 1), Q = [P[5], ...rest];
+    let corr;
+    if (rest.length === 1) {
+      const ra = Math.abs(rest[0].p - P[5].p) / Math.abs(P[5].p - P[0].p);
+      corr = { score: ra < 1 ? near(ra, [0.382, 0.5, 0.236], 0.35) * 0.8 : 0.2, ratios: { ra } };
+    } else corr = scoreABC(Q);
+    if (!corr) continue;
+    const lbl = ['A', 'B', 'C'];
+    out.push({ type: 'impc', m, P, Q, dir: imp.dir, ratios: { ...imp.ratios, ...corr.ratios },
+      score: (imp.score * 0.65 + corr.score * 0.35) * (trendDir ? tb(imp.dir, true) * 0.97 : 1),
+      labels: [...P.slice(1).map((x, j) => ({ ...x, label: String(j + 1) })), ...rest.map((x, j) => ({ ...x, label: lbl[j] }))] });
+  }
+  for (const n of [3, 2]) {
+    const s = L - n; if (s < 0) continue;
+    const Q = piv.slice(s, L + 1), r = scoreABC(Q); if (!r) continue;
+    out.push({ type: 'abc', n, Q, dir: r.dir, ratios: r.ratios, score: r.score * (trendDir ? tb(r.dir, false) : 1),
+      labels: Q.slice(1).map((x, j) => ({ ...x, label: 'ABC'[j] })) });
+  }
+  return out;
+}
+
+/* Проекция следующего хода по найденному счёту */
+function projectNext(c) {
+  const P = c.P, d = c.dir;
+  const pts = c.type === 'abc' ? c.Q : c.type === 'impc' ? [...c.P, ...c.Q.slice(1)] : c.P;
+  const legs = []; for (let j = 1; j < pts.length; j++) legs.push(pts[j].i - pts[j - 1].i);
+  const len = clamp(Math.round(mean(legs)), 3, 30);
+  const R = (a, b) => Math.abs(a - b);
+  let n = {};
+  if (c.type === 'imp') {
+    const w1 = R(P[1].p, P[0].p);
+    if (c.k === 2) n = { wave: 'волна 3', from: P[2], bias: d, targets: [P[2].p + d * 1.618 * w1, P[2].p + d * 2.618 * w1], invalid: P[0].p,
+      path: [[len * 1.4, P[2].p + d * 1.618 * w1]], phase: 'Завершается коррекционная волна 2, впереди обычно самая сильная — третья.' };
+    if (c.k === 3) { const w3 = R(P[3].p, P[2].p), t4 = P[3].p - d * 0.382 * w3;
+      n = { wave: 'волна 4', from: P[3], bias: -d, targets: [t4, P[3].p - d * 0.5 * w3], invalid: P[1].p,
+        path: [[len * 0.8, t4], [len * 1.8, t4 + d * w1]], phase: 'Третья волна, вероятно, отработана; ожидается откат волны 4, затем финальная пятая.' }; }
+    if (c.k === 4) { const t5 = P[4].p + d * w1;
+      n = { wave: 'волна 5', from: P[4], bias: d, targets: [t5, P[4].p + d * 0.618 * R(P[3].p, P[0].p)], invalid: P[1].p,
+        path: [[len, t5], [len * 1.8, t5 - d * 0.382 * R(t5, P[0].p)]], phase: 'Коррекция 4 выглядит завершённой — идёт финальная пятая волна импульса.' }; }
+    if (c.k === 5) { const T = R(P[5].p, P[0].p), a = P[5].p - d * 0.382 * T;
+      n = { wave: 'коррекция A-B-C', from: P[5], bias: -d, targets: [a, P[5].p - d * 0.618 * T], invalid: P[5].p,
+        path: [[len, a], [len * 1.6, a + d * 0.5 * R(a, P[5].p)], [len * 2.6, P[5].p - d * 0.618 * T]], phase: 'Пятиволновой импульс выглядит завершённым — рынок входит в коррекцию A-B-C.' }; }
+  } else if (c.type === 'impc') {
+    const T = R(P[5].p, P[0].p), A = c.Q[1];
+    if (c.m === 1) { const b = A.p + d * 0.5 * R(A.p, P[5].p), cc = b - d * R(A.p, P[5].p);
+      n = { wave: 'волна B', from: A, bias: d, targets: [b, A.p + d * 0.618 * R(A.p, P[5].p)], invalid: P[5].p,
+        path: [[len * 0.7, b], [len * 1.7, cc]], phase: 'После импульса прошла волна A; ожидается отскок B и затем ещё одна волна снижения C.' }; }
+    if (c.m === 2) { const B = c.Q[2], a = R(A.p, P[5].p), t = B.p - d * a;
+      n = { wave: 'волна C', from: B, bias: -d, targets: [t, B.p - d * 1.618 * a], invalid: P[5].p,
+        path: [[len, t]], phase: 'Отскок B выглядит завершённым — впереди волна C, обычно равная по длине волне A.' }; }
+    if (c.m === 3) { const C = c.Q[3];
+      n = { wave: 'новый импульс', from: C, bias: d, targets: [C.p + d * 0.618 * T, P[5].p], invalid: C.p,
+        path: [[len, C.p + d * 0.618 * T], [len * 1.6, C.p + d * 0.4 * T]], phase: 'Коррекция A-B-C выглядит завершённой — возможен разворот в сторону основного тренда.' }; }
+  } else {
+    const Q = c.Q, a = R(Q[1].p, Q[0].p);
+    if (c.n === 2) { const t = Q[2].p + d * a;
+      n = { wave: 'волна C', from: Q[2], bias: d, targets: [t, Q[2].p + d * 1.618 * a], invalid: Q[0].p,
+        path: [[len, t]], phase: 'Коррекционная структура: прошли A и B, ожидается C — обычно равна A.' }; }
+    else { const C = Q[3];
+      n = { wave: 'разворот после C', from: C, bias: -d, targets: [Q[2].p, Q[0].p], invalid: C.p,
+        path: [[len, Q[2].p], [len * 1.8, Q[0].p]], phase: 'Коррекция A-B-C выглядит завершённой — ждём возврата к началу коррекции.' }; }
+  }
+  n.len = len;
+  return n;
+}
+
+/* ---------- Уровни поддержки / сопротивления ---------- */
+function levels(piv, price, atrNow, N) {
+  const pts = piv.map(p => ({ p: p.p, w: 1 + (p.i > N - 120 ? 0.6 : 0) + (p.i > N - 40 ? 0.6 : 0), t: p.t }))
+    .sort((a, b) => a.p - b.p);
+  const tol = atrNow * 0.8, cl = [];
+  for (const x of pts) {
+    const last = cl[cl.length - 1];
+    if (last && x.p - last.max <= tol) { last.items.push(x); last.max = x.p; }
+    else cl.push({ items: [x], max: x.p });
+  }
+  return cl.map(c => {
+    const wsum = c.items.reduce((s, x) => s + x.w, 0);
+    return { p: c.items.reduce((s, x) => s + x.p * x.w, 0) / wsum, touches: c.items.length, strength: wsum };
+  }).filter(l => l.touches >= 2 || l.strength >= 2.2);
+}
+
+/* ---------- Вероятности ---------- */
+function normCdf(x) {
+  const t = 1 / (1 + 0.2316419 * Math.abs(x)), d = 0.3989423 * Math.exp(-x * x / 2);
+  const p = d * t * (0.3193815 + t * (-0.3565638 + t * (1.781478 + t * (-1.821256 + t * 1.330274))));
+  return x > 0 ? 1 - p : p;
+}
+/* вероятность касания уровня за n баров (броуновское движение, отражение) */
+function touchProb(S, T, sigma, n) {
+  if (!(sigma > 0) || n <= 0) return 0;
+  const z = Math.abs(Math.log(T / S)) / (sigma * Math.sqrt(n));
+  return clamp(2 * (1 - normCdf(z)), 0, 0.97);
+}
+
+const lexPos = ['surge', 'soar', 'rally', 'gain', 'jump', 'beat', 'record', 'upgrade', 'bullish', 'approv', 'growth', 'rise', 'rises', 'rebound', 'outperform', 'strong', 'profit', 'partnership', 'launch', 'inflow', 'adoption', 'all-time high', 'buyback', 'raises', 'boost', 'рост', 'вырос', 'рекорд', 'прибыл', 'повыси', 'дивиденд', 'одобр'];
+const lexNeg = ['plunge', 'drop', 'fall', 'slump', 'crash', 'miss', 'downgrade', 'bearish', 'lawsuit', 'sue', 'probe', 'investigat', 'hack', 'exploit', 'ban', 'decline', 'loss', 'weak', 'sell-off', 'selloff', 'outflow', 'fraud', 'fine', 'cuts', 'warning', 'recession', 'tariff', 'bankrupt', 'delist', 'liquidat', 'tumble', 'sink', 'падени', 'упал', 'обвал', 'сниж', 'убыт', 'санкц', 'штраф', 'иск'];
+function sentiment(text) {
+  const s = ' ' + String(text).toLowerCase() + ' ';
+  let p = 0, n = 0;
+  for (const w of lexPos) if (s.includes(w)) p++;
+  for (const w of lexNeg) if (s.includes(w)) n++;
+  return clamp((p - n) / 2, -1, 1);
+}
+
+/* ---------- Главный анализ ---------- */
+function analyze(bars, ctx = {}) {
+  const N = bars.length, last = N - 1, c = bars.map(b => b.c), price = c[last];
+  const S20 = sma(c, 20), S50 = sma(c, 50), S200 = sma(c, 200), E21 = ema(c, 21);
+  const R = rsi(c), M = macd(c), A = atr(bars);
+  const atrNow = A[last] || (bars[last].h - bars[last].l) || price * 0.02, atrPct = atrNow / price;
+
+  /* тренд */
+  const s50 = S50[last], s200 = S200[last], s20 = S20[last];
+  const slope50 = (s50 != null && S50[last - 10] != null) ? (s50 - S50[last - 10]) / S50[last - 10] : 0;
+  const longRef = s200 ?? s50, longPrev = (s200 != null ? S200[last - 20] : S50[last - 20]);
+  const trendDir = (longRef != null && longPrev != null) ? Math.sign(longRef - longPrev) : 0;
+  let T = 0;
+  if (s50 != null) T += price > s50 ? 0.4 : -0.4;
+  if (s50 != null && s200 != null) T += s50 > s200 ? 0.3 : -0.3; else if (s20 != null && s50 != null) T += s20 > s50 ? 0.3 : -0.3;
+  T += 0.3 * Math.sign(slope50);
+
+  /* пересечения средних за последние 40 баров */
+  const crosses = [];
+  for (let i = Math.max(1, last - 40); i <= last; i++) {
+    if (S50[i] == null || S200[i] == null || S50[i - 1] == null || S200[i - 1] == null) continue;
+    if (S50[i - 1] <= S200[i - 1] && S50[i] > S200[i]) crosses.push({ i, type: 'golden' });
+    if (S50[i - 1] >= S200[i - 1] && S50[i] < S200[i]) crosses.push({ i, type: 'death' });
+  }
+
+  /* импульс */
+  const r = R[last], h = M.hist[last], h3 = M.hist[last - 3];
+  let Mo = 0;
+  if (h != null) Mo += h > 0 ? 0.4 : -0.4;
+  if (h != null && h3 != null) Mo += h > h3 ? 0.2 : -0.2;
+  if (r != null) { Mo += (r - 50) / 50 * 0.6; if (r > 75) Mo -= 0.35; if (r < 25) Mo += 0.35; }
+
+  /* волны на нескольких масштабах */
+  const ks = [2, 3, 4.5, 6.5, 9];
+  const scales = ks.map(k => clamp(k * atrPct, 0.004, 0.7)).map(dev => ({ dev, piv: zigzag(bars, dev) }));
+  let best = null;
+  scales.forEach((sc, si) => {
+    if (sc.piv.length < 4) return;
+    for (const cand of countCandidates(sc.piv, trendDir)) {
+      const span = last - cand.labels[0].i;
+      const sizeOk = span >= 8 ? 1 : 0.7;
+      const sc2 = cand.score * (1 + 0.05 * si) * sizeOk;
+      if (!best || sc2 > best.rank) best = { ...cand, rank: sc2, scale: si, dev: sc.dev };
+    }
+  });
+  let wave = null;
+  if (best) { wave = { ...best, next: projectNext(best), confidence: clamp(best.score, 0, 1) }; }
+
+  /* дивергенция RSI на мелком масштабе */
+  const minor = scales[0].piv, divs = [];
+  const H = minor.filter(p => p.t === 'H').slice(-2), Lw = minor.filter(p => p.t === 'L').slice(-2);
+  if (H.length === 2 && R[H[0].i] != null && H[1].p > H[0].p && R[H[1].i] < R[H[0].i] - 2 && last - H[1].i < 30) divs.push({ i: H[1].i, type: 'bear' });
+  if (Lw.length === 2 && R[Lw[0].i] != null && Lw[1].p < Lw[0].p && R[Lw[1].i] > R[Lw[0].i] + 2 && last - Lw[1].i < 30) divs.push({ i: Lw[1].i, type: 'bull' });
+  for (const d of divs) Mo += d.type === 'bull' ? 0.25 : -0.25;
+
+  /* Фибоначчи: последний завершённый крупный размах */
+  const majorSc = scales.slice().reverse().find(s => s.piv.length >= 4) || scales[0];
+  const mp = majorSc.piv; let fib = null;
+  if (mp.length >= 3) {
+    let a = mp[mp.length - 3], b = mp[mp.length - 2];
+    if ((b.p - price) / (b.p - a.p) > 1) { a = mp[mp.length - 2]; b = mp[mp.length - 1]; }
+    const d = b.p > a.p ? 1 : -1, rng = b.p - a.p;
+    const retr = [0, 0.236, 0.382, 0.5, 0.618, 0.786, 1].map(x => ({ r: x, p: b.p - rng * x, kind: 'retr' }));
+    const ext = [1.272, 1.618, 2.618].map(x => ({ r: x, p: a.p + rng * x, kind: 'ext' }));
+    const depth = (b.p - price) / rng;
+    fib = { a, b, dir: d, levels: [...retr, ...ext], depth };
+  }
+
+  /* уровни */
+  const lv = levels(scales[1].piv.length > 6 ? scales[1].piv : scales[0].piv, price, atrNow, N);
+  const sup = lv.filter(l => l.p < price - atrNow * 0.15).sort((x, y) => y.p - x.p).slice(0, 3);
+  const res = lv.filter(l => l.p > price + atrNow * 0.15).sort((x, y) => x.p - y.p).slice(0, 3);
+  if (fib) for (const l of [...sup, ...res]) {
+    const f = fib.levels.find(f => Math.abs(f.p - l.p) < atrNow * 0.6);
+    if (f) l.fib = f.r;
+  }
+
+  /* волатильность */
+  const lr = []; for (let i = Math.max(1, N - 120); i < N; i++) lr.push(Math.log(c[i] / c[i - 1]));
+  const mu = mean(lr), sigma = Math.sqrt(mean(lr.map(x => (x - mu) ** 2)));
+
+  /* фон: новости и индекс страха */
+  const news = ctx.news || [];
+  const newsS = news.length ? mean(news.map(n => n.s)) : null;
+  const fng = ctx.fng ?? null;
+  const fngS = fng == null ? null : (fng > 75 ? -0.4 : fng < 25 ? 0.4 : (fng - 50) / 100);
+  const W = wave ? wave.next.bias * Math.min(1, wave.confidence * 1.4) : 0;
+  const parts = [[T, 0.3], [clamp(Mo, -1, 1), 0.2], [W, wave ? 0.3 : 0], [newsS, 0.12], [fngS, 0.08]].filter(x => x[0] != null && x[1] > 0);
+  const wsum = parts.reduce((s, x) => s + x[1], 0);
+  const total = clamp(parts.reduce((s, x) => s + x[0] * x[1], 0) / wsum, -1, 1);
+  const pSide = clamp(0.1 + 0.3 * (1 - Math.min(1, Math.abs(total) * 1.6)), 0.08, 0.4);
+  const up = 1 / (1 + Math.exp(-3 * total));
+  const prob = { up: (1 - pSide) * up, down: (1 - pSide) * (1 - up), side: pSide };
+
+  /* сценарии */
+  const horizon = clamp(wave ? Math.round(wave.next.len * 2) : 30, 10, 60);
+  const sc = [];
+  if (wave) {
+    const n = wave.next, dirP = n.bias > 0 ? prob.up : prob.down;
+    sc.push({ key: 'main', title: (n.bias > 0 ? 'Рост: ' : 'Снижение: ') + n.wave, bias: n.bias, p: dirP, text: n.phase,
+      targets: n.targets.map(t => ({ p: t, touch: touchProb(price, t, sigma, horizon) })), invalid: n.invalid });
+    const beyond = n.bias > 0 ? (sup[1]?.p ?? n.invalid - atrNow * 2) : (res[1]?.p ?? n.invalid + atrNow * 2);
+    sc.push({ key: 'alt', title: n.bias > 0 ? 'Снижение: разметка ломается' : 'Рост: движение продолжается', bias: -n.bias, p: n.bias > 0 ? prob.down : prob.up,
+      text: `Если цена закрепится ${n.bias > 0 ? 'ниже' : 'выше'} уровня отмены, текущая разметка неверна — рынок пойдёт к следующей зоне.`,
+      targets: [{ p: n.invalid, touch: touchProb(price, n.invalid, sigma, horizon) }, { p: beyond, touch: touchProb(price, beyond, sigma, horizon) }], invalid: null });
+  }
+  if (sup[0] && res[0]) sc.push({ key: 'side', title: 'Боковик в диапазоне', bias: 0, p: prob.side,
+    text: 'Цена остаётся между ближайшими поддержкой и сопротивлением, пока не появится импульс с объёмом.',
+    targets: [{ p: sup[0].p, touch: touchProb(price, sup[0].p, sigma, horizon) }, { p: res[0].p, touch: touchProb(price, res[0].p, sigma, horizon) }], invalid: null });
+  sc.sort((a, b) => b.p - a.p);
+
+  return {
+    price, last, N, atr: atrNow, sigma, horizon,
+    ind: { S20, S50, S200, E21, R, M, A }, now: { rsi: r, hist: h, s20, s50, s200, slope50 },
+    trend: { score: T, dir: trendDir }, mom: Mo, crosses, divs,
+    wave, fib, sup, res, prob, total, scenarios: sc, newsS, fng, minor
+  };
+}
+
+function quick(bars) { // краткий срез для таймфрейма-подтверждения
+  if (!bars || bars.length < 60) return null;
+  const a = analyze(bars);
+  return { total: a.total, trend: a.trend.score, rsi: a.now.rsi, wave: a.wave ? a.wave.next.wave : null, bias: a.wave ? a.wave.next.bias : 0, prob: a.prob };
+}
+
+const api = { sma, ema, rsi, atr, macd, zigzag, scoreImpulse, scoreABC, analyze, quick, touchProb, sentiment, clamp };
+if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.Engine = api;
+})(typeof window !== 'undefined' ? window : globalThis);
+</script>
+<script>{
+'use strict';
+const $ = s => document.querySelector(s);
+const E = window.Engine;
+const TF = {
+  '4h': { name: '4Ч', bin: '4h', byb: '240', yI: '60m', yR: '1y', agg: 14400, moex: 60, moexDays: 200, step: 14400 },
+  '1d': { name: '1Д', bin: '1d', byb: 'D', yI: '1d', yR: '5y', moex: 24, moexDays: 1500, step: 86400 },
+  '1w': { name: '1Н', bin: '1w', byb: 'W', yI: '1wk', yR: '10y', moex: 7, moexDays: 3650, step: 604800 }
+};
+const MOEX = new Set('SBER SBERP GAZP LKOH ROSN NVTK GMKN YDEX YNDX TATN TATNP MGNT MTSS ALRS CHMF NLMK PLZL SNGS SNGSP VTBR MOEX AFLT PHOR RUAL IRAO HYDR OZON TCSG FIVE X5 PIKK SMLT MAGN BSPB SFIN AFKS RTKM CBOM ENPG HHRU POSI ASTR WUSH SOFL VKCO IMOEX MOEXBC RTSI FEES UPRO MSNG TRNFP SELG BELU MTLR FLOT LENT AQUA GLTR'.split(' '));
+const STOCKS = new Set('AAPL MSFT NVDA TSLA AMZN GOOGL GOOG META NFLX AMD INTC COIN MSTR SPY QQQ DIA IWM AVGO ORCL CRM ADBE PLTR UBER BABA JPM BAC WMT KO PEP DIS NKE V MA PYPL SHOP SQ HOOD IBM CSCO QCOM MU SMCI ARM TSM ASML BA XOM CVX PFE JNJ MRNA LLY GME AMC RIVN LCID NIO SNOW'.split(' '));
+const SRC = { crypto: 'Binance', stock: 'Yahoo Finance', moex: 'Московская биржа' };
+const MK = { crypto: 'Криптовалюта', stock: 'Фондовый рынок', moex: 'Мосбиржа' };
+
+let state = { q: '', market: null, sym: null, disp: null, meta: {}, data: {}, tf: '1d', a: null, news: [], fng: null, mtf: {}, layers: { ma: true, wave: true, fib: true, lv: true, fc: true }, at: null };
+let chart = null, timer = null;
+
+const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
+
+/* ---------- форматирование ---------- */
+function dec(p) { const a = Math.abs(p); return a >= 1000 ? 0 : a >= 100 ? 1 : a >= 1 ? 2 : a >= 0.01 ? 4 : a >= 0.0001 ? 6 : 8; }
+function fmt(p) { if (p == null || !isFinite(p)) return '—'; if (p === 0) return '0'; const d = dec(p); return p.toLocaleString('ru-RU', { minimumFractionDigits: d, maximumFractionDigits: d }); }
+const pct = x => (x > 0 && x < 0.01 ? '<1' : Math.round(x * 100)) + '%';
+const num = (x, d = 2) => x.toLocaleString('ru-RU', { minimumFractionDigits: d, maximumFractionDigits: d });
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const signPct = x => (x >= 0 ? '+' : '−') + num(Math.abs(x) * 100, 2) + '%';
+
+/* ---------- сеть ---------- */
+const ONLINE = location.protocol.startsWith('http');
+const CRYPTO_NAMES = { BTC: 'Bitcoin', ETH: 'Ethereum', SOL: 'Solana', TON: 'Toncoin', XRP: 'XRP', BNB: 'BNB', DOGE: 'Dogecoin', ADA: 'Cardano', AVAX: 'Avalanche', LINK: 'Chainlink', DOT: 'Polkadot', TRX: 'TRON', LTC: 'Litecoin', SUI: 'Sui', NEAR: 'NEAR Protocol', APT: 'Aptos', ARB: 'Arbitrum', OP: 'Optimism', PEPE: 'Pepe', SHIB: 'Shiba Inu' };
+async function fetchJSON(url, ms = 12000) {
+  const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), ms);
+  try {
+    const r = await fetch(url, { signal: ctl.signal });
+    const txt = await r.text(); let j = null; try { j = JSON.parse(txt); } catch (e) {}
+    if (!r.ok) { const er = new Error('http ' + r.status); er.status = r.status; er.body = j; throw er; }
+    if (j === null) throw new Error('not json');
+    return j;
+  } finally { clearTimeout(t); }
+}
+async function viaProxy(url) {
+  const u = encodeURIComponent(url), list = [];
+  if (location.protocol.startsWith('http')) list.push('/api/proxy?url=' + u);
+  const own = store.get('az_proxy'); if (own) list.push(own.includes('{url}') ? own.replace('{url}', u) : own + u);
+  list.push('https://api.allorigins.win/raw?url=' + u, 'https://api.codetabs.com/v1/proxy?quest=' + u);
+  let last;
+  for (const p of list) { try { return await fetchJSON(p, 14000); } catch (e) { last = e; } }
+  throw last || new Error('proxy');
+}
+function aggregate(bars, step) {
+  const out = [];
+  for (const b of bars) {
+    const k = Math.floor(b.t / step) * step, o = out[out.length - 1];
+    if (o && o.t === k) { o.h = Math.max(o.h, b.h); o.l = Math.min(o.l, b.l); o.c = b.c; o.v += b.v; }
+    else out.push({ t: k, o: b.o, h: b.h, l: b.l, c: b.c, v: b.v });
+  }
+  return out;
+}
+
+async function getCrypto(sym, tf) {
+  const t = TF[tf];
+  for (const h of ['https://data-api.binance.vision', 'https://api.binance.com', 'https://api1.binance.com']) {
+    try {
+      const j = await fetchJSON(`${h}/api/v3/klines?symbol=${sym}&interval=${t.bin}&limit=1000`);
+      if (Array.isArray(j) && j.length) return j.map(k => ({ t: Math.floor(k[0] / 1000), o: +k[1], h: +k[2], l: +k[3], c: +k[4], v: +k[5] }));
+    } catch (e) { if (e.body && e.body.code === -1121) throw new Error('nosym'); }
+  }
+  const j = await fetchJSON(`https://api.bybit.com/v5/market/kline?category=spot&symbol=${sym}&interval=${t.byb}&limit=1000`);
+  const l = j?.result?.list; if (!l || !l.length) throw new Error('nosym');
+  return l.map(k => ({ t: Math.floor(k[0] / 1000), o: +k[1], h: +k[2], l: +k[3], c: +k[4], v: +k[5] })).reverse();
+}
+async function getStock(sym, tf) {
+  const t = TF[tf];
+  let j = null;
+  if (ONLINE) { try { j = await fetchJSON(`/api/chart?symbol=${encodeURIComponent(sym)}&range=${t.yR}&interval=${t.yI}`, 16000); } catch (e) { if (e.status === 404) throw new Error('nosym'); } }
+  if (!j) j = await viaProxy(`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(sym)}?range=${t.yR}&interval=${t.yI}&includePrePost=false`);
+  const r = j?.chart?.result?.[0]; if (!r || !r.timestamp) throw new Error('nosym');
+  const q = r.indicators.quote[0]; let bars = [];
+  r.timestamp.forEach((ts, i) => { if (q.close[i] == null || q.open[i] == null) return; bars.push({ t: ts, o: q.open[i], h: q.high[i], l: q.low[i], c: q.close[i], v: q.volume[i] || 0 }); });
+  if (t.agg) bars = aggregate(bars, t.agg);
+  if (tf === '1d' || tf === '1w') bars = bars.map(b => ({ ...b, t: Math.floor(b.t / 86400) * 86400 }));
+  return { bars, meta: r.meta };
+}
+async function getMoex(sym, tf) {
+  const t = TF[tf], from = new Date(Date.now() - t.moexDays * 864e5).toISOString().slice(0, 10);
+  const paths = [`engines/stock/markets/shares/boards/TQBR/securities/${sym}`, `engines/stock/markets/shares/boards/TQTF/securities/${sym}`, `engines/stock/markets/index/securities/${sym}`];
+  for (const p of paths) {
+    const rows = []; let cols = null;
+    for (let page = 0; page < 12; page++) {
+      const url = `https://iss.moex.com/iss/${p}/candles.json?interval=${t.moex}&from=${from}&start=${rows.length}&iss.meta=off`;
+      let j; try { j = await fetchJSON(url); } catch (e) { try { j = await viaProxy(url); } catch (_) { break; } }
+      const c = j.candles; if (!c) break; cols = c.columns; if (!c.data.length) break;
+      rows.push(...c.data); if (c.data.length < 500) break;
+    }
+    if (rows.length > 20) {
+      const ix = n => cols.indexOf(n);
+      let bars = rows.map(r => {
+        const m = String(r[ix('begin')]).match(/(\d+)-(\d+)-(\d+) (\d+):(\d+):(\d+)/);
+        const ts = Date.UTC(+m[1], m[2] - 1, +m[3], +m[4], +m[5], +m[6]) / 1000 - 3 * 3600;
+        return { t: ts, o: +r[ix('open')], h: +r[ix('high')], l: +r[ix('low')], c: +r[ix('close')], v: +r[ix('volume')] || 0 };
+      });
+      if (tf === '4h') bars = aggregate(bars, 14400);
+      else bars = bars.map(b => ({ ...b, t: Math.floor((b.t + 3 * 3600) / 86400) * 86400 }));
+      return { bars, meta: { currency: 'RUB', exchangeName: 'MOEX' } };
+    }
+  }
+  throw new Error('nosym');
+}
+async function getBars(market, sym, tf) {
+  if (market === 'crypto') return { bars: await getCrypto(sym, tf), meta: { currency: 'USDT', exchangeName: 'Binance' } };
+  if (market === 'stock') return getStock(sym, tf);
+  return getMoex(sym, tf);
+}
+
+async function resolve(q) {
+  const s = q.trim().toUpperCase().replace(/\s+/g, '');
+  const cryptoSym = s.replace(/[-/]/g, '').replace(/USD$/, 'USDT');
+  const cs = /(USDT|USDC|FDUSD|BTC|ETH)$/.test(cryptoSym) && cryptoSym.length > 5 ? cryptoSym : cryptoSym + 'USDT';
+  let order;
+  if (MOEX.has(s)) order = ['moex', 'stock', 'crypto'];
+  else if (STOCKS.has(s) || /[=^.]/.test(s)) order = ['stock', 'crypto', 'moex'];
+  else if (/-/.test(s) && !/-USDT?$/.test(s)) order = ['stock', 'crypto'];
+  else order = ['crypto', 'stock', 'moex'];
+  let lastErr;
+  for (const m of order) {
+    const sym = m === 'crypto' ? cs : s;
+    try {
+      const r = await getBars(m, sym, '1d');
+      if (r.bars.length > 30) return { market: m, sym, first: r };
+    } catch (e) { lastErr = e; }
+  }
+  throw lastErr || new Error('nosym');
+}
+
+async function getNews(market, sym, name) {
+  const q = market === 'crypto' ? sym.replace(/(USDT|USDC|FDUSD)$/, '') + '-USD' : market === 'moex' ? (name || sym) : sym;
+  const out = [];
+  if (ONLINE) {
+    const base = sym.replace(/(USDT|USDC|FDUSD)$/, '');
+    const g = market === 'crypto' ? `${CRYPTO_NAMES[base] || base} crypto` : market === 'moex' ? `${name || sym} акции` : `${name || sym} stock`;
+    try {
+      const j = await fetchJSON(`/api/news?q=${encodeURIComponent(q)}&g=${encodeURIComponent(g)}&lang=${market === 'moex' ? 'ru' : 'en'}`, 15000);
+      out.push(...(j.news || []));
+    } catch (e) {}
+  }
+  if (!out.length) try {
+    const j = await viaProxy(`https://query1.finance.yahoo.com/v1/finance/search?q=${encodeURIComponent(q)}&newsCount=12&quotesCount=0`);
+    for (const n of j.news || []) out.push({ title: n.title, link: n.link, pub: n.publisher, t: n.providerPublishTime });
+  } catch (e) {}
+  const week = Date.now() / 1000 - 10 * 86400;
+  return out.filter(n => n.title && (!n.t || n.t > week)).sort((a, b) => (b.t || 0) - (a.t || 0)).slice(0, 10).map(n => ({ ...n, s: E.sentiment(n.title) }));
+}
+async function getFng() {
+  try { const j = await fetchJSON('https://api.alternative.me/fng/?limit=1'); const d = j.data[0]; return { v: +d.value, c: d.value_classification }; } catch (e) { return null; }
+}
+
+/* ---------- запуск разбора ---------- */
+async function run(q, silent) {
+  q = (q || '').trim(); if (!q) return;
+  if (!silent) { setStatus('load', `Ищу ${esc(q.toUpperCase())} на биржах…`); $('#out').hidden = true; }
+  try {
+    let r = state.q === q.toUpperCase() && state.market ? null : await resolve(q);
+    if (r) { state = { ...state, q: q.toUpperCase(), market: r.market, sym: r.sym, data: { '1d': r.first.bars }, meta: r.first.meta || {} }; }
+    else { const f = await getBars(state.market, state.sym, '1d'); state.data['1d'] = f.bars; state.meta = f.meta || state.meta; }
+    if (!silent) setStatus('load', 'Считаю волны, уровни и сценарии…');
+    const [h4, w1, news, fng] = await Promise.all([
+      getBars(state.market, state.sym, '4h').then(x => x.bars).catch(() => null),
+      getBars(state.market, state.sym, '1w').then(x => x.bars).catch(() => null),
+      getNews(state.market, state.sym, state.meta.shortName || state.meta.longName),
+      state.market === 'crypto' ? getFng() : Promise.resolve(null)
+    ]);
+    state.data['4h'] = h4; state.data['1w'] = w1; state.news = news; state.fng = fng; state.at = new Date();
+    state.disp = state.market === 'crypto' ? state.sym.replace(/(USDT|USDC|FDUSD|BTC|ETH)$/, '/$1') : state.sym;
+    if (!state.data[state.tf]) state.tf = '1d';
+    store.set('az_last', state.q);
+    try { if (/^[A-Z0-9]+$/.test(state.q)) history.replaceState(null, '', '#' + state.q); } catch (e) {}
+    compute(); setStatus(); $('#out').hidden = false;
+    clearInterval(timer); timer = setInterval(() => { if (!document.hidden) run(state.q, true); }, 90000);
+  } catch (e) {
+    if (silent) return;
+    const stockHint = location.protocol.startsWith('http') ? '' : ' Для акций откройте опубликованную версию приложения: в файле котировки акций идут через публичные шлюзы и могут не отвечать.';
+    setStatus('err', `Не нашёл «${esc(q)}» ни на одной площадке.${stockHint} Примеры: BTC, ETH, SOL, AAPL, NVDA, SBER, GC=F — золото, ^GSPC — S&amp;P 500.`);
+  }
+}
+function setStatus(kind, html) {
+  const el = $('#status');
+  if (!kind) { el.hidden = true; return; }
+  el.hidden = false; el.className = 'status glass ' + kind;
+  el.innerHTML = (kind === 'load' ? '<span class="spin"></span>' : '') + `<span>${html}</span>`;
+}
+
+function compute() {
+  const ctx = { news: state.news, fng: state.fng ? state.fng.v : null };
+  state.a = E.analyze(state.data[state.tf], ctx);
+  state.mtf = {};
+  for (const k of ['4h', '1d', '1w']) state.mtf[k] = k === state.tf ? { total: state.a.total, trend: state.a.trend.score, rsi: state.a.now.rsi, wave: state.a.wave?.next.wave, bias: state.a.wave?.next.bias || 0, prob: state.a.prob } : E.quick(state.data[k]);
+  render();
+}
+
+/* ---------- текст разбора ---------- */
+function verdict(a) {
+  const p = a.prob, top = p.up >= p.down ? 'up' : 'down', w = a.wave;
+  if (p.side > Math.max(p.up, p.down)) return { cls: 'side', h: `Перевеса нет: вероятнее боковик ${a.sup[0] ? fmt(a.sup[0].p) : ''}${a.res[0] ? '–' + fmt(a.res[0].p) : ''}`, k: 'Нейтрально' };
+  const t = w ? w.next.targets[0] : null;
+  if (top === 'up') return { cls: 'up', h: w && w.next.bias > 0 ? `Перевес у покупателей: ${w.next.wave} с целью ${fmt(t)}` : `Перевес у покупателей, ближайшее сопротивление ${a.res[0] ? fmt(a.res[0].p) : '—'}`, k: 'Рост' };
+  return { cls: 'down', h: w && w.next.bias < 0 ? `Перевес у продавцов: ${w.next.wave} к ${fmt(t)}` : `Перевес у продавцов, ближайшая поддержка ${a.sup[0] ? fmt(a.sup[0].p) : '—'}`, k: 'Снижение' };
+}
+function ratioText(w) {
+  const r = w.ratios, o = [];
+  if (r.r2 != null) o.push(`волна 2 откатила ${num(r.r2)} от волны 1`);
+  if (r.q3 != null) o.push(`волна 3 = ${num(r.q3)} × волны 1`);
+  if (r.r4 != null) o.push(`волна 4 — ${num(r.r4)} от волны 3`);
+  if (r.q5 != null) o.push(`волна 5 = ${num(r.q5)} × волны 1`);
+  if (r.ra != null) o.push(`волна A — ${num(r.ra)} от всего импульса`);
+  if (r.rb != null) o.push(`B вернула ${num(r.rb)} от A`);
+  if (r.ca != null) o.push(`C = ${num(r.ca)} × A`);
+  return o;
+}
+function countTitle(w) {
+  const d = w.dir > 0 ? 'вверх' : 'вниз';
+  if (w.type === 'imp') return `Импульс ${d}, размечены волны 1–${w.k}`;
+  if (w.type === 'impc') return `Импульс ${d} завершён, идёт коррекция ${['A', 'A–B', 'A–B–C'][w.m - 1]}`;
+  return `Коррекция A–B–${w.n === 3 ? 'C' : '(C)'} ${d}`;
+}
+function story(a) {
+  const n = a.now, s = [], tfN = TF[state.tf].name;
+  if (n.s50 != null && n.s200 != null) {
+    const a50 = a.price > n.s50, a200 = a.price > n.s200, ord = n.s50 > n.s200;
+    s.push(a50 && a200 && ord ? 'Цена выше 50- и 200-периодных средних, средние выстроены по возрастанию — структура восходящего тренда.'
+      : !a50 && !a200 && !ord ? 'Цена ниже 50- и 200-периодных средних, 50-я под 200-й — тренд нисходящий, отскоки пока продают.'
+      : a200 && !a50 ? 'Долгосрочный тренд вверх — цена над 200-й средней, но в среднесрочном плане идёт коррекция под 50-й.'
+      : !a200 && a50 ? 'Цена вернулась выше 50-й средней, но остаётся под 200-й — это восстановление, а не подтверждённый разворот.'
+      : 'Средние переплетены — выраженного тренда нет.');
+  } else s.push('История торгов короткая для 200-периодной средней, ориентир — 20- и 50-периодные.');
+  const cr = a.crosses[a.crosses.length - 1];
+  if (cr) s.push(`${a.last - cr.i} бар(ов) назад — ${cr.type === 'golden' ? '«золотой крест»: 50-я средняя пересекла 200-ю снизу вверх' : '«крест смерти»: 50-я средняя ушла под 200-ю'}.`);
+  if (n.rsi != null) s.push(`RSI ${Math.round(n.rsi)} — ${n.rsi > 70 ? 'рынок перегрет, растёт риск отката' : n.rsi < 30 ? 'перепроданность, возможен технический отскок' : n.rsi >= 50 ? 'импульс на стороне покупателей' : 'импульс на стороне продавцов'}; гистограмма MACD ${n.hist > 0 ? 'выше нуля' : 'ниже нуля'}.`);
+  for (const d of a.divs) s.push(d.type === 'bear' ? 'Медвежья дивергенция: цена обновила максимум, а RSI — нет. Это ослабление роста.' : 'Бычья дивергенция: цена обновила минимум, а RSI — нет. Продавцы выдыхаются.');
+  if (a.wave) s.push(`Волновая разметка на ${tfN}: ${countTitle(a.wave).replace(/^./, c => c.toLowerCase())}. ${ratioText(a.wave).join('; ').replace(/^./, c => c.toUpperCase())}. ${a.wave.next.phase}`);
+  else s.push('Волновая структура не читается однозначно — типично для бокового рынка.');
+  if (a.fib) {
+    const d = a.fib.depth;
+    if (d > 0.05 && d < 1) { const nx = a.fib.levels.filter(f => f.kind === 'retr' && f.r > d).sort((x, y) => x.r - y.r)[0];
+      s.push(`Текущий откат — ${num(d)} от последнего размаха ${fmt(a.fib.a.p)} → ${fmt(a.fib.b.p)}.${nx ? ` Следующая зона Фибоначчи — ${String(nx.r).replace('.', ',')} на ${fmt(nx.p)}.` : ''}`); }
+    else if (d <= 0.05) s.push(`Цена у края последнего размаха; расширения Фибоначчи 1,272 и 1,618 — ${fmt(a.fib.levels.find(f => f.r === 1.272).p)} и ${fmt(a.fib.levels.find(f => f.r === 1.618).p)}.`);
+  }
+  const conf = [...a.sup, ...a.res].filter(l => l.fib);
+  if (conf.length) s.push(`Сильнее всего выглядят зоны, где горизонтальный уровень совпадает с Фибоначчи: ${conf.map(l => fmt(l.p)).join(', ')}.`);
+  if (state.news.length) { const v = a.newsS; s.push(`Новостной фон за последние дни ${v > 0.15 ? 'скорее позитивный' : v < -0.15 ? 'скорее негативный' : 'нейтральный'} (${state.news.length} публикаций).`); }
+  if (state.fng) s.push(`Индекс страха и жадности — ${state.fng.v} (${state.fng.v > 75 ? 'жадность, рынок перегрет эмоционально' : state.fng.v < 25 ? 'страх, такие периоды часто дают отскоки' : 'без крайностей'}).`);
+  const agree = ['4h', '1d', '1w'].map(k => state.mtf[k]).filter(Boolean).map(m => Math.sign(Math.round(m.total * 5)));
+  if (agree.length === 3) s.push(agree.every(x => x === agree[0] && x !== 0) ? 'Все три таймфрейма смотрят в одну сторону — сигнал надёжнее обычного.' : 'Таймфреймы расходятся — это повод уменьшить размер позиции и дождаться подтверждения.');
+  return s;
+}
+
+/* ---------- отрисовка ---------- */
+function render() {
+  const a = state.a, bars = state.data[state.tf], last = bars[bars.length - 1], prev = bars[bars.length - 2];
+  const ch = (last.c - prev.c) / prev.c, v = verdict(a);
+  $('#hero').innerHTML = `
+    <div class="h-id"><span class="badge">${MK[state.market]}</span><h2>${esc(state.disp)}</h2><p>${esc(state.meta.longName || state.meta.shortName || '')}</p></div>
+    <div class="h-px"><b>${fmt(last.c)}</b><span class="${ch >= 0 ? 'pos' : 'neg'}">${signPct(ch)} за ${TF[state.tf].name.toLowerCase()}</span></div>`;
+  $('#tfs').innerHTML = Object.keys(TF).map(k => `<button class="tf ${k === state.tf ? 'on' : ''}" data-tf="${k}" ${state.data[k] ? '' : 'disabled'}>${TF[k].name}</button>`).join('');
+  $('#layers').innerHTML = [['ma', 'Средние'], ['wave', 'Волны'], ['fib', 'Фибоначчи'], ['lv', 'Уровни'], ['fc', 'Прогноз']].map(([k, n]) => `<button class="chip ${state.layers[k] ? 'on' : ''}" data-ly="${k}">${n}</button>`).join('');
+  drawChart();
+
+  $('#verdict').className = 'card glass verdict ' + v.cls;
+  $('#verdict').innerHTML = `
+    <span class="kick">${v.k} · горизонт ≈ ${a.horizon} бар. ${TF[state.tf].name}</span>
+    <h3>${esc(v.h)}</h3>
+    <div class="tri"><i class="u" style="width:${a.prob.up * 100}%"></i><i class="s" style="width:${a.prob.side * 100}%"></i><i class="d" style="width:${a.prob.down * 100}%"></i></div>
+    <div class="tri-l"><span><em class="dot u"></em>Рост ${pct(a.prob.up)}</span><span><em class="dot s"></em>Боковик ${pct(a.prob.side)}</span><span><em class="dot d"></em>Снижение ${pct(a.prob.down)}</span></div>
+    <div class="mtf">${['4h', '1d', '1w'].map(k => { const m = state.mtf[k]; if (!m) return `<div><small>${TF[k].name}</small><b>нет данных</b></div>`;
+      const d = m.total > 0.15 ? ['pos', 'Рост'] : m.total < -0.15 ? ['neg', 'Снижение'] : ['', 'Нейтрально'];
+      return `<div class="${k === state.tf ? 'cur' : ''}"><small>${TF[k].name}</small><b class="${d[0]}">${d[1]}</b><span>${m.wave ? esc(m.wave) : '—'}</span></div>`; }).join('')}</div>`;
+
+  $('#scen').innerHTML = a.scenarios.map((s, i) => `
+    <article class="card glass sc ${s.bias > 0 ? 'up' : s.bias < 0 ? 'down' : 'side'}">
+      <header><span>${i === 0 ? 'Основной' : 'Альтернатива'}</span><b>${pct(s.p)}</b></header>
+      <h4>${esc(s.title)}</h4><p>${esc(s.text)}</p>
+      <ul>${s.targets.map((t, j) => `<li><span>${s.key === 'side' ? (j ? 'Верх' : 'Низ') : 'Цель ' + (j + 1)}</span><b>${fmt(t.p)}</b><em>${signPct((t.p - a.price) / a.price)}</em><small>касание ${pct(t.touch)}</small></li>`).join('')}
+      ${s.invalid != null ? `<li class="inv"><span>Отмена</span><b>${fmt(s.invalid)}</b><em>${signPct((s.invalid - a.price) / a.price)}</em><small></small></li>` : ''}</ul>
+    </article>`).join('');
+
+  const lad = [...a.res.slice().reverse().map((l, i, arr) => ({ ...l, k: 'R' + (arr.length - i), c: 'r' })), { p: a.price, k: 'Цена', c: 'now' }, ...a.sup.map((l, i) => ({ ...l, k: 'S' + (i + 1), c: 's' }))];
+  $('#levels').innerHTML = `<h4>Уровни</h4><ol class="ladder">${lad.map(l => `<li class="${l.c}"><span>${l.k}</span><b>${fmt(l.p)}</b><em>${l.c === 'now' ? '' : signPct((l.p - a.price) / a.price)}</em><small>${l.c === 'now' ? '' : (l.fib ? 'Фибо ' + String(l.fib).replace('.', ',') + ' · ' : '') + l.touches + ' кас.'}</small></li>`).join('')}</ol>`;
+
+  if (a.fib) {
+    const lv = a.fib.levels.slice().sort((x, y) => y.p - x.p);
+    $('#fib').innerHTML = `<h4>Фибоначчи</h4><p class="mut">Размах ${fmt(a.fib.a.p)} → ${fmt(a.fib.b.p)}</p><ul class="fibl">${lv.map(f => `<li class="${f.kind} ${[0.382, 0.5, 0.618, 1.618].includes(f.r) ? 'key' : ''}"><span>${String(f.r).replace('.', ',')}</span><i style="--w:${Math.min(100, Math.abs(f.p - a.price) / a.price * 400)}%"></i><b>${fmt(f.p)}</b></li>`).join('')}</ul>`;
+  } else $('#fib').innerHTML = '<h4>Фибоначчи</h4><p class="mut">Недостаточно размахов для построения сетки.</p>';
+
+  if (a.wave) {
+    const w = a.wave;
+    $('#wave').innerHTML = `<h4>Волны Эллиотта</h4><p class="big">${esc(countTitle(w))}</p>
+      <div class="meter"><i style="width:${w.confidence * 100}%"></i></div><p class="mut">Согласованность с канонами Эллиотта: ${pct(w.confidence)}</p>
+      <ul class="dots">${w.labels.map(l => `<li><b>${l.label}</b><span>${fmt(l.p)}</span></li>`).join('')}</ul>
+      <p class="mut">${ratioText(w).join(' · ')}</p>`;
+  } else $('#wave').innerHTML = '<h4>Волны Эллиотта</h4><p class="mut">Чёткой волновой структуры сейчас нет — рынок в фазе накопления или хаотичной коррекции.</p>';
+
+  const n = a.now, ma = [['EMA 21', a.ind.E21[a.last]], ['SMA 50', n.s50], ['SMA 200', n.s200]];
+  $('#ind').innerHTML = `<h4>Индикаторы</h4>
+    <div class="rsi"><span>RSI 14</span><div class="rbar"><i style="left:${n.rsi ?? 50}%"></i></div><b>${n.rsi != null ? Math.round(n.rsi) : '—'}</b></div>
+    <ul class="mas">${ma.map(([k, x]) => `<li><span>${k}</span><b>${fmt(x)}</b><em class="${x != null && a.price > x ? 'pos' : 'neg'}">${x != null ? signPct((a.price - x) / x) : '—'}</em></li>`).join('')}
+    <li><span>MACD</span><b>${n.hist != null ? (n.hist > 0 ? 'выше сигнальной' : 'ниже сигнальной') : '—'}</b><em></em></li>
+    <li><span>Волатильность</span><b>${num(a.sigma * 100, 2)}% за бар</b><em></em></li>
+    ${state.fng ? `<li><span>Страх / жадность</span><b>${state.fng.v}</b><em>${esc(state.fng.c)}</em></li>` : ''}</ul>`;
+
+  $('#story').innerHTML = `<h4>Что говорит график</h4>${story(a).map(x => `<p>${esc(x)}</p>`).join('')}`;
+  $('#news').innerHTML = `<h4>Новостной фон</h4>${state.news.length ? `<ul class="nl">${state.news.map(x => `<li><em class="dot ${x.s > 0 ? 'u' : x.s < 0 ? 'd' : 's'}"></em><a href="${esc(x.link)}" target="_blank" rel="noopener">${esc(x.title)}</a><small>${esc(x.pub || '')}${x.t ? ' · ' + new Date(x.t * 1000).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' }) : ''}</small></li>`).join('')}</ul>` : '<p class="mut">Свежих публикаций по инструменту не нашлось — расчёт опирается только на график.</p>'}`;
+  $('#src').textContent = `Котировки: ${SRC[state.market]}, обновлено ${state.at.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}. Пересчёт каждые 90 секунд.`;
+}
+
+function drawChart() {
+  const a = state.a, bars = state.data[state.tf], L = state.layers, el = $('#chart'), step = TF[state.tf].step, N = bars.length;
+  if (chart) { chart.remove(); chart = null; }
+  const prec = Math.min(8, dec(a.price) + (a.price < 1000 ? 1 : 0));
+  chart = LightweightCharts.createChart(el, {
+    autoSize: true,
+    layout: { background: { type: 'solid', color: 'transparent' }, textColor: 'rgba(225,230,255,.62)', fontFamily: 'Onest, system-ui, sans-serif', fontSize: 11 },
+    grid: { vertLines: { color: 'rgba(255,255,255,.035)' }, horzLines: { color: 'rgba(255,255,255,.05)' } },
+    rightPriceScale: { borderVisible: false, scaleMargins: { top: 0.08, bottom: 0.2 } },
+    timeScale: { borderVisible: false, timeVisible: state.tf === '4h', rightOffset: 4 },
+    crosshair: { mode: 0, vertLine: { color: 'rgba(255,255,255,.25)', labelBackgroundColor: '#3b3470' }, horzLine: { color: 'rgba(255,255,255,.25)', labelBackgroundColor: '#3b3470' } },
+    localization: { locale: 'ru-RU', priceFormatter: fmt }, handleScale: { axisPressedMouseMove: true }
+  });
+  const pf = { type: 'price', precision: prec, minMove: Math.pow(10, -prec) };
+  const cs = chart.addCandlestickSeries({ upColor: '#3ee6b0', downColor: '#ff5f7e', borderVisible: false, wickUpColor: '#3ee6b0', wickDownColor: '#ff5f7e', priceFormat: pf });
+  cs.setData(bars.map(b => ({ time: b.t, open: b.o, high: b.h, low: b.l, close: b.c })));
+  const vol = chart.addHistogramSeries({ priceScaleId: 'vol', priceFormat: { type: 'volume' }, lastValueVisible: false, priceLineVisible: false });
+  chart.priceScale('vol').applyOptions({ scaleMargins: { top: 0.86, bottom: 0 } });
+  vol.setData(bars.map(b => ({ time: b.t, value: b.v, color: b.c >= b.o ? 'rgba(62,230,176,.22)' : 'rgba(255,95,126,.22)' })));
+  const line = (o) => chart.addLineSeries({ priceLineVisible: false, lastValueVisible: false, crosshairMarkerVisible: false, priceFormat: pf, ...o });
+  const tAt = i => i <= N - 1 ? bars[i].t : bars[N - 1].t + (i - N + 1) * step;
+
+  if (L.ma) for (const [arr, color, w] of [[a.ind.E21, 'rgba(255,214,120,.85)', 1], [a.ind.S50, '#7cc7ff', 2], [a.ind.S200, '#b18cff', 2]]) {
+    const dt = []; arr.forEach((x, i) => { if (x != null) dt.push({ time: bars[i].t, value: x }); });
+    if (dt.length) line({ color, lineWidth: w }).setData(dt);
+  }
+  const marks = [];
+  if (L.wave && a.wave) {
+    const w = a.wave, start = w.type === 'abc' ? w.Q[0] : w.P[0];
+    line({ color: 'rgba(214,170,255,.9)', lineWidth: 2 }).setData([start, ...w.labels].map(p => ({ time: bars[p.i].t, value: p.p })));
+    for (const l of w.labels) marks.push({ time: bars[l.i].t, position: l.t === 'H' ? 'aboveBar' : 'belowBar', color: '#e2c6ff', shape: 'circle', text: l.label, size: 0.6 });
+  }
+  if (L.ma) for (const c of a.crosses) marks.push({ time: bars[c.i].t, position: c.type === 'golden' ? 'belowBar' : 'aboveBar', color: c.type === 'golden' ? '#3ee6b0' : '#ff5f7e', shape: c.type === 'golden' ? 'arrowUp' : 'arrowDown', text: c.type === 'golden' ? 'Золотой крест' : 'Крест смерти' });
+  for (const dv of a.divs) marks.push({ time: bars[dv.i].t, position: dv.type === 'bear' ? 'aboveBar' : 'belowBar', color: '#ffd678', shape: dv.type === 'bear' ? 'arrowDown' : 'arrowUp', text: 'Дивергенция' });
+  marks.sort((x, y) => x.time - y.time); cs.setMarkers(marks);
+
+  const taken = L.fc && a.wave ? [...a.wave.next.targets, a.wave.next.invalid] : [];
+  if (L.fib && a.fib) for (const f of a.fib.levels) {
+    const key = [0.382, 0.5, 0.618, 1.618].includes(f.r) && !taken.some(t => Math.abs(t - f.p) < a.atr * 0.3);
+    cs.createPriceLine({ price: f.p, color: f.kind === 'ext' ? 'rgba(255,180,90,.45)' : 'rgba(255,214,120,.38)', lineWidth: 1, lineStyle: 2, axisLabelVisible: key, title: (key ? 'Ф ' : '') + String(f.r).replace('.', ',') });
+  }
+  if (L.lv) {
+    a.res.forEach((l, i) => cs.createPriceLine({ price: l.p, color: 'rgba(255,95,126,.55)', lineWidth: l.fib ? 2 : 1, lineStyle: 0, axisLabelVisible: i === 0, title: 'R' + (i + 1) }));
+    a.sup.forEach((l, i) => cs.createPriceLine({ price: l.p, color: 'rgba(62,230,176,.55)', lineWidth: l.fib ? 2 : 1, lineStyle: 0, axisLabelVisible: i === 0, title: 'S' + (i + 1) }));
+  }
+  let fut = 0;
+  if (L.fc && a.wave) {
+    const nx = a.wave.next, pts = [{ time: bars[N - 1].t, value: a.price }]; let prevI = N - 1;
+    nx.path.forEach(([dt, p]) => { const i = Math.max(nx.from.i + Math.round(dt), N - 1 + Math.round(dt / 2), prevI + 2); prevI = i; pts.push({ time: tAt(i), value: p }); });
+    fut = prevI - N + 1;
+    line({ color: nx.bias > 0 ? '#3ee6b0' : '#ff5f7e', lineWidth: 2, lineStyle: 2, pointMarkersVisible: true }).setData(pts);
+    const sc = a.scenarios.find(s => s.key === 'main');
+    nx.targets.forEach((t, j) => cs.createPriceLine({ price: t, color: nx.bias > 0 ? 'rgba(62,230,176,.9)' : 'rgba(255,95,126,.9)', lineWidth: 1, lineStyle: 3, axisLabelVisible: true, title: `Цель ${j + 1}${sc ? ' · ' + pct(sc.targets[j].touch) : ''}` }));
+    cs.createPriceLine({ price: nx.invalid, color: 'rgba(255,255,255,.6)', lineWidth: 1, lineStyle: 1, axisLabelVisible: true, title: 'Отмена' });
+    const H = Math.max(fut, a.horizon), up = [], dn = [];
+    for (let j = 0; j <= H; j += Math.max(1, Math.round(H / 24))) { const k = a.sigma * Math.sqrt(j); up.push({ time: tAt(N - 1 + j), value: a.price * Math.exp(k) }); dn.push({ time: tAt(N - 1 + j), value: a.price * Math.exp(-k) }); }
+    for (const s of [up, dn]) line({ color: 'rgba(160,190,255,.35)', lineWidth: 1, lineStyle: 1 }).setData(s);
+    fut = Math.max(fut, H);
+  }
+  const rng = { from: Math.max(0, N - (innerWidth < 600 ? 90 : 170)), to: N + Math.min(fut, innerWidth < 600 ? 30 : 60) + 3 }, ch0 = chart;
+  ch0.timeScale().setVisibleLogicalRange(rng);
+  requestAnimationFrame(() => requestAnimationFrame(() => { if (chart === ch0) ch0.timeScale().setVisibleLogicalRange(rng); }));
+}
+
+function copySummary() {
+  const a = state.a; if (!a) return;
+  const v = verdict(a), t = [`${state.disp} · ${TF[state.tf].name} · ${fmt(a.price)}`, v.h, `Рост ${pct(a.prob.up)} / боковик ${pct(a.prob.side)} / снижение ${pct(a.prob.down)}`,
+    ...a.scenarios.map(s => `${s.title} (${pct(s.p)}): ${s.targets.map(x => fmt(x.p)).join(' → ')}${s.invalid != null ? ', отмена ' + fmt(s.invalid) : ''}`),
+    `Сопротивления: ${a.res.map(l => fmt(l.p)).join(', ') || '—'}; поддержки: ${a.sup.map(l => fmt(l.p)).join(', ') || '—'}`, '', ...story(a)].join('\n');
+  navigator.clipboard.writeText(t).then(() => { const b = $('#copy'); b.textContent = 'Скопировано'; setTimeout(() => b.textContent = 'Скопировать разбор', 1600); }).catch(() => {});
+}
+
+/* ---------- события ---------- */
+$('#f').addEventListener('submit', e => { e.preventDefault(); const q = $('#q').value; $('#q').blur(); run(q); });
+$('#quick').addEventListener('click', e => { const b = e.target.closest('[data-q]'); if (!b) return; $('#q').value = b.dataset.q; run(b.dataset.q); });
+$('#tfs').addEventListener('click', e => { const b = e.target.closest('[data-tf]'); if (!b || b.disabled) return; state.tf = b.dataset.tf; compute(); });
+$('#layers').addEventListener('click', e => { const b = e.target.closest('[data-ly]'); if (!b) return; state.layers[b.dataset.ly] = !state.layers[b.dataset.ly]; b.classList.toggle('on'); drawChart(); });
+$('#copy').addEventListener('click', copySummary);
+$('#proxy').value = store.get('az_proxy') || '';
+$('#proxy').addEventListener('change', e => store.set('az_proxy', e.target.value.trim()));
+addEventListener('hashchange', () => { const h = decodeURIComponent(location.hash.slice(1)); if (h && h.toUpperCase() !== state.q) { $('#q').value = h; run(h); } });
+
+const start = decodeURIComponent(location.hash.slice(1)) || store.get('az_last') || 'BTC';
+$('#q').value = start; run(start);
+}
+</script>
+</body>
+</html>
