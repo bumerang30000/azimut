@@ -116,6 +116,44 @@ form input::placeholder{color:var(--mut);text-transform:none;font-weight:400}
 details{color:var(--mut);font-size:14px}details summary{cursor:pointer;min-height:32px}
 details input{width:100%;margin-top:8px;background:rgba(0,0,0,.25);border:1px solid var(--line);border-radius:12px;color:var(--ink);padding:10px 12px;font:16px Onest,sans-serif}
 .law{font-size:13px;color:var(--mut);line-height:1.5}
+.lgd{margin-top:6px}.lgd summary{font-size:13px;color:var(--mut);list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:6px;min-height:30px}
+.lgd summary::-webkit-details-marker,.tile summary::-webkit-details-marker,.scx summary::-webkit-details-marker{display:none}
+.lgd summary::before{content:'ⓘ';font-size:14px}.legend i.bx{border:0;height:10px;width:16px;border-radius:3px}
+.bar>div#layers{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;max-width:100%}.bar>div#layers::-webkit-scrollbar{display:none}
+.chip{white-space:nowrap}
+#scen{padding:8px 10px}
+.scx{border-radius:16px}.scx+.scx{border-top:1px solid rgba(255,255,255,.07)}
+.scx summary{display:grid;grid-template-columns:3.4em 1fr 20px;align-items:center;gap:10px;padding:12px 8px;cursor:pointer;list-style:none}
+.scx .pp{font-size:20px;font-weight:700;letter-spacing:-.02em}.scx.up .pp{color:var(--up)}.scx.down .pp{color:var(--dn)}.scx.side .pp{color:var(--side)}
+.scx .st b{display:block;font-size:16px}.scx .st small{display:block;color:var(--mut);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.scx .tag{display:inline-block;font-size:11px;padding:2px 7px;border-radius:999px;background:rgba(255,255,255,.1);margin-left:6px;vertical-align:2px;color:var(--mut)}
+.scx>div{padding:0 8px 12px}.scx p{margin:0 0 8px;color:var(--mut);font-size:14px}
+.scx ul{list-style:none;margin:0;padding:0}.scx li{display:grid;grid-template-columns:4.6em 1fr auto;gap:2px 8px;padding:7px 0;border-top:1px solid rgba(255,255,255,.08);font-size:14px}
+.scx li span{color:var(--mut)}.scx li em{font-style:normal;color:var(--mut);text-align:right;white-space:nowrap}.scx li small{grid-column:2/4;color:var(--mut);font-size:12.5px}
+.chev{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;color:var(--mut);transition:transform .25s}
+.chev::before{content:'';width:7px;height:7px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:translateY(-2px) rotate(45deg)}
+details[open]>summary .chev{transform:rotate(180deg)}
+.tiles{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(min(100%,232px),1fr))}
+.tile{border-radius:20px;overflow:hidden}.tile[open]{grid-column:1/-1}
+.tile summary{display:grid;grid-template-columns:40px 1fr 20px;gap:12px;align-items:center;padding:13px 14px;cursor:pointer;list-style:none;min-height:66px}
+.tile summary:hover{background:rgba(255,255,255,.03)}
+.ic{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;background:color-mix(in srgb,var(--c) 18%,transparent);border:1px solid color-mix(in srgb,var(--c) 40%,transparent);color:var(--c)}
+.ic svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tt small{display:block;color:var(--mut);font-size:12.5px}.tt b{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:14.5px;font-weight:600;line-height:1.3}
+.tb{padding:2px 16px 16px;animation:fade .25s ease}@keyframes fade{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+.tb h5{margin:14px 0 6px;font-size:13px;font-weight:600;color:var(--mut);text-transform:uppercase;letter-spacing:.04em}.tb h5:first-child{margin-top:4px}
+.cols{display:grid;gap:4px 22px;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr))}
+.kv{list-style:none;margin:0;padding:0}.kv li{display:grid;grid-template-columns:minmax(6em,auto) 1fr auto;gap:2px 10px;padding:7px 0;border-top:1px solid rgba(255,255,255,.07);font-size:14px;align-items:baseline}
+.kv li span{color:var(--mut)}.kv li em{font-style:normal;white-space:nowrap;text-align:right}.kv li small{grid-column:1/-1;color:var(--mut);font-size:12.5px}
+.kv li.now{background:rgba(201,167,255,.14);border-radius:10px;padding:7px 8px;border-top:0}
+.split{display:flex;height:12px;border-radius:999px;overflow:hidden;margin:8px 0 6px}.split i{display:block}
+.split .l{background:#ffaa46}.split .s{background:#5abeff}
+.leg2{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--mut)}
+.leg2 b{color:var(--ink);font-weight:600}
+.hbars{width:100%;height:84px;display:block;margin:6px 0}
+.note{color:var(--mut);font-size:12.5px;line-height:1.45;margin:10px 0 0}
+.bul{margin:0;padding:0 0 0 18px}.bul li{margin:0 0 8px;font-size:14.5px;line-height:1.45}
+
 @media (max-width:600px){.card{padding:15px}.board{padding:12px 10px 8px}.h-px{text-align:left}#hero{align-items:flex-start}.go{padding:0 16px}.mtf span{display:none}}
 </style>
 </head>
@@ -142,24 +180,11 @@ details input{width:100%;margin-top:8px;background:rgba(0,0,0,.25);border:1px so
       <div id="hero"></div>
       <div class="bar"><div id="tfs"></div><div id="layers"></div></div>
       <div id="chart"></div>
-      <div class="legend"><span><i style="border-color:#7cc7ff"></i>SMA 50</span><span><i style="border-color:#b18cff"></i>SMA 200</span><span><i style="border-color:rgba(255,214,120,.85)"></i>EMA 21</span><span><i style="border-color:#d6aaff"></i>Волновая разметка</span><span><i style="border-color:#fff;border-top-style:dashed"></i>Прогнозный путь</span><span><i style="border-color:rgba(160,190,255,.6);border-top-style:dotted"></i>Коридор 1σ</span><span><i style="border:0;height:9px;background:rgba(62,230,176,.3)"></i>Ордер-блок спроса</span><span><i style="border:0;height:9px;background:rgba(255,95,126,.3)"></i>Ордер-блок предложения</span><span><i style="border:0;height:9px;background:linear-gradient(90deg,rgba(255,190,90,.8),rgba(120,200,255,.8))"></i>Ликвидации лонгов / шортов</span></div>
+      <details class="lgd"><summary>Обозначения</summary><div class="legend"><span><i style="border-color:#7cc7ff"></i>SMA 50</span><span><i style="border-color:#b18cff"></i>SMA 200</span><span><i style="border-color:rgba(255,214,120,.85)"></i>EMA 21</span><span><i style="border-color:#d6aaff"></i>Волны</span><span><i style="border-color:#fff;border-top-style:dashed"></i>Прогнозный путь</span><span><i style="border-color:rgba(160,190,255,.6);border-top-style:dotted"></i>Коридор 1σ</span><span><i class="bx" style="background:rgba(62,230,176,.35)"></i>Ордер-блок спроса</span><span><i class="bx" style="background:rgba(255,95,126,.35)"></i>Ордер-блок предложения</span><span><i class="bx" style="background:linear-gradient(90deg,rgba(255,170,70,.15),rgba(255,170,70,.8))"></i>Будущие ликвидации лонгов</span><span><i class="bx" style="background:linear-gradient(90deg,rgba(90,190,255,.15),rgba(90,190,255,.8))"></i>Будущие ликвидации шортов</span><span><i class="bx" style="background:#ffaa46;outline:1px solid #fff"></i>Факт ликвидаций за 24 ч</span><span><i style="border-color:rgba(255,214,120,.8);border-top-style:dashed"></i>Стопы над хаями / под лоу</span></div></details>
     </section>
     <section id="verdict" class="card glass verdict"></section>
-    <section id="scen"></section>
-    <div class="grid">
-      <section id="levels" class="card glass"></section>
-      <section id="fib" class="card glass"></section>
-      <section id="wave" class="card glass"></section>
-      <section id="ind" class="card glass"></section>
-    </div>
-    <div class="grid">
-      <section id="smc" class="card glass sm"></section>
-      <section id="liqc" class="card glass sm"></section>
-    </div>
-    <div class="grid">
-      <section id="story" class="card glass"></section>
-      <section id="news" class="card glass"></section>
-    </div>
+    <section id="scen" class="card glass"></section>
+    <section id="tiles" class="tiles"></section>
     <section class="card glass">
       <div class="foot"><span id="src"></span><button id="copy" type="button">Скопировать разбор</button></div>
       <details><summary>Источник котировок акций</summary>
@@ -389,6 +414,38 @@ function levels(piv, price, atrNow, N) {
     .filter(l => l.touches >= 2 || l.strength >= 2.15);
 }
 
+/* Профиль объёма: объём бара раскладывается по его диапазону; POC, зона стоимости 70% и узлы объёма */
+function volProfile(bars, from, nb) {
+  const seg = bars.slice(from); if (seg.length < 20) return null;
+  const lo = Math.min(...seg.map(b => b.l)), hi = Math.max(...seg.map(b => b.h)); if (!(hi > lo)) return null;
+  const st = (hi - lo) / nb, v = new Array(nb).fill(0);
+  for (const b of seg) {
+    const a = clamp(Math.floor((b.l - lo) / st), 0, nb - 1), z = clamp(Math.floor((b.h - lo) / st), 0, nb - 1), k = (b.v || 1) / (z - a + 1);
+    for (let i = a; i <= z; i++) v[i] += k;
+  }
+  const tot = v.reduce((s, x) => s + x, 0); let pi = 0; v.forEach((x, i) => { if (x > v[pi]) pi = i; });
+  let lI = pi, hI = pi, acc = v[pi];
+  while (acc < tot * 0.7 && (lI > 0 || hI < nb - 1)) { const dn = lI > 0 ? v[lI - 1] : -1, up = hI < nb - 1 ? v[hI + 1] : -1; if (up >= dn) acc += v[++hI]; else acc += v[--lI]; }
+  const mid = i => lo + st * (i + 0.5);
+  const hvn = []; for (let i = 2; i < nb - 2; i++) if (i !== pi && v[i] > v[i - 1] && v[i] >= v[i + 1] && v[i] > v[i - 2] && v[i] >= v[i + 2] && v[i] > tot / nb * 1.4) hvn.push({ p: mid(i), v: v[i] });
+  hvn.sort((a, b) => b.v - a.v);
+  return { poc: mid(pi), vah: lo + st * (hI + 1), val: lo + st * lI, hvn: hvn.slice(0, 3).map(h => h.p), lo, hi, st, v, from };
+}
+/* Календарные уровни: экстремумы и открытия прошлых периодов (по UTC) */
+function periodLevels(bars, tf) {
+  const out = [], N = bars.length; if (N < 10) return out;
+  const key = (t, u) => { const d = new Date(t * 1000); if (u === 'w') { const x = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate())); x.setUTCDate(x.getUTCDate() - ((x.getUTCDay() + 6) % 7)); return x.getTime(); } if (u === 'm') return d.getUTCFullYear() * 12 + d.getUTCMonth(); if (u === 'q') return d.getUTCFullYear() * 4 + Math.floor(d.getUTCMonth() / 3); return d.getUTCFullYear(); };
+  const grp = u => { const g = new Map(); for (const b of bars) { const k = key(b.t, u); const x = g.get(k); if (!x) g.set(k, { o: b.o, h: b.h, l: b.l }); else { x.h = Math.max(x.h, b.h); x.l = Math.min(x.l, b.l); } } return [...g.values()]; };
+  const names = { w: ['прошлой недели', 'недели'], m: ['прошлого месяца', 'месяца'], q: ['прошлого квартала', 'квартала'], y: ['прошлого года', 'года'] };
+  const units = tf === '1w' ? [['q', 1.15], ['y', 1.2]] : tf === '1d' ? [['w', 0.9], ['m', 1.15]] : [['w', 1.05], ['m', 1.1]];
+  for (const [u, w] of units) {
+    const g = grp(u); if (g.length < 2) continue;
+    const prev = g[g.length - 2], cur = g[g.length - 1];
+    out.push({ p: prev.h, name: `хай ${names[u][0]}`, w }, { p: prev.l, name: `лоу ${names[u][0]}`, w }, { p: cur.o, name: `открытие ${names[u][1]}`, w: w * 0.85 });
+  }
+  return out;
+}
+
 /* ---------- Вероятности ---------- */
 function normCdf(x) {
   const t = 1 / (1 + 0.2316419 * Math.abs(x)), d = 0.3989423 * Math.exp(-x * x / 2);
@@ -497,28 +554,48 @@ function analyze(bars, ctx = {}) {
     }
   }
 
-  /* уровни: свинги двух масштабов + фрактальные экстремумы последних баров */
-  const lvSeen = new Set(), lvPiv = [...scales[0].piv, ...(scales[1].piv || []), ...(scales[2].piv || [])].filter(p => (!p.tent || last - p.i > 2) && !lvSeen.has(p.t + p.i) && lvSeen.add(p.t + p.i));
-  const curExt = scales[0].piv[scales[0].piv.length - 1];
-  if (curExt) lvPiv.push({ ...curExt });
-  const lv = levels(lvPiv, price, atrNow, N);
-  const sup = lv.filter(l => l.p < price - atrNow * 0.15).sort((x, y) => y.p - x.p).slice(0, 4);
-  const res = lv.filter(l => l.p > price + atrNow * 0.15).sort((x, y) => x.p - y.p).slice(0, 4);
-  if (fib) for (const l of [...sup, ...res]) {
-    const f = fib.levels.find(f => Math.abs(f.p - l.p) < atrNow * 0.6);
-    if (f) l.fib = f.r;
-  }
-
   /* волатильность: EWMA (λ = 0,94) — быстрее реагирует на смену режима, чем простое среднее */
   let sigma; { let v = null; for (let i = Math.max(1, N - 250); i < N; i++) { const x = Math.log(c[i] / c[i - 1]); v = v == null ? x * x : 0.94 * v + 0.06 * x * x; }
     const lr = []; for (let i = Math.max(1, N - 120); i < N; i++) lr.push(Math.log(c[i] / c[i - 1]));
     const mu = mean(lr), sLong = Math.sqrt(mean(lr.map(x => (x - mu) ** 2)));
     sigma = Math.sqrt(0.6 * (v || 0) + 0.4 * sLong * sLong); }
 
+  /* горизонт по таймфрейму: 4Ч ≈ неделя, 1Д ≈ полтора месяца, 1Н ≈ квартал;
+     окно актуальности уровней: 4Ч ≈ 40 дней, 1Д ≈ полгода, 1Н ≈ 3 года */
+  const step = N > 1 ? bars[last].t - bars[last - 1].t : 86400;
+  const tfK = step <= 4 * 3600 + 60 ? '4h' : step <= 86400 + 60 ? '1d' : '1w';
+  const horizon = ctx.horizon || { '4h': 42, '1d': 30, '1w': 13 }[tfK];
+  const LB = { '4h': 240, '1d': 180, '1w': 156 }[tfK], from = Math.max(0, N - LB);
+  const reachPct = Math.exp(2 * sigma * Math.sqrt(horizon)) - 1;           // дальше этого уровни не нужны для прогноза
+  const inReach = p => Math.abs(p - price) / price <= reachPct;
+
+  /* горизонтальные уровни: свинги только внутри окна актуальности */
+  const lvSeen = new Set(), lvPiv = [...scales[0].piv, ...(scales[1].piv || []), ...(scales[2].piv || [])]
+    .filter(p => p.i >= from && (!p.tent || last - p.i > 2) && !lvSeen.has(p.t + p.i) && lvSeen.add(p.t + p.i));
+  const curExt = scales[0].piv[scales[0].piv.length - 1];
+  if (curExt) lvPiv.push({ ...curExt });
+  const lv = levels(lvPiv, price, atrNow, N).filter(l => inReach(l.p));
+
+  /* профиль объёма за окно: POC — цена максимального объёма, VAH/VAL — границы зоны 70% объёма */
+  const vp = volProfile(bars, from, 56);
+
+  /* календарные опорные точки: прошлая неделя / месяц / квартал и открытия периодов */
+  const per = periodLevels(bars, tfK);
+
+  /* слом структуры: в нисходящем тренде — последний «нижний хай», в восходящем — последний «высокий лоу» */
+  let choch = null;
+  { const P = (root.SMC ? root.SMC.fractals(bars, 2) : scales[0].piv).filter(p => p.i >= from), Hs = P.filter(p => p.t === 'H'), Ls = P.filter(p => p.t === 'L');
+    if (T < 0 && Hs.length) { const h1 = Hs[Hs.length - 1]; if (h1.p > price) choch = { p: h1.p, dir: 1, i: h1.i }; }
+    else if (T > 0 && Ls.length) { const l1 = Ls[Ls.length - 1]; if (l1.p < price) choch = { p: l1.p, dir: -1, i: l1.i }; } }
+
   /* перерастяжение: отклонение от SMA20 в ATR, экстремумы RSI, снятие ликвидности с возвратом */
   const SM = root.SMC;
-  const ob = SM ? SM.orderBlocks(bars) : { bull: [], bear: [] };
-  const pools = SM ? SM.liquidityPools(bars) : { above: [], below: [], sweeps: [] };
+  const obAll = SM ? SM.orderBlocks(bars) : { bull: [], bear: [] };
+  const okOB = o => o.i >= from && inReach(o.side === 'bull' ? o.top : o.bot);
+  const ob = { bull: obAll.bull.filter(okOB), bear: obAll.bear.filter(okOB), far: [...obAll.bull, ...obAll.bear].filter(o => !okOB(o)).length };
+  const poolsAll = SM ? SM.liquidityPools(bars) : { above: [], below: [], sweeps: [] };
+  const okPool = g => g.last >= from && inReach(g.edge);
+  const pools = { above: poolsAll.above.filter(okPool), below: poolsAll.below.filter(okPool), sweeps: poolsAll.sweeps };
   const z = s20 != null ? (price - s20) / atrNow : 0;
   let MR = 0;
   if (Math.abs(z) > 2) MR -= clamp(z / 4, -0.6, 0.6);
@@ -527,7 +604,7 @@ function analyze(bars, ctx = {}) {
   if (sweep) MR += sweep.side === 'sell' ? 0.3 : -0.3;
   MR = clamp(MR, -1, 1);
 
-  /* фон: новости, индекс страха, деривативы */
+  /* фон: новости, индекс страха */
   const news = ctx.news || [];
   const newsS = news.length ? mean(news.map(n => n.s)) : null;
   const fng = ctx.fng ?? null;
@@ -538,37 +615,43 @@ function analyze(bars, ctx = {}) {
   const trendSig = clamp(parts.reduce((s, x) => s + x[0] * x[1], 0) / wsum, -1, 1);
   const total = clamp(trendSig * 0.75 + MR * 0.35, -1, 1);
 
-  /* горизонт по таймфрейму: 4Ч ≈ неделя, 1Д ≈ полтора месяца, 1Н ≈ квартал */
-  const step = N > 1 ? bars[last].t - bars[last - 1].t : 86400;
-  const horizon = ctx.horizon || (step <= 4 * 3600 + 60 ? 42 : step <= 86400 + 60 ? 30 : 13);
-
-  /* лестница целей: все значимые уровни с указанием, что их подтверждает */
+  /* лестница уровней: каждая цена — с перечнем того, что её подтверждает (конфлюэнс) */
   const liq = ctx.liq || null;
   const pts = [];
-  const add = (p, src, w) => { if (p > 0 && isFinite(p)) pts.push({ p, src, w }); };
-  sup.forEach(l => add(l.p, l.fib ? 'уровень+Фибо' : 'уровень', 1 + Math.min(1, l.strength / 4) + (l.fib ? 0.5 : 0)));
-  res.forEach(l => add(l.p, l.fib ? 'уровень+Фибо' : 'уровень', 1 + Math.min(1, l.strength / 4) + (l.fib ? 0.5 : 0)));
-  if (fib) fib.levels.forEach(f => { if (f.r > 0 && f.r < 1) add(f.p, 'Фибо ' + String(f.r).replace('.', ','), [0.382, 0.5, 0.618].includes(f.r) ? 1.1 : 0.8); });
+  const add = (p, src, w) => { if (p > 0 && isFinite(p) && inReach(p)) pts.push({ p, src, w }); };
+  lv.forEach(l => add(l.p, 'свинг' + (l.touches > 1 ? ' ×' + l.touches : ''), 0.8 + Math.min(1, l.strength / 4)));
+  if (vp) { add(vp.poc, 'POC объёма', 1.6); add(vp.vah, 'VAH объёма', 1.15); add(vp.val, 'VAL объёма', 1.15); vp.hvn.forEach(h => add(h, 'узел объёма', 0.8)); }
+  per.forEach(x => add(x.p, x.name, x.w));
+  if (choch) add(choch.p, 'слом структуры', 1.5);
+  { let hi = from, lo = from; for (let i = from; i <= last; i++) { if (bars[i].h > bars[hi].h) hi = i; if (bars[i].l < bars[lo].l) lo = i; }
+    add(bars[hi].h, 'максимум периода', 1.4); add(bars[lo].l, 'минимум периода', 1.4); }
+  if (fib) fib.levels.forEach(f => { if (f.r > 0 && f.r < 1) add(f.p, 'Фибо ' + String(f.r).replace('.', ','), [0.382, 0.5, 0.618].includes(f.r) ? 1.1 : 0.7); });
   ob.bull.forEach(o => add(o.top, 'ордер-блок', 1 + o.strength / 3));
   ob.bear.forEach(o => add(o.bot, 'ордер-блок', 1 + o.strength / 3));
-  pools.above.forEach(g => add(g.edge, 'ликвидность', 0.8 + 0.3 * g.n));
-  pools.below.forEach(g => add(g.edge, 'ликвидность', 0.8 + 0.3 * g.n));
-  if (liq) { const mx = Math.max(1, ...[...liq.longs, ...liq.shorts].map(x => x.usd));
-    [...liq.longs, ...liq.shorts].forEach(x => add(x.p, 'ликвидации', 0.7 + 1.3 * x.usd / mx)); }
+  pools.above.forEach(g => add(g.edge, 'стопы над хаями', 0.7 + 0.3 * g.n));
+  pools.below.forEach(g => add(g.edge, 'стопы под лоу', 0.7 + 0.3 * g.n));
+  if (liq && (liq.longs || liq.shorts)) { const L2 = [...(liq.longs || []), ...(liq.shorts || [])], mx = Math.max(1, ...L2.map(x => x.usd));
+    L2.forEach(x => add(x.p, 'кластер ликвидаций', 0.7 + 1.3 * x.usd / mx)); }
+  if (ctx.opt) { const o = ctx.opt; if (o.callWall) add(o.callWall, 'стена коллов', 1.3); if (o.putWall) add(o.putWall, 'стена путов', 1.3); if (o.maxPain) add(o.maxPain, 'max pain опционов', 1); }
   if (s200 != null) add(s200, 'SMA 200', 1);
   if (s50 != null) add(s50, 'SMA 50', 0.7);
   const ladder = side => {
-    const src = pts.filter(x => side > 0 ? x.p > price + atrNow * 0.5 : x.p < price - atrNow * 0.5).sort((x, y) => side > 0 ? x.p - y.p : y.p - x.p);
-    const out = [];
+    const src = pts.filter(x => side > 0 ? x.p > price + atrNow * 0.3 : x.p < price - atrNow * 0.3).sort((x, y) => y.w - x.w);
+    const out = [], tol = Math.min(atrNow * 0.45, price * 0.012);
     for (const x of src) {
-      const g = out.find(o => Math.abs(o.p - x.p) <= atrNow * 0.45);
+      const g = out.find(o => Math.abs(o.p - x.p) <= tol);
       if (g) { g.p = (g.p * g.w + x.p * x.w) / (g.w + x.w); g.w += x.w; if (!g.src.includes(x.src)) g.src.push(x.src); }
       else out.push({ p: x.p, w: x.w, src: [x.src] });
     }
+    out.sort((x, y) => side > 0 ? x.p - y.p : y.p - x.p);
     out.forEach(o => o.touch = touchProb(price, o.p, sigma, horizon));
     return out;
   };
   const upL = ladder(1), dnL = ladder(-1);
+  // ключевые уровни для карточки: самые подтверждённые в зоне досягаемости, по порядку от цены
+  const keyLv = (L, k) => L.slice(0, 12).filter(o => o.w >= 1.2 || o.src.length >= 2).slice(0, k);
+  const res = keyLv(upL, 4).map(o => ({ p: o.p, src: o.src, w: o.w, fib: (o.src.find(x => x.startsWith('Фибо')) || '').replace('Фибо ', '') || null }));
+  const sup = keyLv(dnL, 4).map(o => ({ p: o.p, src: o.src, w: o.w, fib: (o.src.find(x => x.startsWith('Фибо')) || '').replace('Фибо ', '') || null }));
   const minD = Math.max(atrNow * 1.2, price * (Math.exp(0.45 * sigma * Math.sqrt(horizon)) - 1));
   const pickT = (L, wt) => {
     if (!L.length) return [];
@@ -576,7 +659,7 @@ function analyze(bars, ctx = {}) {
     if (far.length) L = far;
     const reach = L.filter(o => o.touch >= 0.3);
     const t1 = (reach.length ? reach : L.slice(0, 1)).reduce((b, o) => (o.w * (0.6 + o.touch) > b.w * (0.6 + b.touch) ? o : b));
-    const rest = L.filter(o => (wt > 0 ? o.p > t1.p : o.p < t1.p) && o.touch >= 0.1);
+    const rest = L.filter(o => (wt > 0 ? o.p > t1.p : o.p < t1.p) && Math.abs(o.p - t1.p) >= minD * 0.6 && o.touch >= 0.1);
     let t2 = rest.length ? rest.reduce((b, o) => (o.w * (0.4 + o.touch) > b.w * (0.4 + b.touch) ? o : b)) : null;
     return t2 ? [t1, t2] : [t1];
   };
@@ -629,7 +712,7 @@ function analyze(bars, ctx = {}) {
     price, last, N, atr: atrNow, sigma, horizon, z, MR, trendSig,
     ind: { S20, S50, S200, E21, R, M, A }, now: { rsi: r, hist: h, s20, s50, s200, slope50 },
     trend: { score: T, dir: trendDir }, mom: Mo, crosses, divs,
-    wave, fib, sup, res, prob, total, scenarios: sc, newsS, fng, minor, ob, pools, sweep, upT, dnT, liq
+    wave, fib, sup, res, prob, total, scenarios: sc, newsS, fng, minor, ob, pools, sweep, upT, dnT, liq, vp, per, choch, upL, dnL, tfK, LB
   };
 }
 function fmtN(p) { const a = Math.abs(p), d = a >= 1000 ? 0 : a >= 100 ? 1 : a >= 1 ? 2 : a >= 0.01 ? 4 : 6; return p.toLocaleString('ru-RU', { minimumFractionDigits: d, maximumFractionDigits: d }); }
@@ -658,7 +741,7 @@ const STOCKS = new Set('AAPL MSFT NVDA TSLA AMZN GOOGL GOOG META NFLX AMD INTC C
 const SRC = { crypto: 'Binance', stock: 'Yahoo Finance', moex: 'Московская биржа' };
 const MK = { crypto: 'Криптовалюта', stock: 'Фондовый рынок', moex: 'Мосбиржа' };
 
-let state = { q: '', market: null, sym: null, disp: null, meta: {}, data: {}, tf: '1d', a: null, news: [], fng: null, mtf: {}, layers: { ma: true, wave: true, fib: false, lv: true, ob: true, liq: true, fc: true }, deriv: null, liq: null, at: null };
+let state = { q: '', market: null, sym: null, disp: null, meta: {}, data: {}, tf: '1d', a: null, news: [], fng: null, mtf: {}, layers: { ma: true, wave: true, fib: false, lv: true, ob: true, liq: true, fc: true }, deriv: null, liq: null, lg: null, opt: null, open: {}, at: null };
 let chart = null, timer = null;
 
 const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
@@ -821,6 +904,47 @@ async function getDeriv(sym) {
       funding: t0 ? +t0.fundingRate : null, ls: null, longAcc: null };
   } catch (e) { return null; }
 }
+/* Ликвидации по всему рынку: MarginPad (12 бирж, факт за 24 ч и модельные кластеры) + CoinBoss (по часам, по биржам, крупнейшие) */
+async function getLiqGlobal(base) {
+  const MP = 'https://marginpad.io/api/v1', CB = 'https://api.coinboss.com/api/liquidations';
+  const safe = p => p.catch(() => null);
+  const [rec, cl, mk, ch, ex, lg] = await Promise.all([
+    safe(fetchJSON(`${MP}/liquidations/recent?symbol=${base}`, 10000)), safe(fetchJSON(`${MP}/clusters?symbol=${base}`, 10000)),
+    safe(fetchJSON(`${MP}/liquidations`, 10000)), safe(fetchJSON(`${CB}/chart?symbol=${base}`, 10000)),
+    safe(fetchJSON(`${CB}/exchanges?symbol=${base}`, 10000)), safe(fetchJSON(`${CB}/largest?symbol=${base}`, 10000))]);
+  const out = { base };
+  if (rec && rec.symbol === base && Array.isArray(rec.buckets) && rec.buckets.length) {
+    out.real = { buckets: rec.buckets.map(b => ({ p: +b.price, long: +b.long || 0, short: +b.short || 0 })), at: rec.updatedAt };
+    out.real.L = out.real.buckets.reduce((s, b) => s + b.long, 0); out.real.S = out.real.buckets.reduce((s, b) => s + b.short, 0);
+  }
+  if (cl && cl.symbol === base && Array.isArray(cl.clusters) && cl.clusters.length)
+    out.fwdRaw = cl.clusters.map(x => ({ p: +x.price, side: String(x.side).startsWith('long') ? 'long' : 'short', usd: +x.est_notional || 0 }));
+  const md = mk && mk.data;
+  if (md) { out.market = md.market; const c = (md.coins || []).find(x => x.s === base); if (c) out.coin = { long: c.long, short: c.short, total: c.liq }; }
+  if (ch && Array.isArray(ch.data)) {
+    const m = new Map(); for (const r of ch.data) { const h = +r.hour, x = m.get(h) || { t: h / 1000, L: 0, S: 0 }; x[r.side === 'LONG' ? 'L' : 'S'] += +r.total_usd || 0; m.set(h, x); }
+    const cut = Date.now() / 1000 - 86400; out.hourly = [...m.values()].filter(x => x.t >= cut - 3600).sort((a, b) => a.t - b.t);
+  }
+  if (ex && Array.isArray(ex.data)) out.exch = ex.data.map(x => ({ ex: x.exchange, L: +x.long_usd, S: +x.short_usd, T: +x.total_usd })).sort((a, b) => b.T - a.T);
+  if (lg && Array.isArray(lg.data)) { const cut = Date.now() - 864e5; out.largest = lg.data.filter(x => +x.timestamp >= cut && String(x.symbol || '').toUpperCase().startsWith(base)).slice(0, 5).map(x => ({ ex: x.exchange, side: x.side, p: +x.price, usd: +x.value_usd, t: Math.floor(+x.timestamp / 1000) })); }
+  if (!out.coin && out.real) out.coin = { long: out.real.L, short: out.real.S, total: out.real.L + out.real.S };
+  if (!out.coin && out.exch) { const L = out.exch.reduce((s, x) => s + x.L, 0), S = out.exch.reduce((s, x) => s + x.S, 0); out.coin = { long: L, short: S, total: L + S }; }
+  return out.real || out.coin || out.fwdRaw ? out : null;
+}
+/* Сводим прогнозные кластеры в бины ~0,5% цены: для графика и для лестницы целей */
+function liqBins(raw, price) {
+  const bin = price * 0.005, m = new Map();
+  for (const x of raw) { const k = Math.round(x.p / bin); const o = m.get(k) || { p: k * bin, long: 0, short: 0 }; o[x.side] += x.usd; m.set(k, o); }
+  const bins = [...m.values()].filter(b => b.p > price * 0.65 && b.p < price * 1.35).sort((a, b) => a.p - b.p);
+  const mx = Math.max(1, ...bins.map(b => b.long + b.short)); bins.forEach(b => b.w = (b.long + b.short) / mx);
+  const top = side => {   // соседние бины склеиваем в один кластер (окно 1,2%)
+    const src = bins.filter(b => side === 'long' ? b.p < price && b.long > 0 : b.p > price && b.short > 0).map(b => ({ p: b.p, usd: b[side] })).sort((a, b) => b.usd - a.usd), out = [];
+    for (const x of src) { const c = out.find(o => Math.abs(o.p - x.p) / price <= 0.012); if (c) { c.p = (c.p * c.usd + x.p * x.usd) / (c.usd + x.usd); c.usd += x.usd; } else out.push({ ...x }); }
+    return out.sort((a, b) => b.usd - a.usd).slice(0, 4).sort((a, b) => side === 'long' ? b.p - a.p : a.p - b.p);
+  };
+  return { bins, bin, longs: top('long'), shorts: top('short') };
+}
+async function getOpt(sym) { try { return await fetchJSON(`/api/options?symbol=${encodeURIComponent(sym)}`, 15000); } catch (e) { return null; } }
 async function getFng() {
   try { const j = await fetchJSON('https://api.alternative.me/fng/?limit=1'); const d = j.data[0]; return { v: +d.value, c: d.value_classification }; } catch (e) { return null; }
 }
@@ -834,16 +958,20 @@ async function run(q, silent) {
     if (r) { state = { ...state, q: q.toUpperCase(), market: r.market, sym: r.sym, data: { '1d': r.first.bars }, meta: r.first.meta || {} }; }
     else { const f = await getBars(state.market, state.sym, '1d'); state.data['1d'] = f.bars; state.meta = f.meta || state.meta; }
     if (!silent) setStatus('load', 'Считаю волны, уровни и сценарии…');
-    const [h4, w1, news, fng, deriv] = await Promise.all([
+    const [h4, w1, news, fng, deriv, lg, opt] = await Promise.all([
       getBars(state.market, state.sym, '4h').then(x => x.bars).catch(() => null),
       getBars(state.market, state.sym, '1w').then(x => x.bars).catch(() => null),
       getNews(state.market, state.sym, state.meta.shortName || state.meta.longName),
       state.market === 'crypto' ? getFng() : Promise.resolve(null),
-      state.market === 'crypto' ? getDeriv(state.sym).catch(() => null) : Promise.resolve(null)
+      state.market === 'crypto' ? getDeriv(state.sym).catch(() => null) : Promise.resolve(null),
+      state.market === 'crypto' ? getLiqGlobal(state.sym.replace(/(USDT|USDC|FDUSD)$/, '')).catch(() => null) : Promise.resolve(null),
+      state.market === 'stock' && ONLINE && !/[=^.]/.test(state.sym) ? getOpt(state.sym) : Promise.resolve(null)
     ]);
-    state.data['4h'] = h4; state.data['1w'] = w1; state.news = news; state.fng = fng; state.deriv = deriv; state.at = new Date();
+    state.data['4h'] = h4; state.data['1w'] = w1; state.news = news; state.fng = fng; state.deriv = deriv; state.lg = lg; state.opt = opt && !opt.optErr ? opt : (opt && opt.short ? opt : null); state.at = new Date();
+    const px = state.data['1d'][state.data['1d'].length - 1].c;
     state.liq = null;
-    try { if (deriv && h4 && window.SMC) state.liq = SMC.liqMap(h4, deriv.oi, deriv.taker); } catch (e) { state.liq = null; }
+    if (lg && lg.fwdRaw) state.liq = { ...liqBins(lg.fwdRaw, px), src: 'MarginPad · 12 бирж' };
+    else { try { if (deriv && h4 && window.SMC) { const m = SMC.liqMap(h4, deriv.oi, deriv.taker); if (m) state.liq = { bins: m.bins, bin: m.bin, longs: m.longs, shorts: m.shorts, src: 'модель по OI ' + deriv.src }; } } catch (e) {} }
     state.disp = state.market === 'crypto' ? state.sym.replace(/(USDT|USDC|FDUSD|BTC|ETH)$/, '/$1') : state.sym;
     if (!state.data[state.tf]) state.tf = '1d';
     store.set('az_last', state.q);
@@ -864,7 +992,7 @@ function setStatus(kind, html) {
 }
 
 function compute() {
-  const base = { news: state.news, fng: state.fng ? state.fng.v : null, liq: state.liq };
+  const base = { news: state.news, fng: state.fng ? state.fng.v : null, liq: state.liq, opt: state.opt && state.opt.callWall ? state.opt : null };
   const all = {}; let htf = null;
   for (const k of ['1w', '1d', '4h']) {
     const b = state.data[k]; if (!b || b.length < 60) continue;
@@ -951,6 +1079,25 @@ function story(a) {
 }
 
 /* ---------- отрисовка ---------- */
+/* ---------- иконки ---------- */
+const IC = {
+  lv: '<path d="M3 6h18M3 12h12M3 18h18"/><circle cx="19" cy="12" r="2"/>',
+  liq: '<path d="M13 2 4 14h7l-1 8 9-12h-7z"/>',
+  opt: '<path d="M3 21h18M6 21V11M11 21V5M16 21v-7M21 21V9"/>',
+  ob: '<rect x="3" y="4" width="18" height="6" rx="1.5"/><rect x="3" y="14" width="18" height="6" rx="1.5"/>',
+  vol: '<path d="M3 5h8M3 9h14M3 13h18M3 17h10M3 21h6"/>',
+  wave: '<path d="M2 17l4-7 4 5 5-10 4 8 3-3"/>',
+  fib: '<path d="M3 20h18M3 15h13M3 11h9M3 8h6M3 5h4"/>',
+  ind: '<path d="M4 17a8 8 0 1 1 16 0"/><path d="m12 17 4-5"/>',
+  news: '<path d="M5 4h11v16H6a1 1 0 0 1-1-1z"/><path d="M16 8h3v11a1 1 0 0 1-1 1h-2M8 8h5M8 12h5M8 16h3"/>',
+  story: '<path d="M4 5h16M4 10h16M4 15h10M4 20h7"/>'
+};
+const svgI = k => `<svg viewBox="0 0 24 24">${IC[k]}</svg>`;
+function tile(k, color, title, value, body) {
+  const open = state.open[k] ? ' open' : '';
+  return `<details class="tile glass" data-k="${k}"${open}><summary><span class="ic" style="--c:${color}">${svgI(k)}</span><span class="tt"><small>${esc(title)}</small><b>${value}</b></span><i class="chev"></i></summary><div class="tb">${body}</div></details>`;
+}
+
 function render() {
   const a = state.a, bars = state.data[state.tf], last = bars[bars.length - 1], prev = bars[bars.length - 2];
   const ch = (last.c - prev.c) / prev.c, v = verdict(a);
@@ -958,12 +1105,12 @@ function render() {
     <div class="h-id"><span class="badge">${MK[state.market]}</span><h2>${esc(state.disp)}</h2><p>${esc(state.meta.longName || state.meta.shortName || '')}</p></div>
     <div class="h-px"><b>${fmt(last.c)}</b><span class="${ch >= 0 ? 'pos' : 'neg'}">${signPct(ch)} за ${TF[state.tf].name.toLowerCase()}</span></div>`;
   $('#tfs').innerHTML = Object.keys(TF).map(k => `<button class="tf ${k === state.tf ? 'on' : ''}" data-tf="${k}" ${state.data[k] ? '' : 'disabled'}>${TF[k].name}</button>`).join('');
-  $('#layers').innerHTML = [['ma', 'Средние'], ['wave', 'Волны'], ['fib', 'Фибоначчи'], ['lv', 'Уровни'], ['ob', 'Ордер-блоки'], ['liq', 'Ликвидность'], ['fc', 'Прогноз']].map(([k, n]) => `<button class="chip ${state.layers[k] ? 'on' : ''}" data-ly="${k}">${n}</button>`).join('');
+  $('#layers').innerHTML = [['ma', 'Средние'], ['wave', 'Волны'], ['lv', 'Уровни'], ['ob', 'Ордер-блоки'], ['liq', 'Ликвидации'], ['fib', 'Фибо'], ['fc', 'Прогноз']].map(([k, n]) => `<button class="chip ${state.layers[k] ? 'on' : ''}" data-ly="${k}">${n}</button>`).join('');
   drawChart();
 
   $('#verdict').className = 'card glass verdict ' + v.cls;
   $('#verdict').innerHTML = `
-    <span class="kick">${v.k} · горизонт ${HOR[state.tf]} (${a.horizon} бар. ${TF[state.tf].name}) · вероятности — какая цель будет достигнута первой</span>
+    <span class="kick">${v.k} · горизонт ${HOR[state.tf]} · ${TF[state.tf].name}</span>
     <h3>${esc(v.h)}</h3>
     <div class="tri"><i class="u" style="width:${a.prob.up * 100}%"></i><i class="s" style="width:${a.prob.side * 100}%"></i><i class="d" style="width:${a.prob.down * 100}%"></i></div>
     <div class="tri-l"><span><em class="dot u"></em>Рост ${pct(a.prob.up)}</span><span><em class="dot s"></em>Боковик ${pct(a.prob.side)}</span><span><em class="dot d"></em>Снижение ${pct(a.prob.down)}</span></div>
@@ -971,80 +1118,131 @@ function render() {
       const t = m.top, d = !t || t.key === 'side' ? ['', 'Боковик'] : t.key === 'up' ? ['pos', t.title] : ['neg', t.title];
       return `<div class="${k === state.tf ? 'cur' : ''}"><small>${TF[k].name}</small><b class="${d[0]}">${esc(d[1])}${t ? ' · ' + pct(t.p) : ''}</b><span>${m.wave ? esc(m.wave) : '—'}</span></div>`; }).join('')}</div>`;
 
-  $('#scen').innerHTML = a.scenarios.map((s, i) => `
-    <article class="card glass sc ${s.bias > 0 ? 'up' : s.bias < 0 ? 'down' : 'side'}">
-      <header><span>${i === 0 ? 'Основной' : 'Альтернатива'}</span><b>${pct(s.p)}</b></header>
-      <h4>${esc(s.title)}</h4><p>${esc(s.text)}</p>
-      <ul>${s.targets.map((t, j) => `<li><span>${s.key === 'side' ? (j ? 'Верх' : 'Низ') : 'Цель ' + (j + 1)}</span><b>${fmt(t.p)}</b><em>${signPct((t.p - a.price) / a.price)}</em><small>${s.key === 'side' ? '' : esc(t.why) + ' · '}касание за горизонт ${pct(t.touch)}</small></li>`).join('')}
-      ${s.invalid != null ? `<li class="inv"><span>Отмена</span><b>${fmt(s.invalid)}</b><em>${signPct((s.invalid - a.price) / a.price)}</em><small>закрытие бара за уровнем — сценарий снимается</small></li>` : ''}</ul>
-    </article>`).join('');
+  $('#scen').innerHTML = a.scenarios.map((s, i) => {
+    const cls = s.bias > 0 ? 'up' : s.bias < 0 ? 'down' : 'side';
+    const line = s.key === 'side' ? `${fmt(s.targets[0].p)} – ${fmt(s.targets[1].p)}` : `${s.targets.map(t => fmt(t.p)).join(' → ')} · отмена ${fmt(s.invalid)}`;
+    return `<details class="scx ${cls}"${state.open['sc' + s.key] ? ' open' : ''} data-k="sc${s.key}"><summary><span class="pp">${pct(s.p)}</span><span class="st"><b>${esc(s.title)}${i === 0 ? '<span class="tag">основной</span>' : ''}</b><small>${line}</small></span><i class="chev"></i></summary>
+      <div><p>${esc(s.text)}</p><ul>${s.targets.map((t, j) => `<li><span>${s.key === 'side' ? (j ? 'Верх' : 'Низ') : 'Цель ' + (j + 1)}</span><b>${fmt(t.p)}</b><em>${signPct((t.p - a.price) / a.price)}</em><small>${s.key === 'side' ? '' : esc(t.why) + ' · '}касание за горизонт ${pct(t.touch)}</small></li>`).join('')}
+      ${s.invalid != null ? `<li><span>Отмена</span><b>${fmt(s.invalid)}</b><em>${signPct((s.invalid - a.price) / a.price)}</em><small>закрытие бара за уровнем — сценарий снимается</small></li>` : ''}</ul></div></details>`; }).join('');
 
-  const lad = [...a.res.slice().reverse().map((l, i, arr) => ({ ...l, k: 'R' + (arr.length - i), c: 'r' })), { p: a.price, k: 'Цена', c: 'now' }, ...a.sup.map((l, i) => ({ ...l, k: 'S' + (i + 1), c: 's' }))];
-  $('#levels').innerHTML = `<h4>Уровни</h4><ol class="ladder">${lad.map(l => `<li class="${l.c}"><span>${l.k}</span><b>${fmt(l.p)}</b><em>${l.c === 'now' ? '' : signPct((l.p - a.price) / a.price)}</em><small>${l.c === 'now' ? '' : (l.fib ? 'Фибо ' + String(l.fib).replace('.', ',') + ' · ' : '') + l.touches + ' кас.'}</small></li>`).join('')}</ol>`;
-
-  if (a.fib) {
-    const lv = a.fib.levels.slice().sort((x, y) => y.p - x.p);
-    $('#fib').innerHTML = `<h4>Фибоначчи</h4><p class="mut">Размах ${fmt(a.fib.a.p)} → ${fmt(a.fib.b.p)}</p><ul class="fibl">${lv.map(f => `<li class="${f.kind} ${[0.382, 0.5, 0.618, 1.618].includes(f.r) ? 'key' : ''}"><span>${String(f.r).replace('.', ',')}</span><i style="--w:${Math.min(100, Math.abs(f.p - a.price) / a.price * 400)}%"></i><b>${fmt(f.p)}</b></li>`).join('')}</ul>`;
-  } else $('#fib').innerHTML = '<h4>Фибоначчи</h4><p class="mut">Недостаточно размахов для построения сетки.</p>';
-
-  if (a.wave) {
-    const w = a.wave;
-    $('#wave').innerHTML = `<h4>Волны Эллиотта</h4><p class="big">${esc(countTitle(w))}</p>
+  const T = [];
+  // разбор
+  const st = story(a);
+  T.push(tile('story', '#c9a7ff', 'Разбор аналитика', `${st.length} наблюдений`, `<ul class="bul">${st.map(x => `<li>${esc(x)}</li>`).join('')}</ul>`));
+  // уровни
+  const P = x => signPct((x - a.price) / a.price);
+  const lvRow = (o, k) => `<li><span>${k}</span><b>${fmt(o.p)}</b><em>${P(o.p)}</em><small>${esc(o.src.join(' · '))}</small></li>`;
+  T.push(tile('lv', '#9fd8ff', 'Ключевые уровни', `${a.res[0] ? '▲ ' + fmt(a.res[0].p) : '▲ —'} · ${a.sup[0] ? '▼ ' + fmt(a.sup[0].p) : '▼ —'}`,
+    `<ul class="kv">${a.res.slice().reverse().map((o, i, arr) => lvRow(o, 'R' + (arr.length - i))).join('')}<li class="now"><span>Цена</span><b>${fmt(a.price)}</b><em></em></li>${a.sup.map((o, i) => lvRow(o, 'S' + (i + 1))).join('')}</ul>
+    <p class="note">Берутся только актуальные точки в зоне досягаемости за горизонт: профиль объёма, экстремумы и открытия недели/месяца, слом структуры, кластеры ликвидаций, ордер-блоки, Фибоначчи текущего плеча. Чем больше подтверждений у цены — тем сильнее уровень.</p>`));
+  // ликвидации / опционы
+  if (state.market === 'crypto') T.push(liqTile(a));
+  else if (state.market === 'stock') T.push(optTile(a));
+  // ордер-блоки и ликвидность
+  T.push(obTile(a));
+  // объём
+  if (a.vp) T.push(volTile(a));
+  // волны
+  if (a.wave) { const w = a.wave;
+    T.push(tile('wave', '#e2c6ff', 'Волны Эллиотта', esc(countTitle(w)), `<p class="big">${esc(countTitle(w))}</p>
       <div class="meter"><i style="width:${w.confidence * 100}%"></i></div><p class="mut">Согласованность с канонами Эллиотта: ${pct(w.confidence)}</p>
       <ul class="dots">${w.labels.map(l => `<li><b>${l.label}</b><span>${fmt(l.p)}</span></li>`).join('')}</ul>
-      <p class="mut">${ratioText(w).join(' · ')}</p>
-      <p class="mut">Волновой ориентир (${esc(w.next.wave)}): ${w.next.targets.map((t, j) => `${fmt(t)} — ${w.next.reach[j] < 0.05 ? 'вне горизонта прогноза' : 'достижимость ' + pct(w.next.reach[j])}`).join('; ')}. Отмена разметки — ${fmt(w.next.invalid)}.</p>`;
-  } else $('#wave').innerHTML = '<h4>Волны Эллиотта</h4><p class="mut">Чёткой волновой структуры сейчас нет — рынок в фазе накопления или хаотичной коррекции.</p>';
-
+      <p class="mut">${ratioText(w).join(' · ')}</p><p class="mut">${esc(w.next.phase)}</p>
+      <p class="note">Волновой ориентир (${esc(w.next.wave)}): ${w.next.targets.map((t, j) => `${fmt(t)} — ${w.next.reach[j] < 0.05 ? 'вне горизонта' : 'достижимость ' + pct(w.next.reach[j])}`).join('; ')}. Отмена разметки — ${fmt(w.next.invalid)}.</p>`)); }
+  else T.push(tile('wave', '#e2c6ff', 'Волны Эллиотта', 'Структура не читается', '<p class="mut">Чёткой волновой структуры сейчас нет — рынок в фазе накопления или хаотичной коррекции.</p>'));
+  // Фибоначчи
+  if (a.fib) { const lv = a.fib.levels.slice().sort((x, y) => y.p - x.p), d = a.fib.depth;
+    const nx = a.fib.levels.filter(f => f.kind === 'retr' && f.r > d).sort((x, y) => x.r - y.r)[0];
+    T.push(tile('fib', '#ffd678', 'Фибоначчи', `откат ${num(Math.max(0, d), 2)}${nx ? ' · след. ' + fmt(nx.p) : ''}`,
+      `<p class="mut">Плечо ${fmt(a.fib.a.p)} → ${fmt(a.fib.b.p)}${a.fib.log ? ' (лог-шкала)' : ''}</p><ul class="fibl">${lv.map(f => `<li class="${f.kind} ${[0.382, 0.5, 0.618, 1.618].includes(f.r) ? 'key' : ''}"><span>${String(f.r).replace('.', ',')}</span><i style="--w:${Math.min(100, Math.abs(f.p - a.price) / a.price * 400)}%"></i><b>${fmt(f.p)}</b></li>`).join('')}</ul>`)); }
+  // индикаторы
   const n = a.now, ma = [['EMA 21', a.ind.E21[a.last]], ['SMA 50', n.s50], ['SMA 200', n.s200]];
-  $('#ind').innerHTML = `<h4>Индикаторы</h4>
-    <div class="rsi"><span>RSI 14</span><div class="rbar"><i style="left:${n.rsi ?? 50}%"></i></div><b>${n.rsi != null ? Math.round(n.rsi) : '—'}</b></div>
-    <ul class="mas">${ma.map(([k, x]) => `<li><span>${k}</span><b>${fmt(x)}</b><em class="${x != null && a.price > x ? 'pos' : 'neg'}">${x != null ? signPct((a.price - x) / x) : '—'}</em></li>`).join('')}
+  T.push(tile('ind', '#7cc7ff', 'Индикаторы', `RSI ${n.rsi != null ? Math.round(n.rsi) : '—'} · MACD ${n.hist > 0 ? '↑' : '↓'} · σ ${num(a.sigma * 100, 1)}%`,
+    `<div class="rsi"><span>RSI 14</span><div class="rbar"><i style="left:${n.rsi ?? 50}%"></i></div><b>${n.rsi != null ? Math.round(n.rsi) : '—'}</b></div>
+    <ul class="kv">${ma.map(([k, x]) => `<li><span>${k}</span><b>${fmt(x)}</b><em class="${x != null && a.price > x ? 'pos' : 'neg'}">${x != null ? signPct((a.price - x) / x) : '—'}</em></li>`).join('')}
     <li><span>MACD</span><b>${n.hist != null ? (n.hist > 0 ? 'выше сигнальной' : 'ниже сигнальной') : '—'}</b><em></em></li>
+    <li><span>Отклонение от SMA 20</span><b>${num(a.z, 1)} ATR</b><em></em></li>
     <li><span>Волатильность</span><b>${num(a.sigma * 100, 2)}% за бар</b><em></em></li>
-    ${state.fng ? `<li><span>Страх / жадность</span><b>${state.fng.v}</b><em>${esc(state.fng.c)}</em></li>` : ''}</ul>`;
-
-  renderSmc(a);
-  $('#story').innerHTML = `<h4>Что говорит график</h4>${story(a).map(x => `<p>${esc(x)}</p>`).join('')}`;
-  $('#news').innerHTML = `<h4>Новостной фон</h4>${state.news.length ? `<ul class="nl">${state.news.map(x => `<li><em class="dot ${x.s > 0 ? 'u' : x.s < 0 ? 'd' : 's'}"></em><a href="${esc(x.link)}" target="_blank" rel="noopener">${esc(x.title)}</a><small>${esc(x.pub || '')}${x.t ? ' · ' + new Date(x.t * 1000).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' }) : ''}</small></li>`).join('')}</ul>` : '<p class="mut">Свежих публикаций по инструменту не нашлось — расчёт опирается только на график.</p>'}`;
+    ${state.fng ? `<li><span>Страх / жадность</span><b>${state.fng.v}</b><em>${esc(state.fng.c)}</em></li>` : ''}</ul>`));
+  // новости
+  const nv = a.newsS;
+  T.push(tile('news', '#9fb3ff', 'Новостной фон', state.news.length ? `${state.news.length} · ${nv > 0.15 ? 'позитив' : nv < -0.15 ? 'негатив' : 'нейтрально'}` : 'нет свежих',
+    state.news.length ? `<ul class="nl">${state.news.map(x => `<li><em class="dot ${x.s > 0 ? 'u' : x.s < 0 ? 'd' : 's'}"></em><a href="${esc(x.link)}" target="_blank" rel="noopener">${esc(x.title)}</a><small>${esc(x.pub || '')}${x.t ? ' · ' + new Date(x.t * 1000).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' }) : ''}</small></li>`).join('')}</ul>` : '<p class="mut">Свежих публикаций по инструменту не нашлось — расчёт опирается только на график.</p>'));
+  $('#tiles').innerHTML = T.join('');
   $('#src').textContent = `Котировки: ${SRC[state.market]}, обновлено ${state.at.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}. Пересчёт каждые 90 секунд.`;
 }
 
-function renderSmc(a) {
-  const P = x => signPct((x - a.price) / a.price);
-  const obRow = (o, side) => `<li><span><em class="ob" style="background:${side === 'bull' ? 'rgba(62,230,176,.6)' : 'rgba(255,95,126,.6)'}"></em>${dShort(state.data[state.tf][o.i].t)}</span><b>${fmt(o.bot)}–${fmt(o.top)}</b><em>${P(side === 'bull' ? o.top : o.bot)} · ${o.touches === 0 ? 'нетронут' : 'тест ×' + o.touches}</em></li>`;
-  const ob = a.ob, pl = a.pools;
-  const sw = pl.sweeps.filter(x => a.last - x.i <= 20).filter((x, k, arr) => !arr.slice(0, k).some(y => Math.abs(y.i - x.i) <= 3)).slice(0, 2);
-  $('#smc').innerHTML = `<h4>Ордер-блоки и ликвидность · ${TF[state.tf].name}</h4>
-    <h5>Предложение — медвежьи ордер-блоки выше цены</h5>
-    ${ob.bear.length ? `<ul class="mas">${ob.bear.slice(0, 3).map(o => obRow(o, 'bear')).join('')}</ul>` : '<p class="mut">Активных зон продавца рядом нет.</p>'}
-    <h5>Спрос — бычьи ордер-блоки ниже цены</h5>
-    ${ob.bull.length ? `<ul class="mas">${ob.bull.slice(0, 3).map(o => obRow(o, 'bull')).join('')}</ul>` : '<p class="mut">Активных зон покупателя рядом нет — снизу опора только на уровни и ликвидность.</p>'}
-    <h5>Пулы ликвидности (скопления стопов)</h5>
-    <ul class="mas">${pl.above.slice(0, 2).map(g => `<li><span>Над хаями${g.n > 1 ? ' ×' + g.n : ''}</span><b>${fmt(g.edge)}</b><em>${P(g.edge)}</em></li>`).join('')}${pl.below.slice(0, 2).map(g => `<li><span>Под лоу${g.n > 1 ? ' ×' + g.n : ''}</span><b>${fmt(g.edge)}</b><em>${P(g.edge)}</em></li>`).join('')}</ul>
-    ${sw.length ? `<p class="mut">${sw.map(x => `${dShort(state.data[state.tf][x.i].t)}: снята ликвидность ${x.side === 'sell' ? 'под' : 'над'} ${fmt(x.p)} (тень до ${fmt(x.ext)}), закрытие вернулось ${x.side === 'sell' ? 'выше' : 'ниже'} — признак ложного пробоя.`).join(' ')}</p>` : ''}
-    <p class="mut">Ордер-блок — последняя встречная свеча перед импульсом, сломавшим структуру: там остались неисполненные заявки крупного игрока. Нетронутые зоны сильнее протестированных.</p>`;
-
-  const L = state.liq, d = state.deriv;
-  if (state.market !== 'crypto') {
-    $('#liqc').innerHTML = `<h4>Ликвидации</h4><p class="mut">Для акций и Мосбиржи биржи не публикуют позиции с плечом, поэтому карта ликвидаций не строится. Ориентир — пулы ликвидности: стопы над хаями ${pl.above[0] ? fmt(pl.above[0].edge) : '—'} и под лоу ${pl.below[0] ? fmt(pl.below[0].edge) : '—'}.</p>`;
-    return;
+function hourlySvg(h) {
+  if (!h || !h.length) return '';
+  const W = 300, H = 84, mid = H / 2, n = h.length, bw = W / n, mx = Math.max(1, ...h.map(x => Math.max(x.L, x.S)));
+  const bars = h.map((x, i) => { const s = x.S / mx * (mid - 4), l = x.L / mx * (mid - 4);
+    return `<rect x="${(i * bw + 1).toFixed(1)}" y="${(mid - s).toFixed(1)}" width="${Math.max(1, bw - 2).toFixed(1)}" height="${s.toFixed(1)}" fill="#5abeff"/><rect x="${(i * bw + 1).toFixed(1)}" y="${mid}" width="${Math.max(1, bw - 2).toFixed(1)}" height="${l.toFixed(1)}" fill="#ffaa46"/>`; }).join('');
+  return `<svg class="hbars" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">${bars}<line x1="0" x2="${W}" y1="${mid}" y2="${mid}" stroke="rgba(255,255,255,.25)"/></svg><div class="leg2"><span>▲ шорты</span><span>▼ лонги</span><span>по часам, ${new Date(h[0].t * 1000).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })} → сейчас</span></div>`;
+}
+function liqTile(a) {
+  const g = state.lg, L = state.liq, d = state.deriv;
+  const ds = d ? SMC.derivSummary(d.oi, d.funding, d.longAcc, a.price, (() => { const b = state.data['4h']; return b && b.length > 43 ? b[b.length - 43].c : null; })()) : null;
+  let val = 'нет данных', body = '';
+  if (g && g.coin) {
+    const c = g.coin, tot = c.long + c.short || 1;
+    val = `24 ч: ${usd(c.total || tot)} · ${c.short > c.long ? 'шорты ' + pct(c.short / tot) : 'лонги ' + pct(c.long / tot)}`;
+    body += `<h5>Ликвидировано за 24 часа · ${esc(g.base)}</h5><div class="split"><i class="l" style="width:${c.long / tot * 100}%"></i><i class="s" style="width:${c.short / tot * 100}%"></i></div>
+      <div class="leg2"><span>Лонги <b>${usd(c.long)}</b></span><span>Шорты <b>${usd(c.short)}</b></span>${g.market ? `<span>Весь рынок <b>${usd(g.market.total)}</b> (${pct(g.market.long / (g.market.total || 1))} лонги)</span>` : ''}</div>`;
+    if (g.hourly && g.hourly.length) body += hourlySvg(g.hourly);
   }
-  if (!L || !d) { $('#liqc').innerHTML = `<h4>Ликвидации</h4><p class="mut">Фьючерсные данные по этому инструменту недоступны — карта ликвидаций не строится.</p>`; return; }
-  const rows = [...L.shorts.slice().reverse().map(x => ({ ...x, s: 's' })), ...L.longs.map(x => ({ ...x, s: 'l' }))];
-  const mx = Math.max(1, ...rows.map(x => x.usd));
-  const ds = E && SMC.derivSummary(d.oi, d.funding, d.longAcc, a.price, (() => { const b = state.data['4h']; return b && b.length > 43 ? b[b.length - 43].c : null; })());
-  const ev = L.events.slice().sort((x, y) => y.t - x.t).slice(0, 4);
-  $('#liqc').innerHTML = `<h4>Карта ликвидаций · оценка</h4>
-    <h5>Шорты будут ликвидированы выше · лонги — ниже</h5>
-    ${rows.map(x => `<div class="heat"><b>${fmt(x.p)}</b><i class="${x.s}" style="--w:${Math.max(4, x.usd / mx * 100)}%"></i><em>${usd(x.usd)}</em></div>`).join('') || '<p class="mut">Крупных скоплений нет.</p>'}
-    ${ds ? `<ul class="mas">
+  body += '<div class="cols">';
+  if (g && g.exch && g.exch.length) body += `<div><h5>По биржам</h5><ul class="kv">${g.exch.slice(0, 6).map(x => `<li><span>${esc(x.ex)}</span><b>${usd(x.T)}</b><em>лонги ${pct(x.L / (x.T || 1))}</em></li>`).join('')}</ul></div>`;
+  if (g && g.largest && g.largest.length) body += `<div><h5>Крупнейшие за сутки</h5><ul class="kv">${g.largest.map(x => `<li><span>${esc(x.ex)} · ${new Date(x.t * 1000).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}</span><b>${usd(x.usd)}</b><em>${x.side === 'LONG' ? 'лонг' : 'шорт'} @ ${fmt(x.p)}</em></li>`).join('')}</ul></div>`;
+  if (L) body += `<div><h5>Где ликвидируют дальше</h5><ul class="kv">${L.shorts.slice().reverse().map(x => `<li><span style="color:#5abeff">шорты</span><b>${fmt(x.p)}</b><em>${usd(x.usd)} · ${signPct((x.p - a.price) / a.price)}</em></li>`).join('')}${L.longs.map(x => `<li><span style="color:#ffaa46">лонги</span><b>${fmt(x.p)}</b><em>${usd(x.usd)} · ${signPct((x.p - a.price) / a.price)}</em></li>`).join('')}</ul></div>`;
+  if (ds) body += `<div><h5>Деривативы</h5><ul class="kv">
       <li><span>Открытый интерес</span><b>${usd(ds.oiUsd)}</b><em class="${ds.oiCh >= 0 ? 'pos' : 'neg'}">${signPct(ds.oiCh)} за 7 дн.</em></li>
       ${ds.funding != null ? `<li><span>Фандинг</span><b>${num(ds.funding * 100, 4)}%</b><em>${ds.funding > 0.0003 ? 'лонги перегреты' : ds.funding < -0.0001 ? 'шорты платят' : 'нейтрально'}</em></li>` : ''}
-      ${ds.lsAcc != null ? `<li><span>Аккаунтов в лонге</span><b>${pct(ds.lsAcc)}</b><em>${ds.lsAcc > 0.65 ? 'толпа в лонгах' : ds.lsAcc < 0.4 ? 'толпа в шортах' : 'баланс'}</em></li>` : ''}</ul>
-      <p class="mut">${esc(ds.read)}</p>` : ''}
-    ${ev.length ? `<h5>Крупные выносы (оценка)</h5><ul class="mas">${ev.map(e => `<li><span>${dShort(e.t)}</span><b>${e.long >= e.short ? 'лонги' : 'шорты'}</b><em>≈ ${usd(Math.max(e.long, e.short))}</em></li>`).join('')}</ul>` : ''}
-    <p class="mut">Модель по открытому интересу ${esc(d.src)} за ~30 дней: прирост OI раскладывается по плечам 5–100×. Это оценка одной биржи, а не фактические ликвидации рынка; крупные кластеры работают как «магниты» для цены.</p>`;
+      ${ds.lsAcc != null ? `<li><span>Аккаунтов в лонге</span><b>${pct(ds.lsAcc)}</b><em>${ds.lsAcc > 0.65 ? 'толпа в лонгах' : ds.lsAcc < 0.4 ? 'толпа в шортах' : 'баланс'}</em></li>` : ''}</ul><p class="note">${esc(ds.read)}</p></div>`;
+  body += '</div>';
+  body += `<p class="note">Факт — ликвидации с ${g && g.real ? '12 бирж (MarginPad)' : 'агрегатора'}, по часам и биржам — CoinBoss. Будущие кластеры — ${L ? esc(L.src) : '—'}: это оценка, где сработают принудительные закрытия; крупные скопления работают как «магниты» для цены. На графике: полосы — будущие ликвидации, столбики у последней свечи — факт за 24 ч.</p>`;
+  return tile('liq', '#ffaa46', 'Ликвидации', val, body);
+}
+function optTile(a) {
+  const o = state.opt;
+  if (!o) return tile('opt', '#7cf0c8', 'Опционы и шорты', 'нет данных', '<p class="mut">Для этой бумаги данных опционов нет (индексы, валюты, сырьё и Мосбиржа). Ориентиры ликвидности — в плитке «Ордер-блоки и ликвидность».</p>');
+  const sh = o.short || {};
+  const val = o.callWall ? `коллы ${fmt(o.callWall)} · путы ${fmt(o.putWall)}` : sh.pctFloat != null ? `шорт ${pct(sh.pctFloat)} флоута` : 'нет данных';
+  return tile('opt', '#7cf0c8', 'Опционы и шорты', val, `<div class="cols">
+    ${o.callWall ? `<div><h5>Стены открытого интереса</h5><ul class="kv">
+      ${(o.callWalls || []).map(([k, oi]) => `<li><span>коллы</span><b>${fmt(k)}</b><em>${oi.toLocaleString('ru-RU')} OI · ${signPct((k - a.price) / a.price)}</em></li>`).join('')}
+      ${(o.putWalls || []).map(([k, oi]) => `<li><span>путы</span><b>${fmt(k)}</b><em>${oi.toLocaleString('ru-RU')} OI · ${signPct((k - a.price) / a.price)}</em></li>`).join('')}
+      <li><span>Max pain</span><b>${fmt(o.maxPain)}</b><em>${signPct((o.maxPain - a.price) / a.price)}</em></li>
+      <li><span>Put/Call по OI</span><b>${o.pcr != null ? num(o.pcr, 2) : '—'}</b><em>${o.pcr > 1.2 ? 'много защиты — страх' : o.pcr < 0.6 ? 'перекос в коллы — жадность' : 'баланс'}</em></li></ul></div>` : ''}
+    ${sh.pctFloat != null || sh.ratio != null ? `<div><h5>Шорт-интерес</h5><ul class="kv">
+      ${sh.pctFloat != null ? `<li><span>В шорте</span><b>${pct(sh.pctFloat)} флоута</b><em>${sh.pctFloat > 0.15 ? 'высокий — риск сквиза' : sh.pctFloat > 0.05 ? 'умеренный' : 'низкий'}</em></li>` : ''}
+      ${sh.ratio != null ? `<li><span>Дней на покрытие</span><b>${num(sh.ratio, 1)}</b><em></em></li>` : ''}
+      ${sh.shares && sh.prior ? `<li><span>За месяц</span><b>${signPct((sh.shares - sh.prior) / sh.prior)}</b><em>${sh.shares > sh.prior ? 'шортов больше' : 'шортов меньше'}</em></li>` : ''}</ul></div>` : ''}
+    </div><p class="note">На фондовом рынке биржи не раскрывают маржинальные позиции, поэтому «карты ликвидаций» нет. Её роль играют опционы: к экспирации цену часто притягивает max pain, а стены коллов и путов работают как сопротивление и поддержку. Высокий шорт-интерес — топливо для резкого роста. Данные — Yahoo Finance (опционы с экспирацией до 50 дней).</p>`);
+}
+function obTile(a) {
+  const P = x => signPct((x - a.price) / a.price), bars = state.data[state.tf];
+  const obRow = (o, side) => `<li><span><em class="ob" style="display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;background:${side === 'bull' ? 'rgba(62,230,176,.7)' : 'rgba(255,95,126,.7)'}"></em>${dShort(bars[o.i].t)}</span><b>${fmt(o.bot)}–${fmt(o.top)}</b><em>${P(side === 'bull' ? o.top : o.bot)} · ${o.touches === 0 ? 'нетронут' : 'тест ×' + o.touches}</em></li>`;
+  const ob = a.ob, pl = a.pools;
+  const sw = pl.sweeps.filter(x => a.last - x.i <= 20).filter((x, k, arr) => !arr.slice(0, k).some(y => Math.abs(y.i - x.i) <= 3)).slice(0, 2);
+  const val = `${ob.bear[0] ? '▲ ' + fmt(ob.bear[0].bot) : '▲ —'} · ${ob.bull[0] ? '▼ ' + fmt(ob.bull[0].top) : '▼ —'}${sw.length ? ' · сбор ликв.' : ''}`;
+  return tile('ob', '#ff8fa6', 'Ордер-блоки и ликвидность', val, `<div class="cols">
+    <div><h5>Продавец выше</h5>${ob.bear.length ? `<ul class="kv">${ob.bear.slice(0, 3).map(o => obRow(o, 'bear')).join('')}</ul>` : '<p class="mut">Актуальных зон продавца в досягаемости нет.</p>'}
+    <h5>Покупатель ниже</h5>${ob.bull.length ? `<ul class="kv">${ob.bull.slice(0, 3).map(o => obRow(o, 'bull')).join('')}</ul>` : '<p class="mut">Актуальных зон покупателя в досягаемости нет.</p>'}</div>
+    <div><h5>Скопления стопов</h5><ul class="kv">${pl.above.slice(0, 2).map(g => `<li><span>над хаями${g.n > 1 ? ' ×' + g.n : ''}</span><b>${fmt(g.edge)}</b><em>${P(g.edge)}</em></li>`).join('')}${pl.below.slice(0, 2).map(g => `<li><span>под лоу${g.n > 1 ? ' ×' + g.n : ''}</span><b>${fmt(g.edge)}</b><em>${P(g.edge)}</em></li>`).join('') || '<li><span>нет рядом</span><b></b><em></em></li>'}</ul>
+    ${sw.length ? `<h5>Сбор ликвидности</h5><ul class="kv">${sw.map(x => `<li><span>${dShort(bars[x.i].t)}</span><b>${x.side === 'sell' ? 'под' : 'над'} ${fmt(x.p)}</b><em>тень до ${fmt(x.ext)}</em><small>Закрытие вернулось ${x.side === 'sell' ? 'выше' : 'ниже'} — ложный пробой, стопы толпы забраны.</small></li>`).join('')}</ul>` : ''}</div></div>
+    <p class="note">Ордер-блок — последняя встречная свеча перед импульсом, сломавшим структуру: там остались заявки крупного игрока. Показаны зоны за последние ${a.LB} бар. в пределах досягаемости${ob.far ? `; ещё ${ob.far} старых/далёких скрыты` : ''}.</p>`);
+}
+function volTile(a) {
+  const vp = a.vp, n = vp.v.length, mx = Math.max(...vp.v), W = 300, H = 150, bh = H / n;
+  const y = p => H - (p - vp.lo) / (vp.hi - vp.lo) * H;
+  const bars = vp.v.map((x, i) => { const p = vp.lo + vp.st * (i + 0.5), inVA = p >= vp.val && p <= vp.vah;
+    return `<rect x="0" y="${(H - (i + 1) * bh).toFixed(1)}" width="${(x / mx * W * 0.92).toFixed(1)}" height="${Math.max(1, bh - 0.6).toFixed(1)}" fill="${inVA ? 'rgba(159,216,255,.55)' : 'rgba(159,216,255,.22)'}"/>`; }).join('');
+  const lineAt = (p, c, t) => `<line x1="0" x2="${W}" y1="${y(p).toFixed(1)}" y2="${y(p).toFixed(1)}" stroke="${c}" stroke-width="1.2" stroke-dasharray="4 3"/><text x="${W - 2}" y="${(y(p) - 3).toFixed(1)}" fill="${c}" font-size="10" text-anchor="end">${t}</text>`;
+  const svg = `<svg viewBox="0 0 ${W} ${H}" style="width:100%;max-width:420px;height:150px;display:block" preserveAspectRatio="none">${bars}${lineAt(vp.poc, '#ffd678', 'POC')}${lineAt(a.price, '#fff', 'цена')}</svg>`;
+  return tile('vol', '#9fd8ff', 'Профиль объёма', `POC ${fmt(vp.poc)} · ${a.price > vp.vah ? 'выше зоны стоимости' : a.price < vp.val ? 'ниже зоны стоимости' : 'внутри зоны стоимости'}`, `<div class="cols"><div>${svg}</div><div>
+    <ul class="kv"><li><span>VAH</span><b>${fmt(vp.vah)}</b><em>${signPct((vp.vah - a.price) / a.price)}</em></li><li><span>POC</span><b>${fmt(vp.poc)}</b><em>${signPct((vp.poc - a.price) / a.price)}</em></li><li><span>VAL</span><b>${fmt(vp.val)}</b><em>${signPct((vp.val - a.price) / a.price)}</em></li></ul>
+    <h5>Опорные точки периодов</h5><ul class="kv">${a.per.map(x => `<li><span>${esc(x.name)}</span><b>${fmt(x.p)}</b><em>${signPct((x.p - a.price) / a.price)}</em></li>`).join('')}</ul></div></div>
+    <p class="note">Профиль за последние ${a.LB} бар.: POC — цена, где прошёл максимальный объём; зона стоимости (VAH–VAL) — 70% объёма. Вне зоны цена ищет возврат к ней или принятие нового диапазона.</p>`);
 }
 
 function drawChart() {
@@ -1083,13 +1281,12 @@ function drawChart() {
   for (const dv of a.divs) marks.push({ time: bars[dv.i].t, position: dv.type === 'bear' ? 'aboveBar' : 'belowBar', color: '#ffd678', shape: dv.type === 'bear' ? 'arrowDown' : 'arrowUp', text: 'Дивергенция' });
   if (L.liq) {
     for (const x of a.pools.sweeps.filter(x => a.last - x.i <= 20).filter((x, k, arr) => !arr.slice(0, k).some(y => Math.abs(y.i - x.i) <= 3)).slice(0, 2)) marks.push({ time: bars[x.i].t, position: x.side === 'sell' ? 'belowBar' : 'aboveBar', color: '#ffd678', shape: x.side === 'sell' ? 'arrowUp' : 'arrowDown', text: innerWidth < 600 ? 'Сбор' : 'Сбор ликвидности' });
-    if (state.liq) {
+    const lgst = null;
+    if (lgst && lgst.length) {
       const agg = new Map();
-      for (const e of state.liq.events) { let i = N - 1; while (i > 0 && bars[i].t > e.t) i--; const g = agg.get(i) || { long: 0, short: 0 }; g.long += e.long; g.short += e.short; agg.set(i, g); }
-      [...agg.entries()].sort((x, y) => (y[1].long + y[1].short) - (x[1].long + x[1].short)).slice(0, 3).forEach(([i, g]) => {
-        const lg = g.long >= g.short;
-        marks.push({ time: bars[i].t, position: lg ? 'belowBar' : 'aboveBar', color: lg ? '#ffbe5a' : '#78c8ff', shape: 'square', text: innerWidth < 600 ? '' : `Ликв. ${lg ? 'лонгов' : 'шортов'} ≈ ${usd(Math.max(g.long, g.short))}` });
-      });
+      for (const e of lgst) { let i = N - 1; while (i > 0 && bars[i].t > e.t) i--; const g = agg.get(i) || { long: 0, short: 0 }; g[e.side === 'LONG' ? 'long' : 'short'] += e.usd; agg.set(i, g); }
+      [...agg.entries()].slice(0, 2).forEach(([i, g]) => { const lg = g.long >= g.short;
+        marks.push({ time: bars[i].t, position: lg ? 'belowBar' : 'aboveBar', color: lg ? '#ffaa46' : '#5abeff', shape: 'square', text: innerWidth < 600 ? '' : `Ликв. ${lg ? 'лонгов' : 'шортов'} ${usd(Math.max(g.long, g.short))}` }); });
     }
   }
   const seenM = new Set(); const mk = marks.filter(m => { const k = m.time + m.position + m.text; if (seenM.has(k)) return false; seenM.add(k); return true; });
@@ -1163,23 +1360,39 @@ function paintOverlay(cs) {
     }
   }
   if (L.liq) {
-    const Lq = state.liq;
+    const Lq = state.liq, maxW = Math.min(150, plotW * 0.2);
     if (Lq && Lq.bins.length) {
-      const bh = Math.max(2, Math.abs(cs.priceToCoordinate(a.price) - cs.priceToCoordinate(a.price + Lq.bin)) - 1), maxW = Math.min(150, plotW * 0.22);
+      const bh = Math.max(2, Math.abs(cs.priceToCoordinate(a.price) - cs.priceToCoordinate(a.price + Lq.bin)));
       for (const b of Lq.bins) {
         const y = cs.priceToCoordinate(b.p); if (y == null || y < 0 || y > plotH) continue;
-        const v = b.w; if (v < 0.04) continue;
-        const isLong = b.p < a.price, w = v * maxW;
-        g.fillStyle = isLong ? `rgba(255,190,90,${0.25 + 0.6 * v})` : `rgba(120,200,255,${0.25 + 0.6 * v})`;
-        g.fillRect(plotW - w, y - bh / 2, w, bh);
+        const v = b.w; if (v < 0.05) continue;
+        const isLong = b.p < a.price, rgb = isLong ? '255,170,70' : '90,190,255';
+        g.fillStyle = `rgba(${rgb},${(0.03 + 0.16 * v * v).toFixed(3)})`; g.fillRect(0, y - bh / 2, plotW, bh);          // тепловая полоса на всю ширину
+        g.fillStyle = `rgba(${rgb},${(0.25 + 0.65 * v).toFixed(3)})`; g.fillRect(plotW - v * maxW, y - bh / 2, v * maxW, Math.max(1, bh - 1)); // профиль у правого края
       }
-      g.textAlign = 'right';
-      for (const c of [...Lq.longs, ...Lq.shorts].sort((x, y) => y.usd - x.usd).slice(0, plotW < 500 ? 0 : 3)) {
-        const y = cs.priceToCoordinate(c.p); if (y == null || y < 8 || y > plotH - 8) continue;
-        g.fillStyle = c.p < a.price ? '#ffcf8a' : '#a9dcff';
-        g.fillText(`${c.p < a.price ? 'ликв. лонгов' : 'ликв. шортов'} ${usd(c.usd)}`, plotW - maxW - 6, y - 6);
+      if (plotW >= 500) { g.textAlign = 'right';
+        const used = [];
+        for (const c of [Lq.longs.slice().sort((x, y) => y.usd - x.usd)[0], Lq.shorts.slice().sort((x, y) => y.usd - x.usd)[0]].filter(Boolean)) {
+          const y = cs.priceToCoordinate(c.p); if (y == null || y < 8 || y > plotH - 8 || used.some(u => Math.abs(u - y) < 14)) continue; used.push(y);
+          g.fillStyle = c.p < a.price ? '#ffc98a' : '#a9dcff';
+          g.fillText(`${c.p < a.price ? 'лонги' : 'шорты'} ${usd(c.usd)}`, plotW - maxW - 6, y - 6);
+        }
+        g.textAlign = 'left'; }
+    }
+    const R = state.lg && state.lg.real, xl = ts.logicalToCoordinate(state.data[state.tf].length - 1);
+    if (R && xl != null) {                                     // факт за 24 ч — столбики влево от последней свечи
+      const bin = a.price * 0.0025, m = new Map();
+      for (const b of R.buckets) { const k = Math.round(b.p / bin); const o = m.get(k) || { p: k * bin, long: 0, short: 0 }; o.long += b.long; o.short += b.short; m.set(k, o); }
+      const arr = [...m.values()], mx = Math.max(1, ...arr.map(x => x.long + x.short)), w2 = Math.min(120, plotW * 0.16);
+      const bh2 = Math.max(2, Math.abs(cs.priceToCoordinate(a.price) - cs.priceToCoordinate(a.price + bin)) - 1);
+      for (const x of arr) {
+        const y = cs.priceToCoordinate(x.p); if (y == null || y < 0 || y > plotH) continue;
+        const wl = x.long / mx * w2, wsx = x.short / mx * w2;
+        if (wl > 0.5) { g.fillStyle = 'rgba(255,170,70,.9)'; g.fillRect(xl - 4 - wl, y - bh2 / 2, wl, bh2); }
+        if (wsx > 0.5) { g.fillStyle = 'rgba(90,190,255,.9)'; g.fillRect(xl - 4 - wl - wsx, y - bh2 / 2, wsx, bh2); }
       }
-      g.textAlign = 'left';
+      if (plotW >= 500) { const top = arr.slice().sort((p, q) => (q.long + q.short) - (p.long + p.short))[0];
+        if (top) { const y = cs.priceToCoordinate(top.p); if (y != null) { g.textAlign = 'right'; g.fillStyle = '#fff'; g.fillText(`24 ч: ${usd(top.long + top.short)}`, xl - 6 - (top.long + top.short) / mx * w2, y - 5); g.textAlign = 'left'; } } }
     }
     g.setLineDash([3, 4]); g.lineWidth = 1;
     for (const p of [...a.pools.above.slice(0, 2), ...a.pools.below.slice(0, 2)]) {
@@ -1209,6 +1422,7 @@ $('#quick').addEventListener('click', e => { const b = e.target.closest('[data-q
 $('#tfs').addEventListener('click', e => { const b = e.target.closest('[data-tf]'); if (!b || b.disabled) return; state.tf = b.dataset.tf; compute(); });
 $('#layers').addEventListener('click', e => { const b = e.target.closest('[data-ly]'); if (!b) return; state.layers[b.dataset.ly] = !state.layers[b.dataset.ly]; b.classList.toggle('on'); drawChart(); });
 $('#copy').addEventListener('click', copySummary);
+document.addEventListener('toggle', e => { const d = e.target; if (d && d.dataset && d.dataset.k) state.open[d.dataset.k] = d.open; }, true);
 $('#proxy').value = store.get('az_proxy') || '';
 $('#proxy').addEventListener('change', e => store.set('az_proxy', e.target.value.trim()));
 addEventListener('hashchange', () => { const h = decodeURIComponent(location.hash.slice(1)); if (h && h.toUpperCase() !== state.q) { $('#q').value = h; run(h); } });
