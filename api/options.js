@@ -33,12 +33,13 @@ export default async function handler(req, res) {
     const agg = arr => { const m = new Map(); for (const o of arr) m.set(o.strike, (m.get(o.strike) || 0) + (o.openInterest || 0)); return m; };
     const cm = agg(calls), pm = agg(puts);
     const top = (m, f) => [...m.entries()].filter(([k]) => f(k)).sort((a, b) => b[1] - a[1]);
-    const cw = top(cm, k => k > price), pw = top(pm, k => k < price);
+    const near = k => Math.abs(k - price) / price <= 0.2;   // дальние страйки — не рабочие уровни
+    const cw = top(cm, k => k > price && near(k)), pw = top(pm, k => k < price && near(k));
     const cOI = calls.reduce((s, o) => s + (o.openInterest || 0), 0), pOI = puts.reduce((s, o) => s + (o.openInterest || 0), 0);
     Object.assign(out, {
       price, expiries: chains.map(c => toD(c.expirationDate)), callWall: cw[0]?.[0] ?? null, callWallOI: cw[0]?.[1] ?? 0,
       putWall: pw[0]?.[0] ?? null, putWallOI: pw[0]?.[1] ?? 0, callWalls: cw.slice(0, 3), putWalls: pw.slice(0, 3),
-      maxPain: maxPain(calls, puts), pcr: cOI ? pOI / cOI : null, callOI: cOI, putOI: pOI
+      maxPain: maxPain(calls.filter(o => near(o.strike)), puts.filter(o => near(o.strike))), pcr: cOI ? pOI / cOI : null, callOI: cOI, putOI: pOI
     });
   } catch (e) { out.optErr = true; }
   try {
