@@ -305,8 +305,20 @@ function countCandidates(piv, trendDir) {
   return out;
 }
 
-/* Проекция следующего хода по найденному счёту */
+/* Проекция следующего хода по найденному счёту.
+   Считаем в логарифмической шкале: соотношения Фибоначчи берутся в процентах хода,
+   поэтому цели на длинных волнах не уходят в ноль и минус. */
 function projectNext(c) {
+  const lg = x => ({ ...x, p: Math.log(Math.max(x.p, 1e-12)) });
+  const L = { ...c, P: c.P && c.P.map(lg), Q: c.Q && c.Q.map(lg) };
+  const n = projectNextLin(L), ex = Math.exp;
+  const all = [...(c.P || []), ...(c.Q || [])];
+  n.from = all.find(x => x.i === n.from.i) || n.from;
+  n.targets = n.targets.map(ex); n.invalid = ex(n.invalid);
+  n.path = n.path.map(([dt, v]) => [dt, ex(v)]);
+  return n;
+}
+function projectNextLin(c) {
   const P = c.P, d = c.dir;
   const pts = c.type === 'abc' ? c.Q : c.type === 'impc' ? [...c.P, ...c.Q.slice(1)] : c.P;
   const legs = []; for (let j = 1; j < pts.length; j++) legs.push(pts[j].i - pts[j - 1].i);
