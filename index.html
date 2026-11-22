@@ -116,19 +116,69 @@ form input::placeholder{color:var(--mut);text-transform:none;font-weight:400}
 details{color:var(--mut);font-size:14px}details summary{cursor:pointer;min-height:32px}
 details input{width:100%;margin-top:8px;background:rgba(0,0,0,.25);border:1px solid var(--line);border-radius:12px;color:var(--ink);padding:10px 12px;font:16px Onest,sans-serif}
 .law{font-size:13px;color:var(--mut);line-height:1.5}
+.verdict .sub{margin:-6px 0 4px;color:var(--mut);font-size:14.5px;line-height:1.4}
+.mtf>div[data-tf]{cursor:pointer}.mtf em.mp{display:block;font-style:normal;font-size:13px;color:var(--mut);margin-top:2px}.mtf .ar{margin-right:6px}
+.road{position:relative;height:112px;margin:4px 6px 10px}.road.r2{height:152px}
+.road .ax{position:absolute;left:0;right:0;top:52px;height:4px;border-radius:4px;background:rgba(255,255,255,.12)}
+.road .seg{position:absolute;top:51px;height:6px;border-radius:6px}.road .seg.up{background:linear-gradient(90deg,rgba(62,230,176,.3),var(--up))}.road .seg.down{background:linear-gradient(270deg,rgba(255,95,126,.3),var(--dn))}.road .seg.stop{background:repeating-linear-gradient(90deg,rgba(255,255,255,.45) 0 5px,transparent 5px 9px);height:4px;top:52px}.road .seg.side{background:var(--side)}
+.road .mk{position:absolute;top:46px;width:16px;height:16px;margin-left:-8px;border-radius:50%;border:3px solid #15122b}
+.road .mk.now{background:#fff;width:20px;height:20px;margin-left:-10px;top:44px;box-shadow:0 0 0 4px rgba(255,255,255,.18)}.road .mk.up{background:var(--up)}.road .mk.down{background:var(--dn)}.road .mk.side{background:var(--side)}.road .mk.alt{background:rgba(255,255,255,.35)}
+.road .mk.stop{background:#15122b;border:2px solid rgba(255,255,255,.75);border-radius:4px}.road .mk.stop::after{content:'×';position:absolute;inset:-3px 0 0;text-align:center;font-size:13px;line-height:14px;color:#fff}
+.road .mk b{position:absolute;left:50%;transform:translateX(-50%);white-space:nowrap;font-size:11.5px;font-weight:500;color:var(--mut);text-align:center;line-height:1.2}
+.road .mk b.top{bottom:24px}.road .mk b.bot{top:22px}.road .mk b.bot2{top:66px}.road .mk b.l{left:-6px;transform:none;text-align:left}.road .mk b.r{left:auto;right:-6px;transform:none;text-align:right}.road .mk b strong{display:block;color:var(--ink);font-size:13.5px;font-weight:700}.road .mk b em{display:block;font-style:normal;font-size:11px}
+.sh{margin:6px 8px 4px;font-size:13px;color:var(--mut);font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+.scx>summary{grid-template-columns:34px 1fr auto 20px!important}
+.scx .ai{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;font-size:18px;font-weight:700;background:rgba(255,255,255,.07)}
+.scx.up .ai{color:var(--up);background:rgba(62,230,176,.14)}.scx.down .ai{color:var(--dn);background:rgba(255,95,126,.14)}.scx.side .ai{color:var(--side);background:rgba(159,179,255,.14)}
+.scx .pb{display:block;height:6px;border-radius:6px;background:rgba(255,255,255,.08);margin-top:7px;overflow:hidden}.scx .pb i{display:block;height:100%;border-radius:6px}
+.scx.up .pb i{background:var(--up)}.scx.down .pb i{background:var(--dn)}.scx.side .pb i{background:var(--side)}
+.scx .pp{font-size:17px!important}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:2px 0 10px}
+.cp{display:flex;flex-direction:column;padding:8px 12px;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);min-width:92px}
+.cp small{font-size:11.5px;color:var(--mut)}.cp b{font-size:16px}.cp em{font-style:normal;font-size:12px;color:var(--mut)}
+.cp.up{border-color:rgba(62,230,176,.45)}.cp.down{border-color:rgba(255,95,126,.45)}.cp.stop{border-style:dashed;border-color:rgba(255,255,255,.35)}
+.why{list-style:none;margin:0 0 6px;padding:0}.scx .why li,.why li{display:block;border:0;font-size:14px;line-height:1.4;padding:5px 0 5px 16px;position:relative;color:var(--mut)}.why li b{color:var(--ink);font-weight:600}
+.why li::before{content:'';position:absolute;left:2px;top:12px;width:6px;height:6px;border-radius:50%;background:currentColor}
+.more{margin-top:8px}.more summary{cursor:pointer;color:#c9a7ff;font-size:13.5px;list-style:none;min-height:28px;display:inline-flex;align-items:center;white-space:nowrap}.more summary::-webkit-details-marker{display:none}
+.more summary::after{content:' ›';margin-left:4px}.more[open] summary::after{content:' ‹'}
+.more p,.more li{color:var(--mut);font-size:13.5px;line-height:1.45}
+.lead{margin:2px 0 12px;color:var(--mut);font-size:14px;line-height:1.45}
+.tug{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;font-size:13px;margin-bottom:12px}.tug .split{margin:0}
+.tug .split .u{background:var(--up)}.tug .split .d{background:var(--dn)}
+.rs{list-style:none;margin:0;padding:0;display:grid;gap:8px;align-content:start}
+.rs li{padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.05);border-left:3px solid}.rs li.u{border-color:var(--up)}.rs li.d{border-color:var(--dn)}.rs li.n{border-color:rgba(255,255,255,.2)}
+.rs li b{display:block;font-size:14.5px;margin-bottom:2px}.rs li span{display:block;font-size:13px;color:var(--mut);line-height:1.4}
+.lad{list-style:none;margin:0;padding:0}
+.lad li{display:grid;grid-template-columns:6.5em 1fr 4.8em;gap:4px 12px;align-items:center;padding:8px 0;border-top:1px solid rgba(255,255,255,.06)}
+.lad li b{font-size:15px}.lad li em{font-style:normal;text-align:right;font-size:13px;color:var(--mut)}
+.lad .str{height:8px;border-radius:8px;background:rgba(255,255,255,.06);overflow:hidden}.lad .str i{display:block;height:100%;border-radius:8px}
+.lad li.r .str i{background:linear-gradient(90deg,rgba(255,95,126,.35),var(--dn))}.lad li.s .str i{background:linear-gradient(90deg,rgba(62,230,176,.35),var(--up))}
+.lad li small{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:4px}
+.tg{font-size:11.5px;padding:2px 8px;border-radius:999px;background:rgba(255,255,255,.08);color:var(--mut)}
+.lad li.now{background:rgba(255,255,255,.1);border-radius:12px;padding:8px 10px;border:0;margin:4px 0}.lad li.now em{color:var(--ink)}
+.wv{width:100%;max-width:520px;height:auto;display:block;margin:0 auto 6px}
+.steps{list-style:none;margin:0;padding:0}.steps li{display:grid;grid-template-columns:6.5em 1fr;gap:10px;padding:7px 0;border-top:1px solid rgba(255,255,255,.06);font-size:14px}.steps li span{color:var(--mut)}.steps li b{font-weight:500}
+.fb{list-style:none;margin:0;padding:0}.fb li{display:grid;grid-template-columns:4.5em 1fr auto;gap:10px;align-items:center;padding:6px 0;font-size:14px;color:var(--mut)}
+.fb li i{height:2px;background:rgba(255,214,120,.25)}.fb li.key{color:var(--ink)}.fb li.key i{height:3px;background:rgba(255,214,120,.8)}
+.fb li.now{color:#fff;font-weight:600;background:rgba(255,255,255,.1);border-radius:10px;padding:6px 10px}.fb li.now i{height:3px;background:#fff}
+.gauges{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr))}
+.gg small{display:block;font-size:13px;color:var(--mut);margin-bottom:6px}.gg b{font-size:17px;margin-right:8px}.gg span{font-size:13px;color:var(--mut)}
+.gb{position:relative;height:8px;border-radius:8px;margin-bottom:6px;background:linear-gradient(90deg,var(--up),rgba(159,179,255,.7) 50%,var(--dn))}
+.gb i{position:absolute;top:-5px;width:4px;height:18px;margin-left:-2px;border-radius:3px;background:#fff;box-shadow:0 0 0 2px rgba(0,0,0,.35)}
+
 .lgd{margin-top:6px}.lgd summary{font-size:13px;color:var(--mut);list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:6px;min-height:30px}
 .lgd summary::-webkit-details-marker,.tile summary::-webkit-details-marker,.scx summary::-webkit-details-marker{display:none}
 .lgd summary::before{content:'ⓘ';font-size:14px}.legend i.bx{border:0;height:10px;width:16px;border-radius:3px}
 .bar>div#layers{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;max-width:100%}.bar>div#layers::-webkit-scrollbar{display:none}
 .chip{white-space:nowrap}
-#scen{padding:8px 10px}
+#scen{padding:8px 10px;display:block!important}
 .scx{border-radius:16px}.scx+.scx{border-top:1px solid rgba(255,255,255,.07)}
-.scx summary{display:grid;grid-template-columns:3.4em 1fr 20px;align-items:center;gap:10px;padding:12px 8px;cursor:pointer;list-style:none}
+.scx>summary{display:grid;grid-template-columns:3.4em 1fr 20px;align-items:center;gap:10px;padding:12px 8px;cursor:pointer;list-style:none}
 .scx .pp{font-size:20px;font-weight:700;letter-spacing:-.02em}.scx.up .pp{color:var(--up)}.scx.down .pp{color:var(--dn)}.scx.side .pp{color:var(--side)}
 .scx .st b{display:block;font-size:16px}.scx .st small{display:block;color:var(--mut);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .scx .tag{display:inline-block;font-size:11px;padding:2px 7px;border-radius:999px;background:rgba(255,255,255,.1);margin-left:6px;vertical-align:2px;color:var(--mut)}
 .scx>div{padding:0 8px 12px}.scx p{margin:0 0 8px;color:var(--mut);font-size:14px}
-.scx ul{list-style:none;margin:0;padding:0}.scx li{display:grid;grid-template-columns:4.6em 1fr auto;gap:2px 8px;padding:7px 0;border-top:1px solid rgba(255,255,255,.08);font-size:14px}
+.scx ul{list-style:none;margin:0;padding:0}.scx .old li{display:grid;grid-template-columns:4.6em 1fr auto;gap:2px 8px;padding:7px 0;border-top:1px solid rgba(255,255,255,.08);font-size:14px}
 .scx li span{color:var(--mut)}.scx li em{font-style:normal;color:var(--mut);text-align:right;white-space:nowrap}.scx li small{grid-column:2/4;color:var(--mut);font-size:12.5px}
 .chev{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;color:var(--mut);transition:transform .25s}
 .chev::before{content:'';width:7px;height:7px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:translateY(-2px) rotate(45deg)}
@@ -1010,13 +1060,6 @@ const usd = x => x >= 1e9 ? '$' + num(x / 1e9, 2) + ' млрд' : x >= 1e6 ? '$'
 const dShort = t => new Date(t * 1000).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
 
 /* ---------- текст разбора ---------- */
-function verdict(a) {
-  const s = a.scenarios[0];
-  if (!s) return { cls: 'side', h: 'Недостаточно данных для сценариев', k: 'Нейтрально' };
-  if (s.key === 'side') return { cls: 'side', h: `Перевеса нет: вероятнее диапазон ${fmt(s.targets[0].p)}–${fmt(s.targets[1].p)}`, k: 'Нейтрально' };
-  const up = s.key === 'up', t = s.targets;
-  return { cls: up ? 'up' : 'down', h: `${s.title}: ${fmt(t[0].p)}${t[1] ? ' → ' + fmt(t[1].p) : ''} · отмена ${fmt(s.invalid)}`, k: up ? 'Рост' : 'Снижение' };
-}
 function ratioText(w) {
   const r = w.ratios, o = [];
   if (r.r2 != null) o.push(`волна 2 откатила ${num(r.r2)} от волны 1`);
@@ -1098,9 +1141,88 @@ function tile(k, color, title, value, body) {
   return `<details class="tile glass" data-k="${k}"${open}><summary><span class="ic" style="--c:${color}">${svgI(k)}</span><span class="tt"><small>${esc(title)}</small><b>${value}</b></span><i class="chev"></i></summary><div class="tb">${body}</div></details>`;
 }
 
+/* ---------- простой язык и инфографика ---------- */
+const uclamp = (x, a, b) => Math.max(a, Math.min(b, x));
+const HORW = { '4h': 'за неделю', '1d': 'за 1,5 месяца', '1w': 'за квартал' };
+const TFW = { '4h': 'Неделя', '1d': 'Месяц', '1w': 'Квартал' };
+const arrow = d => d > 0 ? '↗' : d < 0 ? '↘' : '→';
+function plainWave(w) {
+  const d = w.dir > 0 ? 'вверх' : 'вниз', nd = w.next.bias > 0 ? 'вверх' : w.next.bias < 0 ? 'вниз' : 'в сторону';
+  if (w.type === 'imp') return { now: `Идёт сильное движение ${d}: пройдено ${w.k} из 5 волн`, next: `${w.next.wave} ${nd}` };
+  if (w.type === 'impc') return { now: `Движение ${d} из 5 волн закончилось, идёт откат`, next: `откат, волна ${['A', 'B', 'C'][Math.min(2, w.m)]} ${nd}` };
+  if (w.n === 3) return { now: `Откат ${d} из трёх волн (A-B-C) закончился`, next: `вероятен разворот ${nd}` };
+  return { now: `Идёт откат ${d}: прошли волны A и B`, next: `волна C ${nd}` };
+}
+function reasons(a) {
+  const n = a.now, R = [], add = (d, w, t, s) => R.push({ d, w, t, s });
+  if (n.s50 != null && n.s200 != null) {
+    const a50 = a.price > n.s50, a200 = a.price > n.s200;
+    if (!a50 && !a200) add(-1, 1.5, 'Тренд вниз', 'Цена ниже средних линий — общий тренд падающий.');
+    else if (a50 && a200) add(1, 1.5, 'Тренд вверх', 'Цена выше средних линий — общий тренд растущий.');
+    else add(0, 0, 'Тренд неясен', 'Цена между средними линиями — направления нет.');
+  }
+  if (n.rsi != null && n.rsi < 30) add(1, 1, 'Перепродан', 'Цену сильно продали — после такого часто бывает отскок.');
+  if (n.rsi != null && n.rsi > 70) add(-1, 1, 'Перегрет', 'Цену сильно покупали — после такого часто бывает откат.');
+  const sw = a.pools.sweeps.find(x => a.last - x.i <= 5);
+  if (sw) sw.side === 'sell' ? add(1, 1, 'Сняли стопы снизу', `Цену проткнули ниже ${fmt(sw.p)} и вернули — ловушка для продавцов.`) : add(-1, 1, 'Сняли стопы сверху', `Цену проткнули выше ${fmt(sw.p)} и вернули — ловушка для покупателей.`);
+  if (a.z < -2.5) add(1, 0.8, 'Слишком далеко вниз', 'Цена сильно оторвалась от средней — её обычно тянет обратно.');
+  if (a.z > 2.5) add(-1, 0.8, 'Слишком далеко вверх', 'Цена сильно оторвалась от средней — её обычно тянет обратно.');
+  if (a.wave && a.wave.next.bias) { const pw = plainWave(a.wave); add(a.wave.next.bias, 1.2, `Волны: ${a.wave.next.bias > 0 ? 'следующий ход вверх' : 'следующий ход вниз'}`, `${pw.now}. Дальше — ${pw.next}.`); }
+  if (n.hist != null) n.hist > 0 ? add(1, 0.5, 'Импульс растёт', 'Покупатели набирают силу (MACD).') : add(-1, 0.5, 'Импульс слабеет', 'Продавцы пока сильнее (MACD).');
+  if (state.liq) {
+    const sh = state.liq.shorts.slice().sort((x, y) => y.usd - x.usd)[0], lg = state.liq.longs.slice().sort((x, y) => y.usd - x.usd)[0];
+    if (sh && (!lg || sh.usd > lg.usd * 1.2)) add(1, 0.9, 'Магнит сверху', `Над ценой на ${fmt(sh.p)} скопились шорты на ${usd(sh.usd)} — цена часто идёт их «собирать».`);
+    else if (lg && (!sh || lg.usd > sh.usd * 1.2)) add(-1, 0.9, 'Магнит снизу', `Под ценой на ${fmt(lg.p)} скопились лонги на ${usd(lg.usd)} — цена часто идёт их «собирать».`);
+  }
+  const d = state.deriv;
+  if (d) { const ds = SMC.derivSummary(d.oi, d.funding, d.longAcc, a.price, (() => { const b = state.data['4h']; return b && b.length > 43 ? b[b.length - 43].c : null; })());
+    if (ds && ds.prCh < -0.03 && ds.oiCh < -0.05) add(1, 0.7, 'Плечи вычищены', 'Трейдеров с плечом уже выбили — давление продаж слабеет.');
+    if (ds && ds.prCh < -0.03 && ds.oiCh > 0.03) add(1, 0.6, 'Много новых шортов', 'Продавцы с плечом набирают позиции — топливо для резкого роста.');
+    if (ds && ds.prCh > 0.03 && ds.oiCh < -0.05) add(-1, 0.6, 'Рост без новых денег', 'Цена растёт на закрытии шортов — может выдохнуться.'); }
+  if (state.fng) { if (state.fng.v < 25) add(1, 0.6, 'Страх на рынке', `Индекс страха ${state.fng.v} — когда все боятся, часто бывает разворот вверх.`); if (state.fng.v > 75) add(-1, 0.6, 'Жадность на рынке', `Индекс жадности ${state.fng.v} — когда все жадничают, часто бывает откат.`); }
+  if (a.newsS != null && Math.abs(a.newsS) > 0.15) add(Math.sign(a.newsS), 0.5, a.newsS > 0 ? 'Новости позитивные' : 'Новости негативные', 'Тон свежих публикаций по инструменту.');
+  if (state.opt && state.opt.maxPain) { const mp = state.opt.maxPain; if (Math.abs(mp - a.price) / a.price > 0.02) add(mp > a.price ? 1 : -1, 0.6, 'Опционы тянут ' + (mp > a.price ? 'вверх' : 'вниз'), `К экспирации цену часто притягивает уровень ${fmt(mp)} (max pain).`); }
+  const hi = { '4h': '1d', '1d': '1w' }[state.tf], H = hi && state.mtf[hi] && state.mtf[hi].top;
+  if (H && H.key !== 'side') add(H.bias, 0.8, `${TFW[hi]}: ${H.bias > 0 ? 'вверх' : 'вниз'}`, `На старшем горизонте основной сценарий — ${H.title.toLowerCase()} (${pct(H.p)}).`);
+  return R;
+}
+function road(a) {   // шкала цены: отмена — сейчас — цели
+  const m = a.scenarios[0]; if (!m) return '';
+  const alt = a.scenarios.find(s => s !== m && s.key !== 'side');
+  const pts = [{ p: a.price, k: 'now', t: 'сейчас' }];
+  if (m.key === 'side') { pts.push({ p: m.targets[0].p, k: 'side', t: 'низ' }, { p: m.targets[1].p, k: 'side', t: 'верх' }); }
+  else { m.targets.forEach((t, j) => pts.push({ p: t.p, k: m.key, t: 'цель ' + (j + 1) })); if (m.invalid != null) pts.push({ p: m.invalid, k: 'stop', t: 'отмена' }); }
+  if (alt && m.key === 'side') pts.push({ p: alt.targets[0].p, k: 'alt', t: alt.key === 'up' ? 'если вверх' : 'если вниз' });
+  const lo = Math.min(...pts.map(x => x.p)), hi = Math.max(...pts.map(x => x.p)), pad = (hi - lo) * 0.06 || a.price * 0.01;
+  const X = p => 4 + (p - lo + pad) / (hi - lo + 2 * pad) * 92;
+  const xs = X(a.price), seg = (p, cls) => { const x1 = Math.min(xs, X(p)), x2 = Math.max(xs, X(p)); return `<i class="seg ${cls}" style="left:${x1}%;width:${x2 - x1}%"></i>`; };
+  let segs = '';
+  if (m.key === 'side') segs = seg(m.targets[0].p, 'side') + seg(m.targets[1].p, 'side');
+  else { segs = seg(m.targets[m.targets.length - 1].p, m.key); if (m.invalid != null) segs += seg(m.invalid, 'stop'); }
+  // раскладка подписей: «сейчас» сверху, остальные снизу; при тесноте — второй ряд или наверх
+  const sorted = pts.slice().sort((x, y) => X(x.p) - X(y.p)), xNow = X(a.price), placed = [];
+  const marks = sorted.map(x => {
+    const xx = X(x.p); let row = 'bot';
+    if (x.k === 'now') row = 'top';
+    else { const near = placed.filter(p => p.row === 'bot' && Math.abs(p.x - xx) < 24);
+      if (near.length) row = Math.abs(xx - xNow) >= 26 && !placed.some(p => p.row === 'top' && Math.abs(p.x - xx) < 24) ? 'top' : 'bot2'; }
+    placed.push({ x: xx, row });
+    const al = xx < 14 ? 'l' : xx > 86 ? 'r' : 'c';
+    return `<div class="mk ${x.k}" style="left:${xx}%"><b class="${row} ${al}">${x.t}<strong>${fmt(x.p)}</strong>${x.k !== 'now' ? `<em>${signPct((x.p - a.price) / a.price)}</em>` : ''}</b></div>`; }).join('');
+  return `<div class="road${placed.some(p => p.row === 'bot2') ? ' r2' : ''}"><i class="ax"></i>${segs}${marks}</div>`;
+}
+function verdict(a) {
+  const s = a.scenarios[0];
+  if (!s) return { cls: 'side', h: 'Недостаточно данных', k: '' };
+  if (s.key === 'side') return { cls: 'side', h: `Скорее всего — боковик между ${fmt(s.targets[0].p)} и ${fmt(s.targets[1].p)}`, k: 'Боковик' };
+  const up = s.key === 'up';
+  return { cls: up ? 'up' : 'down', h: `Скорее всего — ${up ? 'рост' : 'снижение'} до ${fmt(s.targets[0].p)}${s.targets[1] ? `, дальше ${fmt(s.targets[1].p)}` : ''}`, k: up ? 'Рост' : 'Снижение' };
+}
+const shortSrc = x => x.replace('кластер ликвидаций', 'ликвидации').replace(' объёма', '').replace('узел', 'объём').replace('стопы над хаями', 'стопы').replace('стопы под лоу', 'стопы').replace('максимум периода', 'макс. периода').replace('минимум периода', 'мин. периода').replace('слом структуры', 'слом тренда').replace('max pain опционов', 'max pain');
+
 function render() {
   const a = state.a, bars = state.data[state.tf], last = bars[bars.length - 1], prev = bars[bars.length - 2];
-  const ch = (last.c - prev.c) / prev.c, v = verdict(a);
+  const ch = (last.c - prev.c) / prev.c, v = verdict(a), main = a.scenarios[0];
   $('#hero').innerHTML = `
     <div class="h-id"><span class="badge">${MK[state.market]}</span><h2>${esc(state.disp)}</h2><p>${esc(state.meta.longName || state.meta.shortName || '')}</p></div>
     <div class="h-px"><b>${fmt(last.c)}</b><span class="${ch >= 0 ? 'pos' : 'neg'}">${signPct(ch)} за ${TF[state.tf].name.toLowerCase()}</span></div>`;
@@ -1110,64 +1232,85 @@ function render() {
 
   $('#verdict').className = 'card glass verdict ' + v.cls;
   $('#verdict').innerHTML = `
-    <span class="kick">${v.k} · горизонт ${HOR[state.tf]} · ${TF[state.tf].name}</span>
+    <span class="kick">Прогноз ${HORW[state.tf]} · график ${TF[state.tf].name}</span>
     <h3>${esc(v.h)}</h3>
+    <p class="sub">${main ? `Вероятность ${pct(main.p)}${main.invalid != null ? ` · прогноз отменится, если цена закроется ${main.key === 'up' ? 'ниже' : 'выше'} ${fmt(main.invalid)}` : ''}` : ''}</p>
+    ${road(a)}
     <div class="tri"><i class="u" style="width:${a.prob.up * 100}%"></i><i class="s" style="width:${a.prob.side * 100}%"></i><i class="d" style="width:${a.prob.down * 100}%"></i></div>
-    <div class="tri-l"><span><em class="dot u"></em>Рост ${pct(a.prob.up)}</span><span><em class="dot s"></em>Боковик ${pct(a.prob.side)}</span><span><em class="dot d"></em>Снижение ${pct(a.prob.down)}</span></div>
-    <div class="mtf">${['4h', '1d', '1w'].map(k => { const m = state.mtf[k]; if (!m) return `<div><small>${TF[k].name}</small><b>нет данных</b></div>`;
-      const t = m.top, d = !t || t.key === 'side' ? ['', 'Боковик'] : t.key === 'up' ? ['pos', t.title] : ['neg', t.title];
-      return `<div class="${k === state.tf ? 'cur' : ''}"><small>${TF[k].name}</small><b class="${d[0]}">${esc(d[1])}${t ? ' · ' + pct(t.p) : ''}</b><span>${m.wave ? esc(m.wave) : '—'}</span></div>`; }).join('')}</div>`;
+    <div class="tri-l"><span>↗ Рост <b>${pct(a.prob.up)}</b></span><span>→ Боковик <b>${pct(a.prob.side)}</b></span><span>↘ Снижение <b>${pct(a.prob.down)}</b></span></div>
+    <div class="mtf">${['4h', '1d', '1w'].map(k => { const m = state.mtf[k]; if (!m || !m.top) return `<div><small>${TFW[k]}</small><b>—</b></div>`;
+      const t = m.top, c = t.key === 'up' ? 'pos' : t.key === 'down' ? 'neg' : '';
+      return `<div class="${k === state.tf ? 'cur' : ''}" data-tf="${k}"><small>${TFW[k]} · ${TF[k].name}</small><b class="${c}">${arrow(t.bias)} ${t.key === 'side' ? 'боковик' : t.key === 'up' ? 'рост' : 'снижение'}</b><em class="mp">${pct(t.p)}</em></div>`; }).join('')}</div>`;
 
-  $('#scen').innerHTML = a.scenarios.map((s, i) => {
+  const Rs = reasons(a);
+  $('#scen').innerHTML = `<h4 class="sh">Сценарии</h4>` + a.scenarios.map((s, i) => {
     const cls = s.bias > 0 ? 'up' : s.bias < 0 ? 'down' : 'side';
-    const line = s.key === 'side' ? `${fmt(s.targets[0].p)} – ${fmt(s.targets[1].p)}` : `${s.targets.map(t => fmt(t.p)).join(' → ')} · отмена ${fmt(s.invalid)}`;
-    return `<details class="scx ${cls}"${state.open['sc' + s.key] ? ' open' : ''} data-k="sc${s.key}"><summary><span class="pp">${pct(s.p)}</span><span class="st"><b>${esc(s.title)}${i === 0 ? '<span class="tag">основной</span>' : ''}</b><small>${line}</small></span><i class="chev"></i></summary>
-      <div><p>${esc(s.text)}</p><ul>${s.targets.map((t, j) => `<li><span>${s.key === 'side' ? (j ? 'Верх' : 'Низ') : 'Цель ' + (j + 1)}</span><b>${fmt(t.p)}</b><em>${signPct((t.p - a.price) / a.price)}</em><small>${s.key === 'side' ? '' : esc(t.why) + ' · '}касание за горизонт ${pct(t.touch)}</small></li>`).join('')}
-      ${s.invalid != null ? `<li><span>Отмена</span><b>${fmt(s.invalid)}</b><em>${signPct((s.invalid - a.price) / a.price)}</em><small>закрытие бара за уровнем — сценарий снимается</small></li>` : ''}</ul></div></details>`; }).join('');
+    const ttl = s.key === 'side' ? `Боковик ${fmt(s.targets[0].p)} – ${fmt(s.targets[1].p)}` : `${s.key === 'up' ? (s.title === 'Отскок вверх' ? 'Отскок' : 'Рост') : (s.title === 'Откат вниз' ? 'Откат' : 'Снижение')} до ${fmt(s.targets[0].p)}`;
+    const why = Rs.filter(r => r.d === s.bias && r.d !== 0).sort((x, y) => y.w - x.w).slice(0, 3);
+    return `<details class="scx ${cls}"${state.open['sc' + s.key] ? ' open' : ''} data-k="sc${s.key}"><summary><span class="ai">${arrow(s.bias)}</span><span class="st"><b>${esc(ttl)}${i === 0 ? '<span class="tag">основной</span>' : ''}</b><span class="pb"><i style="width:${s.p * 100}%"></i></span></span><span class="pp">${pct(s.p)}</span><i class="chev"></i></summary>
+      <div>
+        <div class="chips">${s.targets.map((t, j) => `<span class="cp ${cls}"><small>${s.key === 'side' ? (j ? 'верх' : 'низ') : 'цель ' + (j + 1)}</small><b>${fmt(t.p)}</b><em>${signPct((t.p - a.price) / a.price)}</em></span>`).join('')}${s.invalid != null ? `<span class="cp stop"><small>отмена</small><b>${fmt(s.invalid)}</b><em>${signPct((s.invalid - a.price) / a.price)}</em></span>` : ''}</div>
+        ${why.length ? `<ul class="why">${why.map(r => `<li><b>${esc(r.t)}</b> — ${esc(r.s)}</li>`).join('')}</ul>` : ''}
+        <details class="more"><summary>Подробнее</summary><p>${esc(s.text)}</p>${s.key !== 'side' ? `<p>${s.targets.map((t, j) => `Цель ${j + 1}: ${esc(t.why)}, шанс дойти ${pct(t.touch)}`).join('. ')}.</p>` : ''}</details>
+      </div></details>`; }).join('');
 
   const T = [];
-  // разбор
+  // почему так — аргументы за и против
+  const pro = Rs.filter(r => r.d > 0), con = Rs.filter(r => r.d < 0), wp = pro.reduce((s, r) => s + r.w, 0), wc = con.reduce((s, r) => s + r.w, 0), sh = wp / ((wp + wc) || 1);
+  const card = r => `<li class="${r.d > 0 ? 'u' : 'd'}"><b>${esc(r.t)}</b><span>${esc(r.s)}</span></li>`;
   const st = story(a);
-  T.push(tile('story', '#c9a7ff', 'Разбор аналитика', `${st.length} наблюдений`, `<ul class="bul">${st.map(x => `<li>${esc(x)}</li>`).join('')}</ul>`));
-  // уровни
-  const P = x => signPct((x - a.price) / a.price);
-  const lvRow = (o, k) => `<li><span>${k}</span><b>${fmt(o.p)}</b><em>${P(o.p)}</em><small>${esc(o.src.join(' · '))}</small></li>`;
-  T.push(tile('lv', '#9fd8ff', 'Ключевые уровни', `${a.res[0] ? '▲ ' + fmt(a.res[0].p) : '▲ —'} · ${a.sup[0] ? '▼ ' + fmt(a.sup[0].p) : '▼ —'}`,
-    `<ul class="kv">${a.res.slice().reverse().map((o, i, arr) => lvRow(o, 'R' + (arr.length - i))).join('')}<li class="now"><span>Цена</span><b>${fmt(a.price)}</b><em></em></li>${a.sup.map((o, i) => lvRow(o, 'S' + (i + 1))).join('')}</ul>
-    <p class="note">Берутся только актуальные точки в зоне досягаемости за горизонт: профиль объёма, экстремумы и открытия недели/месяца, слом структуры, кластеры ликвидаций, ордер-блоки, Фибоначчи текущего плеча. Чем больше подтверждений у цены — тем сильнее уровень.</p>`));
-  // ликвидации / опционы
+  T.push(tile('story', '#c9a7ff', 'Почему так', `за рост ${pro.length} · за падение ${con.length}`,
+    `<div class="tug"><span>↗ За рост ${pct(sh)}</span><div class="split"><i class="u" style="width:${sh * 100}%"></i><i class="d" style="width:${(1 - sh) * 100}%"></i></div><span>${pct(1 - sh)} за падение ↘</span></div>
+    <div class="cols"><ul class="rs">${pro.map(card).join('') || '<li class="n"><span>Аргументов нет</span></li>'}</ul><ul class="rs">${con.map(card).join('') || '<li class="n"><span>Аргументов нет</span></li>'}</ul></div>
+    <details class="more"><summary>Подробный разбор аналитика</summary><ul class="bul">${st.map(x => `<li>${esc(x)}</li>`).join('')}</ul></details>`));
+  // уровни — лестница
+  const mxW = Math.max(1, ...[...a.res, ...a.sup].map(o => o.w));
+  const lvRow = (o, cls) => `<li class="${cls}"><b>${fmt(o.p)}</b><span class="str"><i style="width:${Math.max(15, o.w / mxW * 100)}%"></i></span><em>${signPct((o.p - a.price) / a.price)}</em><small>${o.src.map(x => `<span class="tg">${esc(shortSrc(x))}</span>`).join('')}</small></li>`;
+  T.push(tile('lv', '#9fd8ff', 'Ключевые уровни', `▲ ${a.res[0] ? fmt(a.res[0].p) : '—'} · ▼ ${a.sup[0] ? fmt(a.sup[0].p) : '—'}`,
+    `<p class="lead">Сверху — где цену могут остановить продавцы, снизу — где её могут подхватить покупатели. Чем длиннее полоска, тем сильнее уровень.</p>
+    <ul class="lad">${a.res.slice().reverse().map(o => lvRow(o, 'r')).join('')}<li class="now"><b>${fmt(a.price)}</b><span class="str"></span><em>сейчас</em></li>${a.sup.map(o => lvRow(o, 's')).join('')}</ul>`));
   if (state.market === 'crypto') T.push(liqTile(a));
   else if (state.market === 'stock') T.push(optTile(a));
-  // ордер-блоки и ликвидность
   T.push(obTile(a));
-  // объём
   if (a.vp) T.push(volTile(a));
-  // волны
-  if (a.wave) { const w = a.wave;
-    T.push(tile('wave', '#e2c6ff', 'Волны Эллиотта', esc(countTitle(w)), `<p class="big">${esc(countTitle(w))}</p>
-      <div class="meter"><i style="width:${w.confidence * 100}%"></i></div><p class="mut">Согласованность с канонами Эллиотта: ${pct(w.confidence)}</p>
-      <ul class="dots">${w.labels.map(l => `<li><b>${l.label}</b><span>${fmt(l.p)}</span></li>`).join('')}</ul>
-      <p class="mut">${ratioText(w).join(' · ')}</p><p class="mut">${esc(w.next.phase)}</p>
-      <p class="note">Волновой ориентир (${esc(w.next.wave)}): ${w.next.targets.map((t, j) => `${fmt(t)} — ${w.next.reach[j] < 0.05 ? 'вне горизонта' : 'достижимость ' + pct(w.next.reach[j])}`).join('; ')}. Отмена разметки — ${fmt(w.next.invalid)}.</p>`)); }
-  else T.push(tile('wave', '#e2c6ff', 'Волны Эллиотта', 'Структура не читается', '<p class="mut">Чёткой волновой структуры сейчас нет — рынок в фазе накопления или хаотичной коррекции.</p>'));
-  // Фибоначчи
-  if (a.fib) { const lv = a.fib.levels.slice().sort((x, y) => y.p - x.p), d = a.fib.depth;
-    const nx = a.fib.levels.filter(f => f.kind === 'retr' && f.r > d).sort((x, y) => x.r - y.r)[0];
-    T.push(tile('fib', '#ffd678', 'Фибоначчи', `откат ${num(Math.max(0, d), 2)}${nx ? ' · след. ' + fmt(nx.p) : ''}`,
-      `<p class="mut">Плечо ${fmt(a.fib.a.p)} → ${fmt(a.fib.b.p)}${a.fib.log ? ' (лог-шкала)' : ''}</p><ul class="fibl">${lv.map(f => `<li class="${f.kind} ${[0.382, 0.5, 0.618, 1.618].includes(f.r) ? 'key' : ''}"><span>${String(f.r).replace('.', ',')}</span><i style="--w:${Math.min(100, Math.abs(f.p - a.price) / a.price * 400)}%"></i><b>${fmt(f.p)}</b></li>`).join('')}</ul>`)); }
-  // индикаторы
-  const n = a.now, ma = [['EMA 21', a.ind.E21[a.last]], ['SMA 50', n.s50], ['SMA 200', n.s200]];
-  T.push(tile('ind', '#7cc7ff', 'Индикаторы', `RSI ${n.rsi != null ? Math.round(n.rsi) : '—'} · MACD ${n.hist > 0 ? '↑' : '↓'} · σ ${num(a.sigma * 100, 1)}%`,
-    `<div class="rsi"><span>RSI 14</span><div class="rbar"><i style="left:${n.rsi ?? 50}%"></i></div><b>${n.rsi != null ? Math.round(n.rsi) : '—'}</b></div>
-    <ul class="kv">${ma.map(([k, x]) => `<li><span>${k}</span><b>${fmt(x)}</b><em class="${x != null && a.price > x ? 'pos' : 'neg'}">${x != null ? signPct((a.price - x) / x) : '—'}</em></li>`).join('')}
-    <li><span>MACD</span><b>${n.hist != null ? (n.hist > 0 ? 'выше сигнальной' : 'ниже сигнальной') : '—'}</b><em></em></li>
-    <li><span>Отклонение от SMA 20</span><b>${num(a.z, 1)} ATR</b><em></em></li>
-    <li><span>Волатильность</span><b>${num(a.sigma * 100, 2)}% за бар</b><em></em></li>
-    ${state.fng ? `<li><span>Страх / жадность</span><b>${state.fng.v}</b><em>${esc(state.fng.c)}</em></li>` : ''}</ul>`));
-  // новости
+  // волны — схема
+  if (a.wave) { const w = a.wave, pw = plainWave(w), bb = state.data[state.tf];
+    const L = w.labels, i0 = L[0].i, iN = a.last, ext = Math.round((iN - i0) * 0.35);
+    const tReach = w.next.targets.find((t, j) => w.next.reach[j] >= 0.05);
+    const proj = tReach != null ? tReach : a.price * (1 + (w.next.bias || 0) * a.sigma * Math.sqrt(a.horizon));
+    const ps = [...L.map(l => l.p), a.price, proj], lo = Math.min(...ps), hi = Math.max(...ps);
+    const X = i => 10 + (i - i0) / ((iN + ext - i0) || 1) * 280, Y = p => 100 - (p - lo) / ((hi - lo) || 1) * 84;
+    const path = L.map((l, j) => `${j ? 'L' : 'M'}${X(l.i).toFixed(1)},${Y(l.p).toFixed(1)}`).join(' ') + ` L${X(iN).toFixed(1)},${Y(a.price).toFixed(1)}`;
+    const svg = `<svg viewBox="0 0 300 116" class="wv"><path d="${path}" fill="none" stroke="#d6aaff" stroke-width="2.2" stroke-linejoin="round"/>
+      <path d="M${X(iN).toFixed(1)},${Y(a.price).toFixed(1)} L${X(iN + ext).toFixed(1)},${Y(proj).toFixed(1)}" stroke="${w.next.bias > 0 ? '#3ee6b0' : '#ff5f7e'}" stroke-width="2.2" stroke-dasharray="5 4" fill="none"/>
+      ${L.map(l => `<circle cx="${X(l.i).toFixed(1)}" cy="${Y(l.p).toFixed(1)}" r="3.2" fill="#d6aaff"/><text x="${X(l.i).toFixed(1)}" y="${(Y(l.p) + (l.t === 'H' ? -7 : 14)).toFixed(1)}" fill="#fff" font-size="11" font-weight="700" text-anchor="middle">${l.label}</text>`).join('')}
+      <circle cx="${X(iN).toFixed(1)}" cy="${Y(a.price).toFixed(1)}" r="4" fill="#fff"/>${X(iN) - X(L[L.length - 1].i) > 22 ? `<text x="${X(iN).toFixed(1)}" y="${(Y(a.price) + 15).toFixed(1)}" fill="rgba(255,255,255,.7)" font-size="10" text-anchor="middle">сейчас</text>` : ''}<text x="${X(iN + ext).toFixed(1)}" y="${(Y(proj) + (w.next.bias > 0 ? -7 : 14)).toFixed(1)}" fill="${w.next.bias > 0 ? '#3ee6b0' : '#ff5f7e'}" font-size="10" text-anchor="end">прогноз</text></svg>`;
+    const conf = w.confidence >= 0.75 ? 'высокая' : w.confidence >= 0.55 ? 'средняя' : 'низкая';
+    T.push(tile('wave', '#e2c6ff', 'Волны Эллиотта', `Дальше: ${esc(pw.next)}`, `${svg}
+      <ul class="steps"><li><span>Сейчас</span><b>${esc(pw.now)}</b></li><li><span>Дальше</span><b>${esc(pw.next)}${tReach != null ? ` — ориентир ${fmt(tReach)}` : ''}</b></li><li><span>Уверенность</span><b>${conf}</b></li><li><span>Ломается</span><b>если цена уйдёт за ${fmt(w.next.invalid)}</b></li></ul>
+      <details class="more"><summary>Подробнее</summary><p>${esc(countTitle(w))}. ${ratioText(w).join(' · ')}. ${esc(w.next.phase)} Совпадение с правилами Эллиотта ${pct(w.confidence)}.</p></details>`)); }
+  else T.push(tile('wave', '#e2c6ff', 'Волны Эллиотта', 'чёткой структуры нет', '<p class="lead">Сейчас график не складывается в понятные волны — рынок без выраженного движения.</p>'));
+  // Фибоначчи — с отметкой «сейчас»
+  if (a.fib) { const f = a.fib, d = Math.max(0, f.depth), lv = f.levels.filter(x => x.kind === 'retr').slice().sort((x, y) => y.p - x.p);
+    const nx = f.levels.filter(x => x.kind === 'retr' && x.r > d).sort((x, y) => x.r - y.r)[0];
+    const rows = []; let put = false;
+    for (const x of lv) { if (!put && a.price > x.p) { rows.push(`<li class="now"><span>сейчас</span><i></i><b>${fmt(a.price)}</b></li>`); put = true; }
+      rows.push(`<li class="${[0.382, 0.5, 0.618].includes(x.r) ? 'key' : ''}"><span>${Math.round(x.r * 100)}%</span><i></i><b>${fmt(x.p)}</b></li>`); }
+    if (!put) rows.push(`<li class="now"><span>сейчас</span><i></i><b>${fmt(a.price)}</b></li>`);
+    T.push(tile('fib', '#ffd678', 'Фибоначчи', `откат ${Math.round(d * 100)}%${nx ? ' · дальше ' + fmt(nx.p) : ''}`,
+      `<p class="lead">Последнее движение: ${fmt(f.a.p)} → ${fmt(f.b.p)}. Цена вернула ${Math.round(d * 100)}% этого хода. Откаты чаще всего останавливаются на 38%, 50% и 62% (выделены).</p><ul class="fb">${rows.join('')}</ul>`)); }
+  // индикаторы — шкалы
+  const n = a.now, rsi = n.rsi != null ? Math.round(n.rsi) : null, vs200 = n.s200 != null ? (a.price - n.s200) / n.s200 : null, vol = a.sigma * Math.sqrt(state.tf === '4h' ? 6 : state.tf === '1w' ? 1 / 7 : 1);
+  const gauge = (t, val, pos, note) => `<div class="gg"><small>${t}</small><div class="gb"><i style="left:${uclamp(pos, 0, 100)}%"></i></div><b>${val}</b><span>${note}</span></div>`;
+  T.push(tile('ind', '#7cc7ff', 'Индикаторы', `RSI ${rsi ?? '—'} · ${vs200 != null ? (vs200 > 0 ? 'выше' : 'ниже') + ' SMA 200' : ''}`,
+    `<div class="gauges">${gauge('Сила покупателей (RSI)', rsi ?? '—', rsi ?? 50, rsi == null ? '' : rsi < 30 ? 'перепродан — часто отскок' : rsi > 70 ? 'перегрет — часто откат' : 'в норме')}
+    ${vs200 != null ? gauge('Цена против долгой средней', signPct(vs200), 50 + vs200 * 150, vs200 > 0 ? 'выше — долгий тренд вверх' : 'ниже — долгий тренд вниз') : ''}
+    ${gauge('Размах движений', num(vol * 100, 1) + '% в день', Math.min(100, vol * 100 / 6 * 100), vol < 0.015 ? 'спокойно' : vol < 0.035 ? 'обычно' : 'очень резко')}
+    ${state.fng ? gauge('Страх ↔ жадность', state.fng.v, state.fng.v, esc(state.fng.c)) : ''}</div>
+    <details class="more"><summary>Подробнее</summary><ul class="kv">${[['EMA 21', a.ind.E21[a.last]], ['SMA 50', n.s50], ['SMA 200', n.s200]].map(([k, x]) => `<li><span>${k}</span><b>${fmt(x)}</b><em class="${x != null && a.price > x ? 'pos' : 'neg'}">${x != null ? signPct((a.price - x) / x) : '—'}</em></li>`).join('')}<li><span>MACD</span><b>${n.hist > 0 ? 'выше сигнальной' : 'ниже сигнальной'}</b><em></em></li><li><span>От SMA 20</span><b>${num(a.z, 1)} ATR</b><em></em></li></ul></details>`));
   const nv = a.newsS;
-  T.push(tile('news', '#9fb3ff', 'Новостной фон', state.news.length ? `${state.news.length} · ${nv > 0.15 ? 'позитив' : nv < -0.15 ? 'негатив' : 'нейтрально'}` : 'нет свежих',
-    state.news.length ? `<ul class="nl">${state.news.map(x => `<li><em class="dot ${x.s > 0 ? 'u' : x.s < 0 ? 'd' : 's'}"></em><a href="${esc(x.link)}" target="_blank" rel="noopener">${esc(x.title)}</a><small>${esc(x.pub || '')}${x.t ? ' · ' + new Date(x.t * 1000).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' }) : ''}</small></li>`).join('')}</ul>` : '<p class="mut">Свежих публикаций по инструменту не нашлось — расчёт опирается только на график.</p>'));
+  T.push(tile('news', '#9fb3ff', 'Новости', state.news.length ? `${state.news.length} · ${nv > 0.15 ? 'позитив' : nv < -0.15 ? 'негатив' : 'нейтрально'}` : 'нет свежих',
+    state.news.length ? `<ul class="nl">${state.news.map(x => `<li><em class="dot ${x.s > 0 ? 'u' : x.s < 0 ? 'd' : 's'}"></em><a href="${esc(x.link)}" target="_blank" rel="noopener">${esc(x.title)}</a><small>${esc(x.pub || '')}${x.t ? ' · ' + new Date(x.t * 1000).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' }) : ''}</small></li>`).join('')}</ul>` : '<p class="lead">Свежих публикаций нет — прогноз опирается только на график.</p>'));
   $('#tiles').innerHTML = T.join('');
   $('#src').textContent = `Котировки: ${SRC[state.market]}, обновлено ${state.at.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}. Пересчёт каждые 90 секунд.`;
 }
@@ -1186,20 +1329,25 @@ function liqTile(a) {
   if (g && g.coin) {
     const c = g.coin, tot = c.long + c.short || 1;
     val = `24 ч: ${usd(c.total || tot)} · ${c.short > c.long ? 'шорты ' + pct(c.short / tot) : 'лонги ' + pct(c.long / tot)}`;
-    body += `<h5>Ликвидировано за 24 часа · ${esc(g.base)}</h5><div class="split"><i class="l" style="width:${c.long / tot * 100}%"></i><i class="s" style="width:${c.short / tot * 100}%"></i></div>
+    body += `<p class="lead">За сутки биржи принудительно закрыли позиций с плечом на <b>${usd(c.total || tot)}</b>. ${c.short > c.long * 1.5 ? 'В основном выбивали продавцов (шорты) — цену толкали вверх.' : c.long > c.short * 1.5 ? 'В основном выбивали покупателей (лонги) — цену толкали вниз.' : 'Выбивали и покупателей, и продавцов примерно поровну.'}</p><h5>Ликвидировано за 24 часа · ${esc(g.base)}</h5><div class="split"><i class="l" style="width:${c.long / tot * 100}%"></i><i class="s" style="width:${c.short / tot * 100}%"></i></div>
       <div class="leg2"><span>Лонги <b>${usd(c.long)}</b></span><span>Шорты <b>${usd(c.short)}</b></span>${g.market ? `<span>Весь рынок <b>${usd(g.market.total)}</b> (${pct(g.market.long / (g.market.total || 1))} лонги)</span>` : ''}</div>`;
     if (g.hourly && g.hourly.length) body += hourlySvg(g.hourly);
   }
-  body += '<div class="cols">';
+  if (L) {
+    const sh = L.shorts.slice().sort((x, y) => Math.abs(x.p - a.price) - Math.abs(y.p - a.price)).slice(0, 2).sort((x, y) => y.p - x.p);
+    const lg2 = L.longs.slice().sort((x, y) => Math.abs(x.p - a.price) - Math.abs(y.p - a.price)).slice(0, 2).sort((x, y) => y.p - x.p);
+    const mxu = Math.max(1, ...[...sh, ...lg2].map(x => x.usd));
+    const row = (x, k) => `<li class="${k}"><b>${fmt(x.p)}</b><span class="str"><i style="width:${Math.max(12, x.usd / mxu * 100)}%"></i></span><em>${usd(x.usd)}</em><small><span class="tg">${k === 'r' ? 'выбьет шорты' : 'выбьет лонги'}</span><span class="tg">${signPct((x.p - a.price) / a.price)}</span></small></li>`;
+    body += `<h5>Где ликвидируют дальше</h5><ul class="lad">${sh.map(x => row(x, 'r')).join('')}<li class="now"><b>${fmt(a.price)}</b><span class="str"></span><em>сейчас</em></li>${lg2.map(x => row(x, 's')).join('')}</ul>`;
+  }
+  body += '<details class="more"><summary>Подробнее: биржи, крупнейшие, деривативы</summary><div class="cols">';
   if (g && g.exch && g.exch.length) body += `<div><h5>По биржам</h5><ul class="kv">${g.exch.slice(0, 6).map(x => `<li><span>${esc(x.ex)}</span><b>${usd(x.T)}</b><em>лонги ${pct(x.L / (x.T || 1))}</em></li>`).join('')}</ul></div>`;
   if (g && g.largest && g.largest.length) body += `<div><h5>Крупнейшие за сутки</h5><ul class="kv">${g.largest.map(x => `<li><span>${esc(x.ex)} · ${new Date(x.t * 1000).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}</span><b>${usd(x.usd)}</b><em>${x.side === 'LONG' ? 'лонг' : 'шорт'} @ ${fmt(x.p)}</em></li>`).join('')}</ul></div>`;
-  if (L) body += `<div><h5>Где ликвидируют дальше</h5><ul class="kv">${L.shorts.slice().reverse().map(x => `<li><span style="color:#5abeff">шорты</span><b>${fmt(x.p)}</b><em>${usd(x.usd)} · ${signPct((x.p - a.price) / a.price)}</em></li>`).join('')}${L.longs.map(x => `<li><span style="color:#ffaa46">лонги</span><b>${fmt(x.p)}</b><em>${usd(x.usd)} · ${signPct((x.p - a.price) / a.price)}</em></li>`).join('')}</ul></div>`;
   if (ds) body += `<div><h5>Деривативы</h5><ul class="kv">
       <li><span>Открытый интерес</span><b>${usd(ds.oiUsd)}</b><em class="${ds.oiCh >= 0 ? 'pos' : 'neg'}">${signPct(ds.oiCh)} за 7 дн.</em></li>
       ${ds.funding != null ? `<li><span>Фандинг</span><b>${num(ds.funding * 100, 4)}%</b><em>${ds.funding > 0.0003 ? 'лонги перегреты' : ds.funding < -0.0001 ? 'шорты платят' : 'нейтрально'}</em></li>` : ''}
       ${ds.lsAcc != null ? `<li><span>Аккаунтов в лонге</span><b>${pct(ds.lsAcc)}</b><em>${ds.lsAcc > 0.65 ? 'толпа в лонгах' : ds.lsAcc < 0.4 ? 'толпа в шортах' : 'баланс'}</em></li>` : ''}</ul><p class="note">${esc(ds.read)}</p></div>`;
-  body += '</div>';
-  body += `<p class="note">Факт — ликвидации с ${g && g.real ? '12 бирж (MarginPad)' : 'агрегатора'}, по часам и биржам — CoinBoss. Будущие кластеры — ${L ? esc(L.src) : '—'}: это оценка, где сработают принудительные закрытия; крупные скопления работают как «магниты» для цены. На графике: полосы — будущие ликвидации, столбики у последней свечи — факт за 24 ч.</p>`;
+  body += `</div><p class="note">Факт — ликвидации с 12 бирж (MarginPad), по часам и биржам — CoinBoss. Будущие кластеры — ${L ? esc(L.src) : '—'}: это оценка. На графике полосы — будущие ликвидации, столбики у последней свечи — факт за 24 ч.</p></details>`;
   return tile('liq', '#ffaa46', 'Ликвидации', val, body);
 }
 function optTile(a) {
@@ -1224,13 +1372,13 @@ function obTile(a) {
   const obRow = (o, side) => `<li><span><em class="ob" style="display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;background:${side === 'bull' ? 'rgba(62,230,176,.7)' : 'rgba(255,95,126,.7)'}"></em>${dShort(bars[o.i].t)}</span><b>${fmt(o.bot)}–${fmt(o.top)}</b><em>${P(side === 'bull' ? o.top : o.bot)} · ${o.touches === 0 ? 'нетронут' : 'тест ×' + o.touches}</em></li>`;
   const ob = a.ob, pl = a.pools;
   const sw = pl.sweeps.filter(x => a.last - x.i <= 20).filter((x, k, arr) => !arr.slice(0, k).some(y => Math.abs(y.i - x.i) <= 3)).slice(0, 2);
-  const val = `${ob.bear[0] ? '▲ ' + fmt(ob.bear[0].bot) : '▲ —'} · ${ob.bull[0] ? '▼ ' + fmt(ob.bull[0].top) : '▼ —'}${sw.length ? ' · сбор ликв.' : ''}`;
-  return tile('ob', '#ff8fa6', 'Ордер-блоки и ликвидность', val, `<div class="cols">
-    <div><h5>Продавец выше</h5>${ob.bear.length ? `<ul class="kv">${ob.bear.slice(0, 3).map(o => obRow(o, 'bear')).join('')}</ul>` : '<p class="mut">Актуальных зон продавца в досягаемости нет.</p>'}
-    <h5>Покупатель ниже</h5>${ob.bull.length ? `<ul class="kv">${ob.bull.slice(0, 3).map(o => obRow(o, 'bull')).join('')}</ul>` : '<p class="mut">Актуальных зон покупателя в досягаемости нет.</p>'}</div>
+  const val = (!ob.bear[0] && !ob.bull[0] ? 'зон рядом нет' : `${ob.bear[0] ? '▲ ' + fmt(ob.bear[0].bot) : '▲ —'} · ${ob.bull[0] ? '▼ ' + fmt(ob.bull[0].top) : '▼ —'}`) + (sw.length ? ' · сняты стопы' : '');
+  return tile('ob', '#ff8fa6', 'Ордер-блоки и ликвидность', val, `<p class="lead">Зоны, где крупные игроки оставили заявки, и места, где скопились стоп-приказы толпы. Цена часто возвращается к таким местам.</p><div class="cols">
+    <div>${!ob.bear.length && !ob.bull.length ? '<h5>Ордер-блоки</h5><p class="mut">Рядом с ценой активных зон нет.</p>' : `<h5>Продавец выше</h5>${ob.bear.length ? `<ul class="kv">${ob.bear.slice(0, 3).map(o => obRow(o, 'bear')).join('')}</ul>` : '<p class="mut">Актуальных зон продавца в досягаемости нет.</p>'}
+    <h5>Покупатель ниже</h5>${ob.bull.length ? `<ul class="kv">${ob.bull.slice(0, 3).map(o => obRow(o, 'bull')).join('')}</ul>` : '<p class="mut">Актуальных зон покупателя в досягаемости нет.</p>'}`}</div>
     <div><h5>Скопления стопов</h5><ul class="kv">${pl.above.slice(0, 2).map(g => `<li><span>над хаями${g.n > 1 ? ' ×' + g.n : ''}</span><b>${fmt(g.edge)}</b><em>${P(g.edge)}</em></li>`).join('')}${pl.below.slice(0, 2).map(g => `<li><span>под лоу${g.n > 1 ? ' ×' + g.n : ''}</span><b>${fmt(g.edge)}</b><em>${P(g.edge)}</em></li>`).join('') || '<li><span>нет рядом</span><b></b><em></em></li>'}</ul>
     ${sw.length ? `<h5>Сбор ликвидности</h5><ul class="kv">${sw.map(x => `<li><span>${dShort(bars[x.i].t)}</span><b>${x.side === 'sell' ? 'под' : 'над'} ${fmt(x.p)}</b><em>тень до ${fmt(x.ext)}</em><small>Закрытие вернулось ${x.side === 'sell' ? 'выше' : 'ниже'} — ложный пробой, стопы толпы забраны.</small></li>`).join('')}</ul>` : ''}</div></div>
-    <p class="note">Ордер-блок — последняя встречная свеча перед импульсом, сломавшим структуру: там остались заявки крупного игрока. Показаны зоны за последние ${a.LB} бар. в пределах досягаемости${ob.far ? `; ещё ${ob.far} старых/далёких скрыты` : ''}.</p>`);
+    <details class="more"><summary>Что это</summary><p>Ордер-блок — последняя встречная свеча перед импульсом, сломавшим структуру: там остались заявки крупного игрока. Показаны зоны за последние ${a.LB} бар. в пределах досягаемости${ob.far ? `; ещё ${ob.far} старых/далёких скрыты` : ''}.</p></details>`);
 }
 function volTile(a) {
   const vp = a.vp, n = vp.v.length, mx = Math.max(...vp.v), W = 300, H = 150, bh = H / n;
@@ -1239,10 +1387,11 @@ function volTile(a) {
     return `<rect x="0" y="${(H - (i + 1) * bh).toFixed(1)}" width="${(x / mx * W * 0.92).toFixed(1)}" height="${Math.max(1, bh - 0.6).toFixed(1)}" fill="${inVA ? 'rgba(159,216,255,.55)' : 'rgba(159,216,255,.22)'}"/>`; }).join('');
   const lineAt = (p, c, t) => `<line x1="0" x2="${W}" y1="${y(p).toFixed(1)}" y2="${y(p).toFixed(1)}" stroke="${c}" stroke-width="1.2" stroke-dasharray="4 3"/><text x="${W - 2}" y="${(y(p) - 3).toFixed(1)}" fill="${c}" font-size="10" text-anchor="end">${t}</text>`;
   const svg = `<svg viewBox="0 0 ${W} ${H}" style="width:100%;max-width:420px;height:150px;display:block" preserveAspectRatio="none">${bars}${lineAt(vp.poc, '#ffd678', 'POC')}${lineAt(a.price, '#fff', 'цена')}</svg>`;
-  return tile('vol', '#9fd8ff', 'Профиль объёма', `POC ${fmt(vp.poc)} · ${a.price > vp.vah ? 'выше зоны стоимости' : a.price < vp.val ? 'ниже зоны стоимости' : 'внутри зоны стоимости'}`, `<div class="cols"><div>${svg}</div><div>
-    <ul class="kv"><li><span>VAH</span><b>${fmt(vp.vah)}</b><em>${signPct((vp.vah - a.price) / a.price)}</em></li><li><span>POC</span><b>${fmt(vp.poc)}</b><em>${signPct((vp.poc - a.price) / a.price)}</em></li><li><span>VAL</span><b>${fmt(vp.val)}</b><em>${signPct((vp.val - a.price) / a.price)}</em></li></ul>
-    <h5>Опорные точки периодов</h5><ul class="kv">${a.per.map(x => `<li><span>${esc(x.name)}</span><b>${fmt(x.p)}</b><em>${signPct((x.p - a.price) / a.price)}</em></li>`).join('')}</ul></div></div>
-    <p class="note">Профиль за последние ${a.LB} бар.: POC — цена, где прошёл максимальный объём; зона стоимости (VAH–VAL) — 70% объёма. Вне зоны цена ищет возврат к ней или принятие нового диапазона.</p>`);
+  const volLead = `<p class="lead">Больше всего торговали около <b>${fmt(vp.poc)}</b> — цена часто возвращается к этой отметке. Сейчас цена ${a.price > vp.vah ? 'выше основной зоны торгов' : a.price < vp.val ? 'ниже основной зоны торгов' : 'внутри основной зоны торгов'}.</p>`;
+  return tile('vol', '#9fd8ff', 'Профиль объёма', `больше всего сделок у ${fmt(vp.poc)}`, `${volLead}${svg}
+    <details class="more"><summary>Подробнее</summary><ul class="kv"><li><span>Верх зоны (VAH)</span><b>${fmt(vp.vah)}</b><em>${signPct((vp.vah - a.price) / a.price)}</em></li><li><span>Центр (POC)</span><b>${fmt(vp.poc)}</b><em>${signPct((vp.poc - a.price) / a.price)}</em></li><li><span>Низ зоны (VAL)</span><b>${fmt(vp.val)}</b><em>${signPct((vp.val - a.price) / a.price)}</em></li>
+    ${a.per.filter(x => Math.abs(x.p - a.price) / a.price <= Math.exp(2 * a.sigma * Math.sqrt(a.horizon)) - 1).map(x => `<li><span>${esc(x.name)}</span><b>${fmt(x.p)}</b><em>${signPct((x.p - a.price) / a.price)}</em></li>`).join('')}</ul>
+    <p class="note">Профиль за последние ${a.LB} бар.: зона стоимости (VAH–VAL) — где прошло 70% объёма. Вне зоны цена ищет возврат к ней или принятие нового диапазона.</p></details>`);
 }
 
 function drawChart() {
@@ -1420,6 +1569,7 @@ function copySummary() {
 $('#f').addEventListener('submit', e => { e.preventDefault(); const q = $('#q').value; $('#q').blur(); run(q); });
 $('#quick').addEventListener('click', e => { const b = e.target.closest('[data-q]'); if (!b) return; $('#q').value = b.dataset.q; run(b.dataset.q); });
 $('#tfs').addEventListener('click', e => { const b = e.target.closest('[data-tf]'); if (!b || b.disabled) return; state.tf = b.dataset.tf; compute(); });
+$('#verdict').addEventListener('click', e => { const b = e.target.closest('.mtf [data-tf]'); if (!b || b.dataset.tf === state.tf) return; state.tf = b.dataset.tf; compute(); scrollTo({ top: 0, behavior: 'smooth' }); });
 $('#layers').addEventListener('click', e => { const b = e.target.closest('[data-ly]'); if (!b) return; state.layers[b.dataset.ly] = !state.layers[b.dataset.ly]; b.classList.toggle('on'); drawChart(); });
 $('#copy').addEventListener('click', copySummary);
 document.addEventListener('toggle', e => { const d = e.target; if (d && d.dataset && d.dataset.k) state.open[d.dataset.k] = d.open; }, true);
