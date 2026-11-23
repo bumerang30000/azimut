@@ -27,6 +27,7 @@ body{margin:0;min-height:100vh;color:var(--ink);font:16px/1.55 Onest,system-ui,-
 .glass{background:linear-gradient(140deg,rgba(255,255,255,.11),rgba(255,255,255,.035));-webkit-backdrop-filter:blur(22px) saturate(160%);backdrop-filter:blur(22px) saturate(160%);border:1px solid var(--line);border-radius:var(--r);box-shadow:0 18px 50px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.16)}
 .wrap{max-width:1240px;margin:0 auto;padding:max(18px,env(safe-area-inset-top)) max(4vw,14px) max(28px,env(safe-area-inset-bottom))}
 .top{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.langb{margin-left:auto;min-width:52px;height:38px;padding:0 14px;border-radius:999px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:var(--ink);font:600 14px/1 inherit;cursor:pointer;letter-spacing:.04em}.langb:hover{background:rgba(255,255,255,.16)}
 .logo{width:38px;height:38px;flex:none}
 .top b{font-size:20px;font-weight:700;letter-spacing:-.01em}.top span{color:var(--mut);font-size:14px}
 form{display:flex;gap:8px;padding:7px;border-radius:999px}
@@ -116,6 +117,14 @@ form input::placeholder{color:var(--mut);text-transform:none;font-weight:400}
 details{color:var(--mut);font-size:14px}details summary{cursor:pointer;min-height:32px}
 details input{width:100%;margin-top:8px;background:rgba(0,0,0,.25);border:1px solid var(--line);border-radius:12px;color:var(--ink);padding:10px 12px;font:16px Onest,sans-serif}
 .law{font-size:13px;color:var(--mut);line-height:1.5}
+.specc{border:1px solid rgba(255,214,120,.35)}.specc .kick{color:#ffd678;font-size:13px}.specc h3{margin:6px 0 10px;font-size:clamp(20px,3.2vw,28px);line-height:1.15}
+.specc.up h3{color:#c8ffec}.specc.down h3{color:#ffd3dc}.specc .sub{margin:-2px 0 10px;color:var(--mut);font-size:14px}.specc h5{margin:16px 0 8px;font-size:13px;color:var(--mut);text-transform:uppercase;letter-spacing:.04em}
+.tfgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(70px,1fr));gap:8px;margin-top:14px}
+.tfgrid>div{padding:10px;border-radius:14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);cursor:pointer}
+.tfgrid>div.cur{border-color:rgba(255,214,120,.6)}.tfgrid small{display:block;font-size:12px;color:var(--mut)}.tfgrid b{display:block;font-size:15px;margin:2px 0 6px}
+.tfgrid .u b{color:var(--up)}.tfgrid .d b{color:var(--dn)}.tfgrid .s b{color:var(--side)}
+.mini{display:flex;height:5px;border-radius:5px;overflow:hidden}.mini i{display:block}.mini .u{background:var(--up)}.mini .s{background:var(--side)}.mini .d{background:var(--dn)}
+.tf.spb{margin-left:6px;border-color:rgba(255,214,120,.45);color:#ffd678}.tf.spb.on{background:rgba(255,214,120,.22);color:#fff}
 .verdict .sub{margin:-6px 0 4px;color:var(--mut);font-size:14.5px;line-height:1.4}
 .mtf>div[data-tf]{cursor:pointer}.mtf em.mp{display:block;font-style:normal;font-size:13px;color:var(--mut);margin-top:2px}.mtf .ar{margin-right:6px}
 .road{position:relative;height:112px;margin:4px 6px 10px}.road.r2{height:152px}
@@ -213,6 +222,7 @@ details[open]>summary .chev{transform:rotate(180deg)}
   <div class="top">
     <svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.18)"/><path d="M12 44 24 28l9 9 19-21" fill="none" stroke="#c9a7ff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="52" cy="16" r="4" fill="#9fd8ff"/></svg>
     <div><b>Азимут</b><br><span>Волны, Фибоначчи и уровни по любому тикеру</span></div>
+    <button id="lang" class="langb" type="button" aria-label="Language"></button>
   </div>
   <form id="f" class="glass" autocomplete="off">
     <input id="q" name="q" inputmode="text" autocapitalize="characters" spellcheck="false" placeholder="Тикер: BTC, AAPL, SBER…" aria-label="Тикер">
@@ -232,6 +242,7 @@ details[open]>summary .chev{transform:rotate(180deg)}
       <div id="chart"></div>
       <details class="lgd"><summary>Обозначения</summary><div class="legend"><span><i style="border-color:#7cc7ff"></i>SMA 50</span><span><i style="border-color:#b18cff"></i>SMA 200</span><span><i style="border-color:rgba(255,214,120,.85)"></i>EMA 21</span><span><i style="border-color:#d6aaff"></i>Волны</span><span><i style="border-color:#fff;border-top-style:dashed"></i>Прогнозный путь</span><span><i style="border-color:rgba(160,190,255,.6);border-top-style:dotted"></i>Коридор 1σ</span><span><i class="bx" style="background:rgba(62,230,176,.35)"></i>Ордер-блок спроса</span><span><i class="bx" style="background:rgba(255,95,126,.35)"></i>Ордер-блок предложения</span><span><i class="bx" style="background:linear-gradient(90deg,rgba(255,170,70,.15),rgba(255,170,70,.8))"></i>Будущие ликвидации лонгов</span><span><i class="bx" style="background:linear-gradient(90deg,rgba(90,190,255,.15),rgba(90,190,255,.8))"></i>Будущие ликвидации шортов</span><span><i class="bx" style="background:#ffaa46;outline:1px solid #fff"></i>Факт ликвидаций за 24 ч</span><span><i style="border-color:rgba(255,214,120,.8);border-top-style:dashed"></i>Стопы над хаями / под лоу</span></div></details>
     </section>
+    <section id="spec" class="card glass specc" hidden></section>
     <section id="verdict" class="card glass verdict"></section>
     <section id="scen" class="card glass"></section>
     <section id="tiles" class="tiles"></section>
@@ -244,6 +255,7 @@ details[open]>summary .chev{transform:rotate(180deg)}
     </section>
   </div>
 </main>
+<script src="i18n.js"></script>
 <script src="smc.js"></script>
 <script>/* Аналитический движок: индикаторы, зигзаг, волны Эллиотта, Фибоначчи, уровни, вероятности */
 (function (root) {
@@ -414,36 +426,36 @@ function projectNextLin(c) {
   let n = {};
   if (c.type === 'imp') {
     const w1 = R(P[1].p, P[0].p);
-    if (c.k === 2) n = { wave: 'волна 3', from: P[2], bias: d, targets: [P[2].p + d * 1.618 * w1, P[2].p + d * 2.618 * w1], invalid: P[0].p,
-      path: [[len * 1.4, P[2].p + d * 1.618 * w1]], phase: 'Завершается коррекционная волна 2, впереди обычно самая сильная — третья.' };
+    if (c.k === 2) n = { wave: __t("волна 3"), from: P[2], bias: d, targets: [P[2].p + d * 1.618 * w1, P[2].p + d * 2.618 * w1], invalid: P[0].p,
+      path: [[len * 1.4, P[2].p + d * 1.618 * w1]], phase: __t("Завершается коррекционная волна 2, впереди обычно самая сильная — третья.") };
     if (c.k === 3) { const w3 = R(P[3].p, P[2].p), t4 = P[3].p - d * 0.382 * w3;
-      n = { wave: 'волна 4', from: P[3], bias: -d, targets: [t4, P[3].p - d * 0.5 * w3], invalid: P[1].p,
-        path: [[len * 0.8, t4], [len * 1.8, t4 + d * w1]], phase: 'Третья волна, вероятно, отработана; ожидается откат волны 4, затем финальная пятая.' }; }
+      n = { wave: __t("волна 4"), from: P[3], bias: -d, targets: [t4, P[3].p - d * 0.5 * w3], invalid: P[1].p,
+        path: [[len * 0.8, t4], [len * 1.8, t4 + d * w1]], phase: __t("Третья волна, вероятно, отработана; ожидается откат волны 4, затем финальная пятая.") }; }
     if (c.k === 4) { const t5 = P[4].p + d * w1;
-      n = { wave: 'волна 5', from: P[4], bias: d, targets: [t5, P[4].p + d * 0.618 * R(P[3].p, P[0].p)], invalid: P[1].p,
-        path: [[len, t5], [len * 1.8, t5 - d * 0.382 * R(t5, P[0].p)]], phase: 'Коррекция 4 выглядит завершённой — идёт финальная пятая волна импульса.' }; }
+      n = { wave: __t("волна 5"), from: P[4], bias: d, targets: [t5, P[4].p + d * 0.618 * R(P[3].p, P[0].p)], invalid: P[1].p,
+        path: [[len, t5], [len * 1.8, t5 - d * 0.382 * R(t5, P[0].p)]], phase: __t("Коррекция 4 выглядит завершённой — идёт финальная пятая волна импульса.") }; }
     if (c.k === 5) { const T = R(P[5].p, P[0].p), a = P[5].p - d * 0.382 * T;
-      n = { wave: 'коррекция A-B-C', from: P[5], bias: -d, targets: [a, P[5].p - d * 0.618 * T], invalid: P[5].p,
-        path: [[len, a], [len * 1.6, a + d * 0.5 * R(a, P[5].p)], [len * 2.6, P[5].p - d * 0.618 * T]], phase: 'Пятиволновой импульс выглядит завершённым — рынок входит в коррекцию A-B-C.' }; }
+      n = { wave: __t("коррекция A-B-C"), from: P[5], bias: -d, targets: [a, P[5].p - d * 0.618 * T], invalid: P[5].p,
+        path: [[len, a], [len * 1.6, a + d * 0.5 * R(a, P[5].p)], [len * 2.6, P[5].p - d * 0.618 * T]], phase: __t("Пятиволновой импульс выглядит завершённым — рынок входит в коррекцию A-B-C.") }; }
   } else if (c.type === 'impc') {
     const T = R(P[5].p, P[0].p), A = c.Q[1];
     if (c.m === 1) { const b = A.p + d * 0.5 * R(A.p, P[5].p), cc = b - d * R(A.p, P[5].p);
-      n = { wave: 'волна B', from: A, bias: d, targets: [b, A.p + d * 0.618 * R(A.p, P[5].p)], invalid: P[5].p,
-        path: [[len * 0.7, b], [len * 1.7, cc]], phase: 'После импульса прошла волна A; ожидается отскок B и затем ещё одна волна снижения C.' }; }
+      n = { wave: __t("волна B"), from: A, bias: d, targets: [b, A.p + d * 0.618 * R(A.p, P[5].p)], invalid: P[5].p,
+        path: [[len * 0.7, b], [len * 1.7, cc]], phase: __t("После импульса прошла волна A; ожидается встречная волна B, затем волна C в сторону A.") }; }
     if (c.m === 2) { const B = c.Q[2], a = R(A.p, P[5].p), t = B.p - d * a;
-      n = { wave: 'волна C', from: B, bias: -d, targets: [t, B.p - d * 1.618 * a], invalid: P[5].p,
-        path: [[len, t]], phase: 'Отскок B выглядит завершённым — впереди волна C, обычно равная по длине волне A.' }; }
+      n = { wave: __t("волна C"), from: B, bias: -d, targets: [t, B.p - d * 1.618 * a], invalid: P[5].p,
+        path: [[len, t]], phase: __t("Отскок B выглядит завершённым — впереди волна C, обычно равная по длине волне A.") }; }
     if (c.m === 3) { const C = c.Q[3];
-      n = { wave: 'новый импульс', from: C, bias: d, targets: [C.p + d * 0.618 * T, P[5].p], invalid: C.p,
-        path: [[len, C.p + d * 0.618 * T], [len * 1.6, C.p + d * 0.4 * T]], phase: 'Коррекция A-B-C выглядит завершённой — возможен разворот в сторону основного тренда.' }; }
+      n = { wave: __t("новый импульс"), from: C, bias: d, targets: [C.p + d * 0.618 * T, P[5].p], invalid: C.p,
+        path: [[len, C.p + d * 0.618 * T], [len * 1.6, C.p + d * 0.4 * T]], phase: __t("Коррекция A-B-C выглядит завершённой — возможен разворот в сторону основного тренда.") }; }
   } else {
     const Q = c.Q, a = R(Q[1].p, Q[0].p);
     if (c.n === 2) { const t = Q[2].p + d * a;
-      n = { wave: 'волна C', from: Q[2], bias: d, targets: [t, Q[2].p + d * 1.618 * a], invalid: Q[0].p,
-        path: [[len, t]], phase: 'Коррекционная структура: прошли A и B, ожидается C — обычно равна A.' }; }
+      n = { wave: __t("волна C"), from: Q[2], bias: d, targets: [t, Q[2].p + d * 1.618 * a], invalid: Q[0].p,
+        path: [[len, t]], phase: __t("Коррекционная структура: прошли A и B, ожидается C — обычно равна A.") }; }
     else { const C = Q[3];
-      n = { wave: 'разворот после C', from: C, bias: -d, targets: [Q[2].p, Q[0].p], invalid: C.p,
-        path: [[len, Q[2].p], [len * 1.8, Q[0].p]], phase: 'Коррекция A-B-C выглядит завершённой — ждём возврата к началу коррекции.' }; }
+      n = { wave: __t("разворот после C"), from: C, bias: -d, targets: [Q[2].p, Q[0].p], invalid: C.p,
+        path: [[len, Q[2].p], [len * 1.8, Q[0].p]], phase: __t("Коррекция A-B-C выглядит завершённой — ждём возврата к началу коррекции.") }; }
   }
   n.len = len;
   return n;
@@ -484,14 +496,14 @@ function volProfile(bars, from, nb) {
 /* Календарные уровни: экстремумы и открытия прошлых периодов (по UTC) */
 function periodLevels(bars, tf) {
   const out = [], N = bars.length; if (N < 10) return out;
-  const key = (t, u) => { const d = new Date(t * 1000); if (u === 'w') { const x = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate())); x.setUTCDate(x.getUTCDate() - ((x.getUTCDay() + 6) % 7)); return x.getTime(); } if (u === 'm') return d.getUTCFullYear() * 12 + d.getUTCMonth(); if (u === 'q') return d.getUTCFullYear() * 4 + Math.floor(d.getUTCMonth() / 3); return d.getUTCFullYear(); };
+  const key = (t, u) => { const d = new Date(t * 1000); if (u === 'w') { const x = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate())); x.setUTCDate(x.getUTCDate() - ((x.getUTCDay() + 6) % 7)); return x.getTime(); } if (u === 'd') return Math.floor(t / 86400); if (u === 'm') return d.getUTCFullYear() * 12 + d.getUTCMonth(); if (u === 'q') return d.getUTCFullYear() * 4 + Math.floor(d.getUTCMonth() / 3); return d.getUTCFullYear(); };
   const grp = u => { const g = new Map(); for (const b of bars) { const k = key(b.t, u); const x = g.get(k); if (!x) g.set(k, { o: b.o, h: b.h, l: b.l }); else { x.h = Math.max(x.h, b.h); x.l = Math.min(x.l, b.l); } } return [...g.values()]; };
-  const names = { w: ['прошлой недели', 'недели'], m: ['прошлого месяца', 'месяца'], q: ['прошлого квартала', 'квартала'], y: ['прошлого года', 'года'] };
-  const units = tf === '1w' ? [['q', 1.15], ['y', 1.2]] : tf === '1d' ? [['w', 0.9], ['m', 1.15]] : [['w', 1.05], ['m', 1.1]];
+  const names = { d: [__t("прошлого дня"), __t("дня")], w: [__t("прошлой недели"), __t("недели")], m: [__t("прошлого месяца"), __t("месяца")], q: [__t("прошлого квартала"), __t("квартала")], y: [__t("прошлого года"), __t("года")] };
+  const units = tf === '1w' ? [['q', 1.15], ['y', 1.2]] : tf === '1d' ? [['w', 0.9], ['m', 1.15]] : tf === '4h' ? [['w', 1.05], ['m', 1.1]] : [['d', 1.1], ['w', 1.05]];
   for (const [u, w] of units) {
     const g = grp(u); if (g.length < 2) continue;
     const prev = g[g.length - 2], cur = g[g.length - 1];
-    out.push({ p: prev.h, name: `хай ${names[u][0]}`, w }, { p: prev.l, name: `лоу ${names[u][0]}`, w }, { p: cur.o, name: `открытие ${names[u][1]}`, w: w * 0.85 });
+    out.push({ p: prev.h, name: __t("хай {0}", [names[u][0]]), w }, { p: prev.l, name: __t("лоу {0}", [names[u][0]]), w }, { p: cur.o, name: __t("открытие {0}", [names[u][1]]), w: w * 0.85 });
   }
   return out;
 }
@@ -613,9 +625,9 @@ function analyze(bars, ctx = {}) {
   /* горизонт по таймфрейму: 4Ч ≈ неделя, 1Д ≈ полтора месяца, 1Н ≈ квартал;
      окно актуальности уровней: 4Ч ≈ 40 дней, 1Д ≈ полгода, 1Н ≈ 3 года */
   const step = N > 1 ? bars[last].t - bars[last - 1].t : 86400;
-  const tfK = step <= 4 * 3600 + 60 ? '4h' : step <= 86400 + 60 ? '1d' : '1w';
-  const horizon = ctx.horizon || { '4h': 42, '1d': 30, '1w': 13 }[tfK];
-  const LB = { '4h': 240, '1d': 180, '1w': 156 }[tfK], from = Math.max(0, N - LB);
+  const tfK = step <= 960 ? '15m' : step <= 3660 ? '1h' : step <= 4 * 3600 + 60 ? '4h' : step <= 86400 + 60 ? '1d' : '1w';
+  const horizon = ctx.horizon || { '15m': 32, '1h': 24, '4h': 42, '1d': 30, '1w': 13 }[tfK];
+  const LB = { '15m': 384, '1h': 240, '4h': 240, '1d': 180, '1w': 156 }[tfK], from = Math.max(0, N - LB);
   const reachPct = Math.exp(2 * sigma * Math.sqrt(horizon)) - 1;           // дальше этого уровни не нужны для прогноза
   const inReach = p => Math.abs(p - price) / price <= reachPct;
 
@@ -669,20 +681,20 @@ function analyze(bars, ctx = {}) {
   const liq = ctx.liq || null;
   const pts = [];
   const add = (p, src, w) => { if (p > 0 && isFinite(p) && inReach(p)) pts.push({ p, src, w }); };
-  lv.forEach(l => add(l.p, 'свинг' + (l.touches > 1 ? ' ×' + l.touches : ''), 0.8 + Math.min(1, l.strength / 4)));
-  if (vp) { add(vp.poc, 'POC объёма', 1.6); add(vp.vah, 'VAH объёма', 1.15); add(vp.val, 'VAL объёма', 1.15); vp.hvn.forEach(h => add(h, 'узел объёма', 0.8)); }
+  lv.forEach(l => add(l.p, __t("свинг") + (l.touches > 1 ? ' ×' + l.touches : ''), 0.8 + Math.min(1, l.strength / 4)));
+  if (vp) { add(vp.poc, __t("POC объёма"), 1.6); add(vp.vah, __t("VAH объёма"), 1.15); add(vp.val, __t("VAL объёма"), 1.15); vp.hvn.forEach(h => add(h, __t("узел объёма"), 0.8)); }
   per.forEach(x => add(x.p, x.name, x.w));
-  if (choch) add(choch.p, 'слом структуры', 1.5);
+  if (choch) add(choch.p, __t("слом структуры"), 1.5);
   { let hi = from, lo = from; for (let i = from; i <= last; i++) { if (bars[i].h > bars[hi].h) hi = i; if (bars[i].l < bars[lo].l) lo = i; }
-    add(bars[hi].h, 'максимум периода', 1.4); add(bars[lo].l, 'минимум периода', 1.4); }
-  if (fib) fib.levels.forEach(f => { if (f.r > 0 && f.r < 1) add(f.p, 'Фибо ' + String(f.r).replace('.', ','), [0.382, 0.5, 0.618].includes(f.r) ? 1.1 : 0.7); });
-  ob.bull.forEach(o => add(o.top, 'ордер-блок', 1 + o.strength / 3));
-  ob.bear.forEach(o => add(o.bot, 'ордер-блок', 1 + o.strength / 3));
-  pools.above.forEach(g => add(g.edge, 'стопы над хаями', 0.7 + 0.3 * g.n));
-  pools.below.forEach(g => add(g.edge, 'стопы под лоу', 0.7 + 0.3 * g.n));
+    add(bars[hi].h, __t("максимум периода"), 1.4); add(bars[lo].l, __t("минимум периода"), 1.4); }
+  if (fib) fib.levels.forEach(f => { if (f.r > 0 && f.r < 1) add(f.p, __t("Фибо ") + String(f.r).replace('.', LANG === 'en' ? '.' : ','), [0.382, 0.5, 0.618].includes(f.r) ? 1.1 : 0.7); });
+  ob.bull.forEach(o => add(o.top, __t("ордер-блок"), 1 + o.strength / 3));
+  ob.bear.forEach(o => add(o.bot, __t("ордер-блок"), 1 + o.strength / 3));
+  pools.above.forEach(g => add(g.edge, __t("стопы над хаями"), 0.7 + 0.3 * g.n));
+  pools.below.forEach(g => add(g.edge, __t("стопы под лоу"), 0.7 + 0.3 * g.n));
   if (liq && (liq.longs || liq.shorts)) { const L2 = [...(liq.longs || []), ...(liq.shorts || [])], mx = Math.max(1, ...L2.map(x => x.usd));
-    L2.forEach(x => add(x.p, 'кластер ликвидаций', 0.7 + 1.3 * x.usd / mx)); }
-  if (ctx.opt) { const o = ctx.opt; if (o.callWall) add(o.callWall, 'стена коллов', 1.3); if (o.putWall) add(o.putWall, 'стена путов', 1.3); if (o.maxPain) add(o.maxPain, 'max pain опционов', 1); }
+    L2.forEach(x => add(x.p, __t("кластер ликвидаций"), 0.7 + 1.3 * x.usd / mx)); }
+  if (ctx.opt) { const o = ctx.opt; if (o.callWall) add(o.callWall, __t("стена коллов"), 1.3); if (o.putWall) add(o.putWall, __t("стена путов"), 1.3); if (o.maxPain) add(o.maxPain, __t("max pain опционов"), 1); }
   if (s200 != null) add(s200, 'SMA 200', 1);
   if (s50 != null) add(s50, 'SMA 50', 0.7);
   const ladder = side => {
@@ -700,8 +712,8 @@ function analyze(bars, ctx = {}) {
   const upL = ladder(1), dnL = ladder(-1);
   // ключевые уровни для карточки: самые подтверждённые в зоне досягаемости, по порядку от цены
   const keyLv = (L, k) => L.slice(0, 12).filter(o => o.w >= 1.2 || o.src.length >= 2).slice(0, k);
-  const res = keyLv(upL, 4).map(o => ({ p: o.p, src: o.src, w: o.w, fib: (o.src.find(x => x.startsWith('Фибо')) || '').replace('Фибо ', '') || null }));
-  const sup = keyLv(dnL, 4).map(o => ({ p: o.p, src: o.src, w: o.w, fib: (o.src.find(x => x.startsWith('Фибо')) || '').replace('Фибо ', '') || null }));
+  const res = keyLv(upL, 4).map(o => ({ p: o.p, src: o.src, w: o.w, fib: (o.src.find(x => x.startsWith(__t("Фибо"))) || '').replace(__t("Фибо "), '') || null }));
+  const sup = keyLv(dnL, 4).map(o => ({ p: o.p, src: o.src, w: o.w, fib: (o.src.find(x => x.startsWith(__t("Фибо"))) || '').replace(__t("Фибо "), '') || null }));
   const minD = Math.max(atrNow * 1.2, price * (Math.exp(0.45 * sigma * Math.sqrt(horizon)) - 1));
   const pickT = (L, wt) => {
     if (!L.length) return [];
@@ -741,18 +753,18 @@ function analyze(bars, ctx = {}) {
   const tg = arr => arr.map(o => ({ p: o.p, touch: o.touch, why: lbl(o) }));
   const sc = [];
   if (upT.length) sc.push({ key: 'up', bias: 1, p: prob.up,
-    title: ctxDn ? 'Отскок вверх' : 'Рост', targets: tg(upT), invalid: invUp,
+    title: ctxDn ? __t("Отскок вверх") : __t("Рост"), targets: tg(upT), invalid: invUp,
     text: ctxDn
-      ? `Тренд нисходящий, но ${stretchedDn ? 'рынок перепродан' + (sweep && sweep.side === 'sell' ? ' и только что снял ликвидность под минимумом' : '') : 'продавцы теряют импульс'}. Ожидаемый ход — технический отскок к ${fmtN(upT[0].p)}${upT[1] ? ', при силе — к ' + fmtN(upT[1].p) : ''}; там продавцы, скорее всего, вернутся.`
-      : `Покупатели контролируют ход: цель — ${fmtN(upT[0].p)} (${lbl(upT[0])})${upT[1] ? ', следующая — ' + fmtN(upT[1].p) : ''}. Сценарий ломается при закрытии ниже ${fmtN(invUp)}.` });
+      ? __t("Тренд нисходящий, но {0}. Ожидаемый ход — технический отскок к {1}{2}; там продавцы, скорее всего, вернутся.", [stretchedDn ? __t("рынок перепродан") + (sweep && sweep.side === 'sell' ? __t(" и только что снял ликвидность под минимумом") : '') : __t("продавцы теряют импульс"), fmtN(upT[0].p), upT[1] ? __t(", при силе — к ") + fmtN(upT[1].p) : ''])
+      : __t("Покупатели контролируют ход: цель — {0} ({1}){2}. Сценарий ломается при закрытии ниже {3}.", [fmtN(upT[0].p), lbl(upT[0]), upT[1] ? __t(", следующая — ") + fmtN(upT[1].p) : '', fmtN(invUp)]) });
   if (dnT.length) sc.push({ key: 'down', bias: -1, p: prob.down,
-    title: ctxUp ? 'Откат вниз' : 'Снижение', targets: tg(dnT), invalid: invDn,
+    title: ctxUp ? __t("Откат вниз") : __t("Снижение"), targets: tg(dnT), invalid: invDn,
     text: ctxUp
-      ? `Тренд восходящий, ${stretchedUp ? 'но рынок перегрет' + (sweep && sweep.side === 'buy' ? ' и снял ликвидность над максимумом' : '') : 'импульс ослабевает'}. Вероятен откат к ${fmtN(dnT[0].p)}${dnT[1] ? ', глубже — к ' + fmtN(dnT[1].p) : ''}, где покупатели обычно возвращаются.`
-      : `Продавцы контролируют ход: цель — ${fmtN(dnT[0].p)} (${lbl(dnT[0])})${dnT[1] ? ', следующая — ' + fmtN(dnT[1].p) : ''}. Сценарий ломается при закрытии выше ${fmtN(invDn)}.` });
-  if (upT.length && dnT.length) sc.push({ key: 'side', bias: 0, p: prob.side, title: 'Боковик в диапазоне',
-    text: `Ни одна из ближайших целей не достигнута за горизонт: цена ходит между ${fmtN(dnT[0].p)} и ${fmtN(upT[0].p)}, пока не появится импульс с объёмом.`,
-    targets: [{ p: dnT[0].p, touch: dnT[0].touch, why: 'низ' }, { p: upT[0].p, touch: upT[0].touch, why: 'верх' }], invalid: null });
+      ? __t("Тренд восходящий, {0}. Вероятен откат к {1}{2}, где покупатели обычно возвращаются.", [stretchedUp ? __t("но рынок перегрет") + (sweep && sweep.side === 'buy' ? __t(" и снял ликвидность над максимумом") : '') : __t("импульс ослабевает"), fmtN(dnT[0].p), dnT[1] ? __t(", глубже — к ") + fmtN(dnT[1].p) : ''])
+      : __t("Продавцы контролируют ход: цель — {0} ({1}){2}. Сценарий ломается при закрытии выше {3}.", [fmtN(dnT[0].p), lbl(dnT[0]), dnT[1] ? __t(", следующая — ") + fmtN(dnT[1].p) : '', fmtN(invDn)]) });
+  if (upT.length && dnT.length) sc.push({ key: 'side', bias: 0, p: prob.side, title: __t("Боковик в диапазоне"),
+    text: __t("Ни одна из ближайших целей не достигнута за горизонт: цена ходит между {0} и {1}, пока не появится импульс с объёмом.", [fmtN(dnT[0].p), fmtN(upT[0].p)]),
+    targets: [{ p: dnT[0].p, touch: dnT[0].touch, why: __t("низ") }, { p: upT[0].p, touch: upT[0].touch, why: __t("верх") }], invalid: null });
   sc.sort((a, b) => b.p - a.p);
 
   /* волновая цель — как дальний ориентир с честной оценкой достижимости */
@@ -765,7 +777,7 @@ function analyze(bars, ctx = {}) {
     wave, fib, sup, res, prob, total, scenarios: sc, newsS, fng, minor, ob, pools, sweep, upT, dnT, liq, vp, per, choch, upL, dnL, tfK, LB
   };
 }
-function fmtN(p) { const a = Math.abs(p), d = a >= 1000 ? 0 : a >= 100 ? 1 : a >= 1 ? 2 : a >= 0.01 ? 4 : 6; return p.toLocaleString('ru-RU', { minimumFractionDigits: d, maximumFractionDigits: d }); }
+function fmtN(p) { const a = Math.abs(p), d = a >= 1000 ? 0 : a >= 100 ? 1 : a >= 1 ? 2 : a >= 0.01 ? 4 : 6; return p.toLocaleString(LOC, { minimumFractionDigits: d, maximumFractionDigits: d }); }
 
 function quick(bars, ctx) { // краткий срез для таймфрейма-подтверждения
   if (!bars || bars.length < 60) return null;
@@ -782,25 +794,27 @@ if (typeof module !== 'undefined' && module.exports) module.exports = api; else 
 const $ = s => document.querySelector(s);
 const E = window.Engine;
 const TF = {
-  '4h': { name: '4Ч', bin: '4h', byb: '240', yI: '60m', yR: '1y', agg: 14400, moex: 60, moexDays: 200, step: 14400 },
-  '1d': { name: '1Д', bin: '1d', byb: 'D', yI: '1d', yR: '5y', moex: 24, moexDays: 1500, step: 86400 },
-  '1w': { name: '1Н', bin: '1w', byb: 'W', yI: '1wk', yR: '10y', moex: 7, moexDays: 3650, step: 604800 }
+  '15m': { name: __t("15м"), bin: '15m', byb: '15', yI: '15m', yR: '60d', moex: 10, moexDays: 14, step: 900, intra: true },
+  '1h': { name: __t("1Ч"), bin: '1h', byb: '60', yI: '60m', yR: '1y', moex: 60, moexDays: 90, step: 3600, intra: true },
+  '4h': { name: __t("4Ч"), bin: '4h', byb: '240', yI: '60m', yR: '1y', agg: 14400, moex: 60, moexDays: 200, step: 14400 },
+  '1d': { name: __t("1Д"), bin: '1d', byb: 'D', yI: '1d', yR: '5y', moex: 24, moexDays: 1500, step: 86400 },
+  '1w': { name: __t("1Н"), bin: '1w', byb: 'W', yI: '1wk', yR: '10y', moex: 7, moexDays: 3650, step: 604800 }
 };
 const MOEX = new Set('SBER SBERP GAZP LKOH ROSN NVTK GMKN YDEX YNDX TATN TATNP MGNT MTSS ALRS CHMF NLMK PLZL SNGS SNGSP VTBR MOEX AFLT PHOR RUAL IRAO HYDR OZON TCSG FIVE X5 PIKK SMLT MAGN BSPB SFIN AFKS RTKM CBOM ENPG HHRU POSI ASTR WUSH SOFL VKCO IMOEX MOEXBC RTSI FEES UPRO MSNG TRNFP SELG BELU MTLR FLOT LENT AQUA GLTR'.split(' '));
 const STOCKS = new Set('AAPL MSFT NVDA TSLA AMZN GOOGL GOOG META NFLX AMD INTC COIN MSTR SPY QQQ DIA IWM AVGO ORCL CRM ADBE PLTR UBER BABA JPM BAC WMT KO PEP DIS NKE V MA PYPL SHOP SQ HOOD IBM CSCO QCOM MU SMCI ARM TSM ASML BA XOM CVX PFE JNJ MRNA LLY GME AMC RIVN LCID NIO SNOW'.split(' '));
-const SRC = { crypto: 'Binance', stock: 'Yahoo Finance', moex: 'Московская биржа' };
-const MK = { crypto: 'Криптовалюта', stock: 'Фондовый рынок', moex: 'Мосбиржа' };
+const SRC = { crypto: 'Binance', stock: 'Yahoo Finance', moex: __t("Московская биржа") };
+const MK = { crypto: __t("Криптовалюта"), stock: __t("Фондовый рынок"), moex: __t("Мосбиржа") };
 
-let state = { q: '', market: null, sym: null, disp: null, meta: {}, data: {}, tf: '1d', a: null, news: [], fng: null, mtf: {}, layers: { ma: true, wave: true, fib: false, lv: true, ob: true, liq: true, fc: true }, deriv: null, liq: null, lg: null, opt: null, open: {}, at: null };
+let state = { q: '', market: null, sym: null, disp: null, meta: {}, data: {}, tf: '1d', a: null, news: [], fng: null, mtf: {}, spec: false, specSum: null, layers: { ma: true, wave: true, fib: false, lv: true, ob: true, liq: true, fc: true }, deriv: null, liq: null, lg: null, opt: null, open: {}, at: null };
 let chart = null, timer = null;
 
 const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
 
 /* ---------- форматирование ---------- */
 function dec(p) { const a = Math.abs(p); return a >= 1000 ? 0 : a >= 100 ? 1 : a >= 1 ? 2 : a >= 0.01 ? 4 : a >= 0.0001 ? 6 : 8; }
-function fmt(p) { if (p == null || !isFinite(p)) return '—'; if (p === 0) return '0'; const d = dec(p); return p.toLocaleString('ru-RU', { minimumFractionDigits: d, maximumFractionDigits: d }); }
+function fmt(p) { if (p == null || !isFinite(p)) return '—'; if (p === 0) return '0'; const d = dec(p); return p.toLocaleString(LOC, { minimumFractionDigits: d, maximumFractionDigits: d }); }
 const pct = x => (x > 0 && x < 0.01 ? '<1' : Math.round(x * 100)) + '%';
-const num = (x, d = 2) => x.toLocaleString('ru-RU', { minimumFractionDigits: d, maximumFractionDigits: d });
+const num = (x, d = 2) => x.toLocaleString(LOC, { minimumFractionDigits: d, maximumFractionDigits: d });
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const signPct = x => (x >= 0 ? '+' : '−') + num(Math.abs(x) * 100, 2) + '%';
 
@@ -879,7 +893,7 @@ async function getMoex(sym, tf) {
         return { t: ts, o: +r[ix('open')], h: +r[ix('high')], l: +r[ix('low')], c: +r[ix('close')], v: +r[ix('volume')] || 0 };
       });
       if (tf === '4h') bars = aggregate(bars, 14400);
-      else bars = bars.map(b => ({ ...b, t: Math.floor((b.t + 3 * 3600) / 86400) * 86400 }));
+      else if (!t.intra) bars = bars.map(b => ({ ...b, t: Math.floor((b.t + 3 * 3600) / 86400) * 86400 }));
       return { bars, meta: { currency: 'RUB', exchangeName: 'MOEX' } };
     }
   }
@@ -916,9 +930,9 @@ async function getNews(market, sym, name) {
   const out = [];
   if (ONLINE) {
     const base = sym.replace(/(USDT|USDC|FDUSD)$/, '');
-    const g = market === 'crypto' ? `${CRYPTO_NAMES[base] || base} crypto` : market === 'moex' ? `${name || sym} акции` : `${name || sym} stock`;
+    const g = market === 'crypto' ? `${CRYPTO_NAMES[base] || base} crypto` : market === 'moex' && LANG !== 'en' ? `${name || sym} акции` : `${name || sym} stock`;
     try {
-      const j = await fetchJSON(`/api/news?q=${encodeURIComponent(q)}&g=${encodeURIComponent(g)}&lang=${market === 'moex' ? 'ru' : 'en'}`, 15000);
+      const j = await fetchJSON(`/api/news?q=${encodeURIComponent(q)}&g=${encodeURIComponent(g)}&lang=${market === 'moex' && LANG !== 'en' ? 'ru' : 'en'}`, 15000);
       out.push(...(j.news || []));
     } catch (e) {}
   }
@@ -1002,12 +1016,12 @@ async function getFng() {
 /* ---------- запуск разбора ---------- */
 async function run(q, silent) {
   q = (q || '').trim(); if (!q) return;
-  if (!silent) { setStatus('load', `Ищу ${esc(q.toUpperCase())} на биржах…`); $('#out').hidden = true; }
+  if (!silent) { setStatus('load', __t("Ищу {0} на биржах…", [esc(q.toUpperCase())])); $('#out').hidden = true; }
   try {
     let r = state.q === q.toUpperCase() && state.market ? null : await resolve(q);
     if (r) { state = { ...state, q: q.toUpperCase(), market: r.market, sym: r.sym, data: { '1d': r.first.bars }, meta: r.first.meta || {} }; }
     else { const f = await getBars(state.market, state.sym, '1d'); state.data['1d'] = f.bars; state.meta = f.meta || state.meta; }
-    if (!silent) setStatus('load', 'Считаю волны, уровни и сценарии…');
+    if (!silent) setStatus('load', __t("Считаю волны, уровни и сценарии…"));
     const [h4, w1, news, fng, deriv, lg, opt] = await Promise.all([
       getBars(state.market, state.sym, '4h').then(x => x.bars).catch(() => null),
       getBars(state.market, state.sym, '1w').then(x => x.bars).catch(() => null),
@@ -1017,21 +1031,22 @@ async function run(q, silent) {
       state.market === 'crypto' ? getLiqGlobal(state.sym.replace(/(USDT|USDC|FDUSD)$/, '')).catch(() => null) : Promise.resolve(null),
       state.market === 'stock' && ONLINE && !/[=^.]/.test(state.sym) ? getOpt(state.sym) : Promise.resolve(null)
     ]);
+    if (state.spec) await loadIntra(); else { state.data['15m'] = null; state.data['1h'] = null; }
     state.data['4h'] = h4; state.data['1w'] = w1; state.news = news; state.fng = fng; state.deriv = deriv; state.lg = lg; state.opt = opt && !opt.optErr ? opt : (opt && opt.short ? opt : null); state.at = new Date();
     const px = state.data['1d'][state.data['1d'].length - 1].c;
     state.liq = null;
-    if (lg && lg.fwdRaw) state.liq = { ...liqBins(lg.fwdRaw, px), src: 'MarginPad · 12 бирж' };
-    else { try { if (deriv && h4 && window.SMC) { const m = SMC.liqMap(h4, deriv.oi, deriv.taker); if (m) state.liq = { bins: m.bins, bin: m.bin, longs: m.longs, shorts: m.shorts, src: 'модель по OI ' + deriv.src }; } } catch (e) {} }
+    if (lg && lg.fwdRaw) state.liq = { ...liqBins(lg.fwdRaw, px), src: __t("MarginPad · 12 бирж") };
+    else { try { if (deriv && h4 && window.SMC) { const m = SMC.liqMap(h4, deriv.oi, deriv.taker); if (m) state.liq = { bins: m.bins, bin: m.bin, longs: m.longs, shorts: m.shorts, src: __t("модель по OI ") + deriv.src }; } } catch (e) {} }
     state.disp = state.market === 'crypto' ? state.sym.replace(/(USDT|USDC|FDUSD|BTC|ETH)$/, '/$1') : state.sym;
-    if (!state.data[state.tf]) state.tf = '1d';
+    if (!state.data[state.tf]) state.tf = state.spec ? (state.data['15m'] ? '15m' : state.data['1h'] ? '1h' : '1d') : '1d';
     store.set('az_last', state.q);
     try { if (/^[A-Z0-9]+$/.test(state.q)) history.replaceState(null, '', '#' + state.q); } catch (e) {}
     compute(); setStatus(); $('#out').hidden = false;
     clearInterval(timer); timer = setInterval(() => { if (!document.hidden) run(state.q, true); }, 90000);
   } catch (e) {
     if (silent) return;
-    const stockHint = location.protocol.startsWith('http') ? '' : ' Для акций откройте опубликованную версию приложения: в файле котировки акций идут через публичные шлюзы и могут не отвечать.';
-    setStatus('err', `Не нашёл «${esc(q)}» ни на одной площадке.${stockHint} Примеры: BTC, ETH, SOL, AAPL, NVDA, SBER, GC=F — золото, ^GSPC — S&amp;P 500.`);
+    const stockHint = location.protocol.startsWith('http') ? '' : __t(" Для акций откройте опубликованную версию приложения: в файле котировки акций идут через публичные шлюзы и могут не отвечать.");
+    setStatus('err', __t("Не нашёл «{0}» ни на одной площадке.{1} Примеры: BTC, ETH, SOL, AAPL, NVDA, SBER, GC=F — золото, ^GSPC — S&amp;P 500.", [esc(q), stockHint]));
   }
 }
 function setStatus(kind, html) {
@@ -1044,80 +1059,115 @@ function setStatus(kind, html) {
 function compute() {
   const base = { news: state.news, fng: state.fng ? state.fng.v : null, liq: state.liq, opt: state.opt && state.opt.callWall ? state.opt : null };
   const all = {}; let htf = null;
-  for (const k of ['1w', '1d', '4h']) {
+  for (const k of ['1w', '1d', '4h', '1h', '15m']) {
     const b = state.data[k]; if (!b || b.length < 60) continue;
     all[k] = E.analyze(b, { ...base, htf });
     htf = { bias: all[k].wave ? all[k].wave.next.bias : 0 };
   }
-  if (!all[state.tf]) state.tf = all['1d'] ? '1d' : Object.keys(all)[0];
+  const tfs = tfList();
+  if (!all[state.tf]) state.tf = tfs.find(k => all[k]) || (all['1d'] ? '1d' : Object.keys(all)[0]);
   state.all = all; state.a = all[state.tf];
   state.mtf = {};
-  for (const k of ['4h', '1d', '1w']) { const a = all[k]; state.mtf[k] = a ? { total: a.total, top: a.scenarios[0], wave: a.wave?.next.wave, bias: a.wave?.next.bias || 0, prob: a.prob } : null; }
+  for (const k of Object.keys(all)) { const a = all[k]; state.mtf[k] = { total: a.total, top: a.scenarios[0], wave: a.wave?.next.wave, bias: a.wave?.next.bias || 0, prob: a.prob }; }
+  state.specSum = state.spec ? specSummary(all) : null;
   render();
 }
-const HOR = { '4h': 'неделя', '1d': '≈ полтора месяца', '1w': '≈ квартал' };
-const usd = x => x >= 1e9 ? '$' + num(x / 1e9, 2) + ' млрд' : x >= 1e6 ? '$' + Math.round(x / 1e6) + ' млн' : '$' + Math.round(x / 1e3) + ' тыс.';
-const dShort = t => new Date(t * 1000).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
+const tfList = () => state.spec ? ['15m', '1h', '4h'] : ['4h', '1d', '1w'];
+const tfName = k => state.market === 'moex' && k === '15m' ? __t("10м") : TF[k].name;
+
+/* Спекулятивная сводка: логарифмический пул мнений по таймфреймам 15м/1Ч/4Ч/1Д
+   (P ∝ Π pᵢ^wᵢ) — согласованные сигналы усиливают друг друга, противоречивые гасятся. */
+function specSummary(all) {
+  const W = { '15m': 0.25, '1h': 0.3, '4h': 0.25, '1d': 0.2 }, keys = Object.keys(W).filter(k => all[k]);
+  if (keys.length < 2) return null;
+  const ws = keys.reduce((s, k) => s + W[k], 0), lp = { up: 0, side: 0, down: 0 };
+  for (const k of keys) for (const x of ['up', 'side', 'down']) lp[x] += (W[k] / ws) * Math.log(Math.max(0.02, all[k].prob[x]));
+  const ex = { up: Math.exp(lp.up), side: Math.exp(lp.side), down: Math.exp(lp.down) }, sum = ex.up + ex.side + ex.down;
+  const P = { up: ex.up / sum, side: ex.side / sum, down: ex.down / sum };
+  const dir = P.up > P.down && P.up > P.side ? 1 : P.down > P.up && P.down > P.side ? -1 : 0;
+  const rows = keys.map(k => { const t = all[k].scenarios[0]; return { k, bias: t ? t.bias : 0, p: t ? t.p : 0, prob: all[k].prob }; });
+  const agree = rows.filter(r => r.bias === dir && dir !== 0).length;
+  // план: уровни берём с часового графика, вход уточняем по 15-минутному
+  const a1 = all['1h'] || all['15m'], a0 = all['15m'] || a1, price = a0.price;
+  let plan = null;
+  if (dir !== 0 && a1) {
+    const sc = a1.scenarios.find(x => x.bias === dir);
+    if (sc) {
+      const near = (dir > 0 ? a0.sup : a0.res)[0];
+      const entry = near && Math.abs(near.p - price) / price < 0.006 ? near.p : price;
+      const stop = sc.invalid, t1 = sc.targets[0].p, t2 = sc.targets[1] ? sc.targets[1].p : null;
+      const risk = Math.abs(entry - stop), rr = risk > 0 ? Math.abs(t1 - entry) / risk : 0;
+      const pull = (dir > 0 ? a0.sup : a0.res).find(l => Math.abs(l.p - price) / price >= 0.003 && (dir > 0 ? l.p > stop : l.p < stop));
+      plan = { dir, entry, stop, t1, t2, rr, pull: rr < 1.5 && pull ? pull.p : null, rrPull: pull ? Math.abs(t1 - pull.p) / Math.abs(pull.p - stop) : null };
+    }
+  }
+  const hiBias = all['1d'] && all['1d'].scenarios[0] ? all['1d'].scenarios[0].bias : 0;
+  return { P, dir, rows, agree, n: rows.length, plan, counter: dir !== 0 && hiBias !== 0 && hiBias !== dir };
+}
+const HOR = { '15m': __t("≈ 8 часов"), '1h': __t("сутки"), '4h': __t("неделя"), '1d': __t("≈ полтора месяца"), '1w': __t("≈ квартал") };
+const HIGHER = { '15m': '1h', '1h': '4h', '4h': '1d', '1d': '1w' };
+const usd = x => x >= 1e9 ? '$' + num(x / 1e9, 2) + __t(" млрд") : x >= 1e6 ? '$' + Math.round(x / 1e6) + __t(" млн") : '$' + Math.round(x / 1e3) + __t(" тыс.");
+const dShort = t => new Date(t * 1000).toLocaleDateString(LOC, { day: 'numeric', month: 'short' });
 
 /* ---------- текст разбора ---------- */
 function ratioText(w) {
   const r = w.ratios, o = [];
-  if (r.r2 != null) o.push(`волна 2 откатила ${num(r.r2)} от волны 1`);
-  if (r.q3 != null) o.push(`волна 3 = ${num(r.q3)} × волны 1`);
-  if (r.r4 != null) o.push(`волна 4 — ${num(r.r4)} от волны 3`);
-  if (r.q5 != null) o.push(`волна 5 = ${num(r.q5)} × волны 1`);
-  if (r.ra != null) o.push(`волна A — ${num(r.ra)} от всего импульса`);
-  if (r.rb != null) o.push(`B вернула ${num(r.rb)} от A`);
+  if (r.r2 != null) o.push(__t("волна 2 откатила {0} от волны 1", [num(r.r2)]));
+  if (r.q3 != null) o.push(__t("волна 3 = {0} × волны 1", [num(r.q3)]));
+  if (r.r4 != null) o.push(__t("волна 4 — {0} от волны 3", [num(r.r4)]));
+  if (r.q5 != null) o.push(__t("волна 5 = {0} × волны 1", [num(r.q5)]));
+  if (r.ra != null) o.push(__t("волна A — {0} от всего импульса", [num(r.ra)]));
+  if (r.rb != null) o.push(__t("B вернула {0} от A", [num(r.rb)]));
   if (r.ca != null) o.push(`C = ${num(r.ca)} × A`);
   return o;
 }
 function countTitle(w) {
-  const d = w.dir > 0 ? 'вверх' : 'вниз';
-  if (w.type === 'imp') return `Импульс ${d}, размечены волны 1–${w.k}`;
-  if (w.type === 'impc') return `Импульс ${d} завершён, идёт коррекция ${['A', 'A–B', 'A–B–C'][w.m - 1]}`;
-  return `Коррекция A–B–${w.n === 3 ? 'C' : '(C)'} ${d}`;
+  const d = w.dir > 0 ? __t("вверх") : __t("вниз");
+  if (w.type === 'imp') return __t("Импульс {0}, размечены волны 1–{1}", [d, w.k]);
+  if (w.type === 'impc') return __t("Импульс {0} завершён, идёт коррекция {1}", [d, ['A', 'A–B', 'A–B–C'][w.m - 1]]);
+  return __t("Коррекция A–B–{0} {1}", [w.n === 3 ? 'C' : '(C)', d]);
 }
 function story(a) {
   const n = a.now, s = [], tfN = TF[state.tf].name;
   if (n.s50 != null && n.s200 != null) {
     const a50 = a.price > n.s50, a200 = a.price > n.s200, ord = n.s50 > n.s200;
-    s.push(a50 && a200 && ord ? 'Цена выше 50- и 200-периодных средних, средние выстроены по возрастанию — структура восходящего тренда.'
-      : !a50 && !a200 && !ord ? 'Цена ниже 50- и 200-периодных средних, 50-я под 200-й — тренд нисходящий, отскоки пока продают.'
-      : a200 && !a50 ? 'Долгосрочный тренд вверх — цена над 200-й средней, но в среднесрочном плане идёт коррекция под 50-й.'
-      : !a200 && a50 ? 'Цена вернулась выше 50-й средней, но остаётся под 200-й — это восстановление, а не подтверждённый разворот.'
-      : !a50 && !a200 && ord ? `Цена ушла ниже обеих средних, 50-я ещё над 200-й, но ${n.slope50 < 0 ? 'уже разворачивается вниз — восходящая структура сломана, «крест смерти» близко' : 'пока держится — это глубокая коррекция внутри восходящей структуры'}.`
-      : a50 && a200 && !ord ? `Цена выше обеих средних, хотя 50-я ещё под 200-й${n.slope50 > 0 ? ' и разворачивается вверх — набирается восходящая структура, «золотой крест» близко' : ''}.`
-      : 'Средние переплетены — выраженного тренда нет.');
-  } else s.push('История торгов короткая для 200-периодной средней, ориентир — 20- и 50-периодные.');
+    s.push(a50 && a200 && ord ? __t("Цена выше 50- и 200-периодных средних, средние выстроены по возрастанию — структура восходящего тренда.")
+      : !a50 && !a200 && !ord ? __t("Цена ниже 50- и 200-периодных средних, 50-я под 200-й — тренд нисходящий, отскоки пока продают.")
+      : a200 && !a50 ? __t("Долгосрочный тренд вверх — цена над 200-й средней, но в среднесрочном плане идёт коррекция под 50-й.")
+      : !a200 && a50 ? __t("Цена вернулась выше 50-й средней, но остаётся под 200-й — это восстановление, а не подтверждённый разворот.")
+      : !a50 && !a200 && ord ? __t("Цена ушла ниже обеих средних, 50-я ещё над 200-й, но {0}.", [n.slope50 < 0 ? __t("уже разворачивается вниз — восходящая структура сломана, «крест смерти» близко") : __t("пока держится — это глубокая коррекция внутри восходящей структуры")])
+      : a50 && a200 && !ord ? __t("Цена выше обеих средних, хотя 50-я ещё под 200-й{0}.", [n.slope50 > 0 ? __t(" и разворачивается вверх — набирается восходящая структура, «золотой крест» близко") : ''])
+      : __t("Средние переплетены — выраженного тренда нет."));
+  } else s.push(__t("История торгов короткая для 200-периодной средней, ориентир — 20- и 50-периодные."));
   const cr = a.crosses[a.crosses.length - 1];
-  if (cr) s.push(`${a.last - cr.i} бар(ов) назад — ${cr.type === 'golden' ? '«золотой крест»: 50-я средняя пересекла 200-ю снизу вверх' : '«крест смерти»: 50-я средняя ушла под 200-ю'}.`);
-  if (n.rsi != null) s.push(`RSI ${Math.round(n.rsi)} — ${n.rsi > 70 ? 'рынок перегрет, растёт риск отката' : n.rsi < 30 ? 'перепроданность, возможен технический отскок' : n.rsi >= 50 ? 'импульс на стороне покупателей' : 'импульс на стороне продавцов'}; гистограмма MACD ${n.hist > 0 ? 'выше нуля' : 'ниже нуля'}.`);
-  for (const d of a.divs) s.push(d.type === 'bear' ? 'Медвежья дивергенция: цена обновила максимум, а RSI — нет. Это ослабление роста.' : 'Бычья дивергенция: цена обновила минимум, а RSI — нет. Продавцы выдыхаются.');
-  if (a.wave) s.push(`Волновая разметка на ${tfN}: ${countTitle(a.wave).replace(/^./, c => c.toLowerCase())}. ${ratioText(a.wave).join('; ').replace(/^./, c => c.toUpperCase())}. ${a.wave.next.phase}`);
-  else s.push('Волновая структура не читается однозначно — типично для бокового рынка.');
+  if (cr) s.push(__t("{0} бар(ов) назад — {1}.", [a.last - cr.i, cr.type === 'golden' ? __t("«золотой крест»: 50-я средняя пересекла 200-ю снизу вверх") : __t("«крест смерти»: 50-я средняя ушла под 200-ю")]));
+  if (n.rsi != null) s.push(__t("RSI {0} — {1}; гистограмма MACD {2}.", [Math.round(n.rsi), n.rsi > 70 ? __t("рынок перегрет, растёт риск отката") : n.rsi < 30 ? __t("перепроданность, возможен технический отскок") : n.rsi >= 50 ? __t("импульс на стороне покупателей") : __t("импульс на стороне продавцов"), n.hist > 0 ? __t("выше нуля") : __t("ниже нуля")]));
+  for (const d of a.divs) s.push(d.type === 'bear' ? __t("Медвежья дивергенция: цена обновила максимум, а RSI — нет. Это ослабление роста.") : __t("Бычья дивергенция: цена обновила минимум, а RSI — нет. Продавцы выдыхаются."));
+  if (a.wave) s.push(__t("Волновая разметка на {0}: {1}. {2}. {3}", [tfN, countTitle(a.wave).replace(/^./, c => c.toLowerCase()), ratioText(a.wave).join('; ').replace(/^./, c => c.toUpperCase()), a.wave.next.phase]));
+  else s.push(__t("Волновая структура не читается однозначно — типично для бокового рынка."));
   if (a.fib) {
     const d = a.fib.depth;
     if (d > 0.05 && d < 1) { const nx = a.fib.levels.filter(f => f.kind === 'retr' && f.r > d).sort((x, y) => x.r - y.r)[0];
-      s.push(`Текущий откат — ${num(d)} от последнего размаха ${fmt(a.fib.a.p)} → ${fmt(a.fib.b.p)}.${nx ? ` Следующая зона Фибоначчи — ${String(nx.r).replace('.', ',')} на ${fmt(nx.p)}.` : ''}`); }
-    else if (d <= 0.05) s.push(`Цена у края последнего размаха; расширения Фибоначчи 1,272 и 1,618 — ${fmt(a.fib.levels.find(f => f.r === 1.272).p)} и ${fmt(a.fib.levels.find(f => f.r === 1.618).p)}.`);
+      s.push(__t("Текущий откат — {0} от последнего размаха {1} → {2}.{3}", [num(d), fmt(a.fib.a.p), fmt(a.fib.b.p), nx ? __t(" Следующая зона Фибоначчи — {0} на {1}.", [String(nx.r).replace('.', ','), fmt(nx.p)]) : ''])); }
+    else if (d <= 0.05) s.push(__t("Цена у края последнего размаха; расширения Фибоначчи 1,272 и 1,618 — {0} и {1}.", [fmt(a.fib.levels.find(f => f.r === 1.272).p), fmt(a.fib.levels.find(f => f.r === 1.618).p)]));
   }
   const sw = a.pools.sweeps.find(x => a.last - x.i <= 5);
-  if (sw) s.push(`${sw.side === 'sell' ? 'Снята ликвидность под минимумом' : 'Снята ликвидность над максимумом'} ${fmt(sw.p)}: тень ушла до ${fmt(sw.ext)}, а закрытие вернулось обратно. Крупные игроки забрали стопы толпы — ${sw.side === 'sell' ? 'это часто предшествует отскоку' : 'это часто предшествует откату'}.`);
-  if (a.z < -2.5 || a.z > 2.5) s.push(`Цена отклонилась от 20-периодной средней на ${num(Math.abs(a.z), 1)} ATR — это перерастяжение; ${a.z < 0 ? 'продавать «в яму» рискованно, вероятен возврат к средней' : 'покупать на хаях рискованно, вероятен возврат к средней'}.`);
+  if (sw) s.push(__t("{0} {1}: тень ушла до {2}, а закрытие вернулось обратно. Крупные игроки забрали стопы толпы — {3}.", [sw.side === 'sell' ? __t("Снята ликвидность под минимумом") : __t("Снята ликвидность над максимумом"), fmt(sw.p), fmt(sw.ext), sw.side === 'sell' ? __t("это часто предшествует отскоку") : __t("это часто предшествует откату")]));
+  if (a.z < -2.5 || a.z > 2.5) s.push(__t("Цена отклонилась от 20-периодной средней на {0} ATR — это перерастяжение; {1}.", [num(Math.abs(a.z), 1), a.z < 0 ? __t("продавать «в яму» рискованно, вероятен возврат к средней") : __t("покупать на хаях рискованно, вероятен возврат к средней")]));
   const ob1 = a.ob.bear[0], ob2 = a.ob.bull[0];
-  if (ob1 || ob2) s.push(`Ордер-блоки: ${ob1 ? `продавец ждёт в зоне ${fmt(ob1.bot)}–${fmt(ob1.top)}` : 'выше активных зон продавца нет'}${ob2 ? `, покупатель — в зоне ${fmt(ob2.bot)}–${fmt(ob2.top)}` : ', снизу ордер-блоков покупателя нет'}.`);
+  if (ob1 || ob2) s.push(__t("Ордер-блоки: {0}{1}.", [ob1 ? __t("продавец ждёт в зоне {0}–{1}", [fmt(ob1.bot), fmt(ob1.top)]) : __t("выше активных зон продавца нет"), ob2 ? __t(", покупатель — в зоне {0}–{1}", [fmt(ob2.bot), fmt(ob2.top)]) : __t(", снизу ордер-блоков покупателя нет")]));
   if (state.liq) {
     const sh = state.liq.shorts.slice().sort((x, y) => y.usd - x.usd)[0], lg = state.liq.longs.slice().sort((x, y) => y.usd - x.usd)[0];
-    if (sh || lg) s.push(`Карта ликвидаций: ${sh ? `крупнейшее скопление шортов — ${fmt(sh.p)} (${usd(sh.usd)})` : 'шортов с плечом выше мало'}${lg ? `, лонгов — ${fmt(lg.p)} (${usd(lg.usd)})` : ', лонги с плечом ниже почти вычищены'}. Цена часто тянется к таким скоплениям, прежде чем развернуться.`);
+    if (sh || lg) s.push(__t("Карта ликвидаций: {0}{1}. Цена часто тянется к таким скоплениям, прежде чем развернуться.", [sh ? __t("крупнейшее скопление шортов — {0} ({1})", [fmt(sh.p), usd(sh.usd)]) : __t("шортов с плечом выше мало"), lg ? __t(", лонгов — {0} ({1})", [fmt(lg.p), usd(lg.usd)]) : __t(", лонги с плечом ниже почти вычищены")]));
   }
-  const all = state.all || {}, hi = { '4h': '1d', '1d': '1w' }[state.tf];
-  if (hi && all[hi] && all[hi].wave && a.wave) s.push(`Согласование таймфреймов: на ${TF[hi].name} — ${countTitle(all[hi].wave).replace(/^./, c => c.toLowerCase())}; на ${TF[state.tf].name} разметка подстроена под этот контекст.`);
+  const all = state.all || {}, hi = HIGHER[state.tf];
+  if (hi && all[hi] && all[hi].wave && a.wave) s.push(__t("Согласование таймфреймов: на {0} — {1}; на {2} разметка подстроена под этот контекст.", [TF[hi].name, countTitle(all[hi].wave).replace(/^./, c => c.toLowerCase()), TF[state.tf].name]));
   const conf = [...a.sup, ...a.res].filter(l => l.fib);
-  if (conf.length) s.push(`Сильнее всего выглядят зоны, где горизонтальный уровень совпадает с Фибоначчи: ${conf.map(l => fmt(l.p)).join(', ')}.`);
-  if (state.news.length) { const v = a.newsS; s.push(`Новостной фон за последние дни ${v > 0.15 ? 'скорее позитивный' : v < -0.15 ? 'скорее негативный' : 'нейтральный'} (${state.news.length} публикаций).`); }
-  if (state.fng) s.push(`Индекс страха и жадности — ${state.fng.v} (${state.fng.v > 75 ? 'жадность, рынок перегрет эмоционально' : state.fng.v < 25 ? 'страх, такие периоды часто дают отскоки' : 'без крайностей'}).`);
+  if (conf.length) s.push(__t("Сильнее всего выглядят зоны, где горизонтальный уровень совпадает с Фибоначчи: {0}.", [conf.map(l => fmt(l.p)).join(', ')]));
+  if (state.news.length) { const v = a.newsS; s.push(__t("Новостной фон за последние дни {0} ({1} публикаций).", [v > 0.15 ? __t("скорее позитивный") : v < -0.15 ? __t("скорее негативный") : __t("нейтральный"), state.news.length])); }
+  if (state.fng) s.push(__t("Индекс страха и жадности — {0} ({1}).", [state.fng.v, state.fng.v > 75 ? __t("жадность, рынок перегрет эмоционально") : state.fng.v < 25 ? __t("страх, такие периоды часто дают отскоки") : __t("без крайностей")]));
   const agree = ['4h', '1d', '1w'].map(k => state.mtf[k]).filter(Boolean).map(m => m.top ? m.top.bias : 0);
-  if (agree.length === 3) s.push(agree.every(x => x === agree[0] && x !== 0) ? 'Все три таймфрейма смотрят в одну сторону — сигнал надёжнее обычного.' : 'Таймфреймы расходятся — это повод уменьшить размер позиции и дождаться подтверждения.');
+  if (agree.length === 3) s.push(agree.every(x => x === agree[0] && x !== 0) ? __t("Все три таймфрейма смотрят в одну сторону — сигнал надёжнее обычного.") : __t("Таймфреймы расходятся — это повод уменьшить размер позиции и дождаться подтверждения."));
   return s;
 }
 
@@ -1143,56 +1193,56 @@ function tile(k, color, title, value, body) {
 
 /* ---------- простой язык и инфографика ---------- */
 const uclamp = (x, a, b) => Math.max(a, Math.min(b, x));
-const HORW = { '4h': 'за неделю', '1d': 'за 1,5 месяца', '1w': 'за квартал' };
-const TFW = { '4h': 'Неделя', '1d': 'Месяц', '1w': 'Квартал' };
+const HORW = { '15m': __t("на 8 часов"), '1h': __t("на сутки"), '4h': __t("за неделю"), '1d': __t("за 1,5 месяца"), '1w': __t("за квартал") };
+const TFW = { '15m': __t("8 часов"), '1h': __t("Сутки"), '4h': __t("Неделя"), '1d': __t("Месяц"), '1w': __t("Квартал") };
 const arrow = d => d > 0 ? '↗' : d < 0 ? '↘' : '→';
 function plainWave(w) {
-  const d = w.dir > 0 ? 'вверх' : 'вниз', nd = w.next.bias > 0 ? 'вверх' : w.next.bias < 0 ? 'вниз' : 'в сторону';
-  if (w.type === 'imp') return { now: `Идёт сильное движение ${d}: пройдено ${w.k} из 5 волн`, next: `${w.next.wave} ${nd}` };
-  if (w.type === 'impc') return { now: `Движение ${d} из 5 волн закончилось, идёт откат`, next: `откат, волна ${['A', 'B', 'C'][Math.min(2, w.m)]} ${nd}` };
-  if (w.n === 3) return { now: `Откат ${d} из трёх волн (A-B-C) закончился`, next: `вероятен разворот ${nd}` };
-  return { now: `Идёт откат ${d}: прошли волны A и B`, next: `волна C ${nd}` };
+  const d = w.dir > 0 ? __t("вверх") : __t("вниз"), nd = w.next.bias > 0 ? __t("вверх") : w.next.bias < 0 ? __t("вниз") : __t("в сторону");
+  if (w.type === 'imp') return { now: __t("Идёт сильное движение {0}: пройдено {1} из 5 волн", [d, w.k]), next: `${w.next.wave} ${nd}` };
+  if (w.type === 'impc') return { now: __t("Движение {0} из 5 волн закончилось, идёт откат ({1})", [d, [__t("прошла волна A"), __t("прошли A и B"), __t("прошли A, B и C")][w.m - 1]]), next: `${w.next.wave} ${nd}` };
+  if (w.n === 3) return { now: __t("Откат {0} из трёх волн (A-B-C) закончился", [d]), next: __t("вероятен разворот {0}", [nd]) };
+  return { now: __t("Идёт откат {0}: прошли волны A и B", [d]), next: __t("волна C {0}", [nd]) };
 }
 function reasons(a) {
   const n = a.now, R = [], add = (d, w, t, s) => R.push({ d, w, t, s });
   if (n.s50 != null && n.s200 != null) {
     const a50 = a.price > n.s50, a200 = a.price > n.s200;
-    if (!a50 && !a200) add(-1, 1.5, 'Тренд вниз', 'Цена ниже средних линий — общий тренд падающий.');
-    else if (a50 && a200) add(1, 1.5, 'Тренд вверх', 'Цена выше средних линий — общий тренд растущий.');
-    else add(0, 0, 'Тренд неясен', 'Цена между средними линиями — направления нет.');
+    if (!a50 && !a200) add(-1, 1.5, __t("Тренд вниз"), __t("Цена ниже средних линий — общий тренд падающий."));
+    else if (a50 && a200) add(1, 1.5, __t("Тренд вверх"), __t("Цена выше средних линий — общий тренд растущий."));
+    else add(0, 0, __t("Тренд неясен"), __t("Цена между средними линиями — направления нет."));
   }
-  if (n.rsi != null && n.rsi < 30) add(1, 1, 'Перепродан', 'Цену сильно продали — после такого часто бывает отскок.');
-  if (n.rsi != null && n.rsi > 70) add(-1, 1, 'Перегрет', 'Цену сильно покупали — после такого часто бывает откат.');
+  if (n.rsi != null && n.rsi < 30) add(1, 1, __t("Перепродан"), __t("Цену сильно продали — после такого часто бывает отскок."));
+  if (n.rsi != null && n.rsi > 70) add(-1, 1, __t("Перегрет"), __t("Цену сильно покупали — после такого часто бывает откат."));
   const sw = a.pools.sweeps.find(x => a.last - x.i <= 5);
-  if (sw) sw.side === 'sell' ? add(1, 1, 'Сняли стопы снизу', `Цену проткнули ниже ${fmt(sw.p)} и вернули — ловушка для продавцов.`) : add(-1, 1, 'Сняли стопы сверху', `Цену проткнули выше ${fmt(sw.p)} и вернули — ловушка для покупателей.`);
-  if (a.z < -2.5) add(1, 0.8, 'Слишком далеко вниз', 'Цена сильно оторвалась от средней — её обычно тянет обратно.');
-  if (a.z > 2.5) add(-1, 0.8, 'Слишком далеко вверх', 'Цена сильно оторвалась от средней — её обычно тянет обратно.');
-  if (a.wave && a.wave.next.bias) { const pw = plainWave(a.wave); add(a.wave.next.bias, 1.2, `Волны: ${a.wave.next.bias > 0 ? 'следующий ход вверх' : 'следующий ход вниз'}`, `${pw.now}. Дальше — ${pw.next}.`); }
-  if (n.hist != null) n.hist > 0 ? add(1, 0.5, 'Импульс растёт', 'Покупатели набирают силу (MACD).') : add(-1, 0.5, 'Импульс слабеет', 'Продавцы пока сильнее (MACD).');
+  if (sw) sw.side === 'sell' ? add(1, 1, __t("Сняли стопы снизу"), __t("Цену проткнули ниже {0} и вернули — ловушка для продавцов.", [fmt(sw.p)])) : add(-1, 1, __t("Сняли стопы сверху"), __t("Цену проткнули выше {0} и вернули — ловушка для покупателей.", [fmt(sw.p)]));
+  if (a.z < -2.5) add(1, 0.8, __t("Слишком далеко вниз"), __t("Цена сильно оторвалась от средней — её обычно тянет обратно."));
+  if (a.z > 2.5) add(-1, 0.8, __t("Слишком далеко вверх"), __t("Цена сильно оторвалась от средней — её обычно тянет обратно."));
+  if (a.wave && a.wave.next.bias) { const pw = plainWave(a.wave); add(a.wave.next.bias, 1.2, __t("Волны: {0}", [a.wave.next.bias > 0 ? __t("следующий ход вверх") : __t("следующий ход вниз")]), __t("{0}. Дальше — {1}.", [pw.now, pw.next])); }
+  if (n.hist != null) n.hist > 0 ? add(1, 0.5, __t("Импульс растёт"), __t("Покупатели набирают силу (MACD).")) : add(-1, 0.5, __t("Импульс слабеет"), __t("Продавцы пока сильнее (MACD)."));
   if (state.liq) {
     const sh = state.liq.shorts.slice().sort((x, y) => y.usd - x.usd)[0], lg = state.liq.longs.slice().sort((x, y) => y.usd - x.usd)[0];
-    if (sh && (!lg || sh.usd > lg.usd * 1.2)) add(1, 0.9, 'Магнит сверху', `Над ценой на ${fmt(sh.p)} скопились шорты на ${usd(sh.usd)} — цена часто идёт их «собирать».`);
-    else if (lg && (!sh || lg.usd > sh.usd * 1.2)) add(-1, 0.9, 'Магнит снизу', `Под ценой на ${fmt(lg.p)} скопились лонги на ${usd(lg.usd)} — цена часто идёт их «собирать».`);
+    if (sh && (!lg || sh.usd > lg.usd * 1.2)) add(1, 0.9, __t("Магнит сверху"), __t("Над ценой на {0} скопились шорты на {1} — цена часто идёт их «собирать».", [fmt(sh.p), usd(sh.usd)]));
+    else if (lg && (!sh || lg.usd > sh.usd * 1.2)) add(-1, 0.9, __t("Магнит снизу"), __t("Под ценой на {0} скопились лонги на {1} — цена часто идёт их «собирать».", [fmt(lg.p), usd(lg.usd)]));
   }
   const d = state.deriv;
   if (d) { const ds = SMC.derivSummary(d.oi, d.funding, d.longAcc, a.price, (() => { const b = state.data['4h']; return b && b.length > 43 ? b[b.length - 43].c : null; })());
-    if (ds && ds.prCh < -0.03 && ds.oiCh < -0.05) add(1, 0.7, 'Плечи вычищены', 'Трейдеров с плечом уже выбили — давление продаж слабеет.');
-    if (ds && ds.prCh < -0.03 && ds.oiCh > 0.03) add(1, 0.6, 'Много новых шортов', 'Продавцы с плечом набирают позиции — топливо для резкого роста.');
-    if (ds && ds.prCh > 0.03 && ds.oiCh < -0.05) add(-1, 0.6, 'Рост без новых денег', 'Цена растёт на закрытии шортов — может выдохнуться.'); }
-  if (state.fng) { if (state.fng.v < 25) add(1, 0.6, 'Страх на рынке', `Индекс страха ${state.fng.v} — когда все боятся, часто бывает разворот вверх.`); if (state.fng.v > 75) add(-1, 0.6, 'Жадность на рынке', `Индекс жадности ${state.fng.v} — когда все жадничают, часто бывает откат.`); }
-  if (a.newsS != null && Math.abs(a.newsS) > 0.15) add(Math.sign(a.newsS), 0.5, a.newsS > 0 ? 'Новости позитивные' : 'Новости негативные', 'Тон свежих публикаций по инструменту.');
-  if (state.opt && state.opt.maxPain) { const mp = state.opt.maxPain; if (Math.abs(mp - a.price) / a.price > 0.02) add(mp > a.price ? 1 : -1, 0.6, 'Опционы тянут ' + (mp > a.price ? 'вверх' : 'вниз'), `К экспирации цену часто притягивает уровень ${fmt(mp)} (max pain).`); }
-  const hi = { '4h': '1d', '1d': '1w' }[state.tf], H = hi && state.mtf[hi] && state.mtf[hi].top;
-  if (H && H.key !== 'side') add(H.bias, 0.8, `${TFW[hi]}: ${H.bias > 0 ? 'вверх' : 'вниз'}`, `На старшем горизонте основной сценарий — ${H.title.toLowerCase()} (${pct(H.p)}).`);
+    if (ds && ds.prCh < -0.03 && ds.oiCh < -0.05) add(1, 0.7, __t("Плечи вычищены"), __t("Трейдеров с плечом уже выбили — давление продаж слабеет."));
+    if (ds && ds.prCh < -0.03 && ds.oiCh > 0.03) add(1, 0.6, __t("Много новых шортов"), __t("Продавцы с плечом набирают позиции — топливо для резкого роста."));
+    if (ds && ds.prCh > 0.03 && ds.oiCh < -0.05) add(-1, 0.6, __t("Рост без новых денег"), __t("Цена растёт на закрытии шортов — может выдохнуться.")); }
+  if (state.fng) { if (state.fng.v < 25) add(1, 0.6, __t("Страх на рынке"), __t("Индекс страха {0} — когда все боятся, часто бывает разворот вверх.", [state.fng.v])); if (state.fng.v > 75) add(-1, 0.6, __t("Жадность на рынке"), __t("Индекс жадности {0} — когда все жадничают, часто бывает откат.", [state.fng.v])); }
+  if (a.newsS != null && Math.abs(a.newsS) > 0.15) add(Math.sign(a.newsS), 0.5, a.newsS > 0 ? __t("Новости позитивные") : __t("Новости негативные"), __t("Тон свежих публикаций по инструменту."));
+  if (state.opt && state.opt.maxPain) { const mp = state.opt.maxPain; if (Math.abs(mp - a.price) / a.price > 0.02) add(mp > a.price ? 1 : -1, 0.6, __t("Опционы тянут ") + (mp > a.price ? __t("вверх") : __t("вниз")), __t("К экспирации цену часто притягивает уровень {0} (max pain).", [fmt(mp)])); }
+  const hi = HIGHER[state.tf], H = hi && state.mtf[hi] && state.mtf[hi].top;
+  if (H && H.key !== 'side') add(H.bias, 0.8, `${TFW[hi]}: ${H.bias > 0 ? __t("вверх") : __t("вниз")}`, __t("На старшем горизонте основной сценарий — {0} ({1}).", [H.title.toLowerCase(), pct(H.p)]));
   return R;
 }
 function road(a) {   // шкала цены: отмена — сейчас — цели
   const m = a.scenarios[0]; if (!m) return '';
   const alt = a.scenarios.find(s => s !== m && s.key !== 'side');
-  const pts = [{ p: a.price, k: 'now', t: 'сейчас' }];
-  if (m.key === 'side') { pts.push({ p: m.targets[0].p, k: 'side', t: 'низ' }, { p: m.targets[1].p, k: 'side', t: 'верх' }); }
-  else { m.targets.forEach((t, j) => pts.push({ p: t.p, k: m.key, t: 'цель ' + (j + 1) })); if (m.invalid != null) pts.push({ p: m.invalid, k: 'stop', t: 'отмена' }); }
-  if (alt && m.key === 'side') pts.push({ p: alt.targets[0].p, k: 'alt', t: alt.key === 'up' ? 'если вверх' : 'если вниз' });
+  const pts = [{ p: a.price, k: 'now', t: __t("сейчас") }];
+  if (m.key === 'side') { pts.push({ p: m.targets[0].p, k: 'side', t: __t("низ") }, { p: m.targets[1].p, k: 'side', t: __t("верх") }); }
+  else { m.targets.forEach((t, j) => pts.push({ p: t.p, k: m.key, t: __t("цель ") + (j + 1) })); if (m.invalid != null) pts.push({ p: m.invalid, k: 'stop', t: __t("отмена") }); }
+  if (alt && m.key === 'side') pts.push({ p: alt.targets[0].p, k: 'alt', t: alt.key === 'up' ? __t("если вверх") : __t("если вниз") });
   const lo = Math.min(...pts.map(x => x.p)), hi = Math.max(...pts.map(x => x.p)), pad = (hi - lo) * 0.06 || a.price * 0.01;
   const X = p => 4 + (p - lo + pad) / (hi - lo + 2 * pad) * 92;
   const xs = X(a.price), seg = (p, cls) => { const x1 = Math.min(xs, X(p)), x2 = Math.max(xs, X(p)); return `<i class="seg ${cls}" style="left:${x1}%;width:${x2 - x1}%"></i>`; };
@@ -1213,62 +1263,46 @@ function road(a) {   // шкала цены: отмена — сейчас — �
 }
 function verdict(a) {
   const s = a.scenarios[0];
-  if (!s) return { cls: 'side', h: 'Недостаточно данных', k: '' };
-  if (s.key === 'side') return { cls: 'side', h: `Скорее всего — боковик между ${fmt(s.targets[0].p)} и ${fmt(s.targets[1].p)}`, k: 'Боковик' };
+  if (!s) return { cls: 'side', h: __t("Недостаточно данных"), k: '' };
+  if (s.key === 'side') return { cls: 'side', h: __t("Скорее всего — боковик между {0} и {1}", [fmt(s.targets[0].p), fmt(s.targets[1].p)]), k: __t("Боковик") };
   const up = s.key === 'up';
-  return { cls: up ? 'up' : 'down', h: `Скорее всего — ${up ? 'рост' : 'снижение'} до ${fmt(s.targets[0].p)}${s.targets[1] ? `, дальше ${fmt(s.targets[1].p)}` : ''}`, k: up ? 'Рост' : 'Снижение' };
+  return { cls: up ? 'up' : 'down', h: __t("Скорее всего — {0} до {1}{2}", [up ? __t("рост·ui") : __t("снижение"), fmt(s.targets[0].p), s.targets[1] ? __t(", дальше {0}", [fmt(s.targets[1].p)]) : '']), k: up ? __t("Рост") : __t("Снижение") };
 }
-const shortSrc = x => x.replace('кластер ликвидаций', 'ликвидации').replace(' объёма', '').replace('узел', 'объём').replace('стопы над хаями', 'стопы').replace('стопы под лоу', 'стопы').replace('максимум периода', 'макс. периода').replace('минимум периода', 'мин. периода').replace('слом структуры', 'слом тренда').replace('max pain опционов', 'max pain');
+const shortSrc = x => x.replace(__t("кластер ликвидаций"), __t("ликвидации")).replace(__t(" объёма"), '').replace(__t("узел"), __t("объём")).replace(__t("стопы над хаями"), __t("стопы")).replace(__t("стопы под лоу"), __t("стопы")).replace(__t("максимум периода"), __t("макс. периода")).replace(__t("минимум периода"), __t("мин. периода")).replace(__t("слом структуры"), __t("слом тренда")).replace(__t("max pain опционов"), 'max pain');
 
 function render() {
   const a = state.a, bars = state.data[state.tf], last = bars[bars.length - 1], prev = bars[bars.length - 2];
   const ch = (last.c - prev.c) / prev.c, v = verdict(a), main = a.scenarios[0];
-  $('#hero').innerHTML = `
-    <div class="h-id"><span class="badge">${MK[state.market]}</span><h2>${esc(state.disp)}</h2><p>${esc(state.meta.longName || state.meta.shortName || '')}</p></div>
-    <div class="h-px"><b>${fmt(last.c)}</b><span class="${ch >= 0 ? 'pos' : 'neg'}">${signPct(ch)} за ${TF[state.tf].name.toLowerCase()}</span></div>`;
-  $('#tfs').innerHTML = Object.keys(TF).map(k => `<button class="tf ${k === state.tf ? 'on' : ''}" data-tf="${k}" ${state.data[k] ? '' : 'disabled'}>${TF[k].name}</button>`).join('');
-  $('#layers').innerHTML = [['ma', 'Средние'], ['wave', 'Волны'], ['lv', 'Уровни'], ['ob', 'Ордер-блоки'], ['liq', 'Ликвидации'], ['fib', 'Фибо'], ['fc', 'Прогноз']].map(([k, n]) => `<button class="chip ${state.layers[k] ? 'on' : ''}" data-ly="${k}">${n}</button>`).join('');
+  $('#hero').innerHTML = __t("\n    <div class=\"h-id\"><span class=\"badge\">{0}</span><h2>{1}</h2><p>{2}</p></div>\n    <div class=\"h-px\"><b>{3}</b><span class=\"{4}\">{5} за {6}</span></div>", [MK[state.market], esc(state.disp), esc(state.meta.longName || state.meta.shortName || ''), fmt(last.c), ch >= 0 ? 'pos' : 'neg', signPct(ch), TF[state.tf].name.toLowerCase()]);
+  $('#tfs').innerHTML = tfList().map(k => `<button class="tf ${k === state.tf ? 'on' : ''}" data-tf="${k}" ${state.data[k] ? '' : 'disabled'}>${tfName(k)}</button>`).join('') + __t("<button class=\"tf spb {0}\" data-spec=\"1\" title=\"Разбор на 15-минутном и часовом графиках со сверкой со старшими таймфреймами\">⚡ Спекулянт</button>", [state.spec ? 'on' : '']);
+  renderSpec();
+  $('#layers').innerHTML = [['ma', __t("Средние")], ['wave', __t("Волны")], ['lv', __t("Уровни")], ['ob', __t("Ордер-блоки")], ['liq', __t("Ликвидации")], ['fib', __t("Фибо")], ['fc', __t("Прогноз")]].map(([k, n]) => `<button class="chip ${state.layers[k] ? 'on' : ''}" data-ly="${k}">${n}</button>`).join('');
   drawChart();
 
   $('#verdict').className = 'card glass verdict ' + v.cls;
-  $('#verdict').innerHTML = `
-    <span class="kick">Прогноз ${HORW[state.tf]} · график ${TF[state.tf].name}</span>
-    <h3>${esc(v.h)}</h3>
-    <p class="sub">${main ? `Вероятность ${pct(main.p)}${main.invalid != null ? ` · прогноз отменится, если цена закроется ${main.key === 'up' ? 'ниже' : 'выше'} ${fmt(main.invalid)}` : ''}` : ''}</p>
-    ${road(a)}
-    <div class="tri"><i class="u" style="width:${a.prob.up * 100}%"></i><i class="s" style="width:${a.prob.side * 100}%"></i><i class="d" style="width:${a.prob.down * 100}%"></i></div>
-    <div class="tri-l"><span>↗ Рост <b>${pct(a.prob.up)}</b></span><span>→ Боковик <b>${pct(a.prob.side)}</b></span><span>↘ Снижение <b>${pct(a.prob.down)}</b></span></div>
-    <div class="mtf">${['4h', '1d', '1w'].map(k => { const m = state.mtf[k]; if (!m || !m.top) return `<div><small>${TFW[k]}</small><b>—</b></div>`;
+  $('#verdict').innerHTML = __t("\n    <span class=\"kick\">Прогноз {0} · график {1}</span>\n    <h3>{2}</h3>\n    <p class=\"sub\">{3}</p>\n    {4}\n    <div class=\"tri\"><i class=\"u\" style=\"width:{5}%\"></i><i class=\"s\" style=\"width:{6}%\"></i><i class=\"d\" style=\"width:{7}%\"></i></div>\n    <div class=\"tri-l\"><span>↗ Рост <b>{8}</b></span><span>→ Боковик <b>{9}</b></span><span>↘ Снижение <b>{10}</b></span></div>\n    <div class=\"mtf\" style=\"grid-template-columns:repeat({11},minmax(0,1fr))\">{12}</div>", [HORW[state.tf], tfName(state.tf), esc(v.h), main ? __t("Вероятность {0}{1}", [pct(main.p), main.invalid != null ? __t(" · прогноз отменится, если цена закроется {0} {1}", [main.key === 'up' ? __t("ниже") : __t("выше"), fmt(main.invalid)]) : '']) : '', road(a), a.prob.up * 100, a.prob.side * 100, a.prob.down * 100, pct(a.prob.up), pct(a.prob.side), pct(a.prob.down), state.spec ? 4 : 3, (state.spec ? ['15m', '1h', '4h', '1d'] : ['4h', '1d', '1w']).map(k => { const m = state.mtf[k]; if (!m || !m.top) return `<div><small>${TFW[k]}</small><b>—</b></div>`;
       const t = m.top, c = t.key === 'up' ? 'pos' : t.key === 'down' ? 'neg' : '';
-      return `<div class="${k === state.tf ? 'cur' : ''}" data-tf="${k}"><small>${TFW[k]} · ${TF[k].name}</small><b class="${c}">${arrow(t.bias)} ${t.key === 'side' ? 'боковик' : t.key === 'up' ? 'рост' : 'снижение'}</b><em class="mp">${pct(t.p)}</em></div>`; }).join('')}</div>`;
+      return `<div class="${k === state.tf ? 'cur' : ''}" data-tf="${k}"><small>${TFW[k]} · ${tfName(k)}</small><b class="${c}">${arrow(t.bias)} ${t.key === 'side' ? __t("боковик") : t.key === 'up' ? __t("рост·ui") : __t("снижение")}</b><em class="mp">${pct(t.p)}</em></div>`; }).join('')]);
 
   const Rs = reasons(a);
-  $('#scen').innerHTML = `<h4 class="sh">Сценарии</h4>` + a.scenarios.map((s, i) => {
+  $('#scen').innerHTML = __t("<h4 class=\"sh\">Сценарии</h4>") + a.scenarios.map((s, i) => {
     const cls = s.bias > 0 ? 'up' : s.bias < 0 ? 'down' : 'side';
-    const ttl = s.key === 'side' ? `Боковик ${fmt(s.targets[0].p)} – ${fmt(s.targets[1].p)}` : `${s.key === 'up' ? (s.title === 'Отскок вверх' ? 'Отскок' : 'Рост') : (s.title === 'Откат вниз' ? 'Откат' : 'Снижение')} до ${fmt(s.targets[0].p)}`;
+    const ttl = s.key === 'side' ? __t("Боковик {0} – {1}", [fmt(s.targets[0].p), fmt(s.targets[1].p)]) : __t("{0} до {1}", [s.key === 'up' ? (s.title === __t("Отскок вверх") ? __t("Отскок") : __t("Рост")) : (s.title === __t("Откат вниз") ? __t("Откат") : __t("Снижение")), fmt(s.targets[0].p)]);
     const why = Rs.filter(r => r.d === s.bias && r.d !== 0).sort((x, y) => y.w - x.w).slice(0, 3);
-    return `<details class="scx ${cls}"${state.open['sc' + s.key] ? ' open' : ''} data-k="sc${s.key}"><summary><span class="ai">${arrow(s.bias)}</span><span class="st"><b>${esc(ttl)}${i === 0 ? '<span class="tag">основной</span>' : ''}</b><span class="pb"><i style="width:${s.p * 100}%"></i></span></span><span class="pp">${pct(s.p)}</span><i class="chev"></i></summary>
-      <div>
-        <div class="chips">${s.targets.map((t, j) => `<span class="cp ${cls}"><small>${s.key === 'side' ? (j ? 'верх' : 'низ') : 'цель ' + (j + 1)}</small><b>${fmt(t.p)}</b><em>${signPct((t.p - a.price) / a.price)}</em></span>`).join('')}${s.invalid != null ? `<span class="cp stop"><small>отмена</small><b>${fmt(s.invalid)}</b><em>${signPct((s.invalid - a.price) / a.price)}</em></span>` : ''}</div>
-        ${why.length ? `<ul class="why">${why.map(r => `<li><b>${esc(r.t)}</b> — ${esc(r.s)}</li>`).join('')}</ul>` : ''}
-        <details class="more"><summary>Подробнее</summary><p>${esc(s.text)}</p>${s.key !== 'side' ? `<p>${s.targets.map((t, j) => `Цель ${j + 1}: ${esc(t.why)}, шанс дойти ${pct(t.touch)}`).join('. ')}.</p>` : ''}</details>
-      </div></details>`; }).join('');
+    return __t("<details class=\"scx {0}\"{1} data-k=\"sc{2}\"><summary><span class=\"ai\">{3}</span><span class=\"st\"><b>{4}{5}</b><span class=\"pb\"><i style=\"width:{6}%\"></i></span></span><span class=\"pp\">{7}</span><i class=\"chev\"></i></summary>\n      <div>\n        <div class=\"chips\">{8}{9}</div>\n        {10}\n        <details class=\"more\"><summary>Подробнее</summary><p>{11}</p>{12}</details>\n      </div></details>", [cls, state.open['sc' + s.key] ? ' open' : '', s.key, arrow(s.bias), esc(ttl), i === 0 ? __t("<span class=\"tag\">основной</span>") : '', s.p * 100, pct(s.p), s.targets.map((t, j) => `<span class="cp ${cls}"><small>${s.key === 'side' ? (j ? __t("верх") : __t("низ")) : __t("цель ") + (j + 1)}</small><b>${fmt(t.p)}</b><em>${signPct((t.p - a.price) / a.price)}</em></span>`).join(''), s.invalid != null ? __t("<span class=\"cp stop\"><small>отмена</small><b>{0}</b><em>{1}</em></span>", [fmt(s.invalid), signPct((s.invalid - a.price) / a.price)]) : '', why.length ? `<ul class="why">${why.map(r => `<li><b>${esc(r.t)}</b> — ${esc(r.s)}</li>`).join('')}</ul>` : '', esc(s.text), s.key !== 'side' ? `<p>${s.targets.map((t, j) => __t("Цель {0}: {1}, шанс дойти {2}", [j + 1, esc(t.why), pct(t.touch)])).join('. ')}.</p>` : '']); }).join('');
 
   const T = [];
   // почему так — аргументы за и против
   const pro = Rs.filter(r => r.d > 0), con = Rs.filter(r => r.d < 0), wp = pro.reduce((s, r) => s + r.w, 0), wc = con.reduce((s, r) => s + r.w, 0), sh = wp / ((wp + wc) || 1);
   const card = r => `<li class="${r.d > 0 ? 'u' : 'd'}"><b>${esc(r.t)}</b><span>${esc(r.s)}</span></li>`;
   const st = story(a);
-  T.push(tile('story', '#c9a7ff', 'Почему так', `за рост ${pro.length} · за падение ${con.length}`,
-    `<div class="tug"><span>↗ За рост ${pct(sh)}</span><div class="split"><i class="u" style="width:${sh * 100}%"></i><i class="d" style="width:${(1 - sh) * 100}%"></i></div><span>${pct(1 - sh)} за падение ↘</span></div>
-    <div class="cols"><ul class="rs">${pro.map(card).join('') || '<li class="n"><span>Аргументов нет</span></li>'}</ul><ul class="rs">${con.map(card).join('') || '<li class="n"><span>Аргументов нет</span></li>'}</ul></div>
-    <details class="more"><summary>Подробный разбор аналитика</summary><ul class="bul">${st.map(x => `<li>${esc(x)}</li>`).join('')}</ul></details>`));
+  T.push(tile('story', '#c9a7ff', __t("Почему так"), __t("за рост {0} · за падение {1}", [pro.length, con.length]),
+    __t("<div class=\"tug\"><span>↗ За рост {0}</span><div class=\"split\"><i class=\"u\" style=\"width:{1}%\"></i><i class=\"d\" style=\"width:{2}%\"></i></div><span>{3} за падение ↘</span></div>\n    <div class=\"cols\"><ul class=\"rs\">{4}</ul><ul class=\"rs\">{5}</ul></div>\n    <details class=\"more\"><summary>Подробный разбор аналитика</summary><ul class=\"bul\">{6}</ul></details>", [pct(sh), sh * 100, (1 - sh) * 100, pct(1 - sh), pro.map(card).join('') || __t("<li class=\"n\"><span>Аргументов нет</span></li>"), con.map(card).join('') || __t("<li class=\"n\"><span>Аргументов нет</span></li>"), st.map(x => `<li>${esc(x)}</li>`).join('')])));
   // уровни — лестница
   const mxW = Math.max(1, ...[...a.res, ...a.sup].map(o => o.w));
   const lvRow = (o, cls) => `<li class="${cls}"><b>${fmt(o.p)}</b><span class="str"><i style="width:${Math.max(15, o.w / mxW * 100)}%"></i></span><em>${signPct((o.p - a.price) / a.price)}</em><small>${o.src.map(x => `<span class="tg">${esc(shortSrc(x))}</span>`).join('')}</small></li>`;
-  T.push(tile('lv', '#9fd8ff', 'Ключевые уровни', `▲ ${a.res[0] ? fmt(a.res[0].p) : '—'} · ▼ ${a.sup[0] ? fmt(a.sup[0].p) : '—'}`,
-    `<p class="lead">Сверху — где цену могут остановить продавцы, снизу — где её могут подхватить покупатели. Чем длиннее полоска, тем сильнее уровень.</p>
-    <ul class="lad">${a.res.slice().reverse().map(o => lvRow(o, 'r')).join('')}<li class="now"><b>${fmt(a.price)}</b><span class="str"></span><em>сейчас</em></li>${a.sup.map(o => lvRow(o, 's')).join('')}</ul>`));
+  T.push(tile('lv', '#9fd8ff', __t("Ключевые уровни"), `▲ ${a.res[0] ? fmt(a.res[0].p) : '—'} · ▼ ${a.sup[0] ? fmt(a.sup[0].p) : '—'}`,
+    __t("<p class=\"lead\">Сверху — где цену могут остановить продавцы, снизу — где её могут подхватить покупатели. Чем длиннее полоска, тем сильнее уровень.</p>\n    <ul class=\"lad\">{0}<li class=\"now\"><b>{1}</b><span class=\"str\"></span><em>сейчас</em></li>{2}</ul>", [a.res.slice().reverse().map(o => lvRow(o, 'r')).join(''), fmt(a.price), a.sup.map(o => lvRow(o, 's')).join('')])));
   if (state.market === 'crypto') T.push(liqTile(a));
   else if (state.market === 'stock') T.push(optTile(a));
   T.push(obTile(a));
@@ -1281,38 +1315,45 @@ function render() {
     const ps = [...L.map(l => l.p), a.price, proj], lo = Math.min(...ps), hi = Math.max(...ps);
     const X = i => 10 + (i - i0) / ((iN + ext - i0) || 1) * 280, Y = p => 100 - (p - lo) / ((hi - lo) || 1) * 84;
     const path = L.map((l, j) => `${j ? 'L' : 'M'}${X(l.i).toFixed(1)},${Y(l.p).toFixed(1)}`).join(' ') + ` L${X(iN).toFixed(1)},${Y(a.price).toFixed(1)}`;
-    const svg = `<svg viewBox="0 0 300 116" class="wv"><path d="${path}" fill="none" stroke="#d6aaff" stroke-width="2.2" stroke-linejoin="round"/>
-      <path d="M${X(iN).toFixed(1)},${Y(a.price).toFixed(1)} L${X(iN + ext).toFixed(1)},${Y(proj).toFixed(1)}" stroke="${w.next.bias > 0 ? '#3ee6b0' : '#ff5f7e'}" stroke-width="2.2" stroke-dasharray="5 4" fill="none"/>
-      ${L.map(l => `<circle cx="${X(l.i).toFixed(1)}" cy="${Y(l.p).toFixed(1)}" r="3.2" fill="#d6aaff"/><text x="${X(l.i).toFixed(1)}" y="${(Y(l.p) + (l.t === 'H' ? -7 : 14)).toFixed(1)}" fill="#fff" font-size="11" font-weight="700" text-anchor="middle">${l.label}</text>`).join('')}
-      <circle cx="${X(iN).toFixed(1)}" cy="${Y(a.price).toFixed(1)}" r="4" fill="#fff"/>${X(iN) - X(L[L.length - 1].i) > 22 ? `<text x="${X(iN).toFixed(1)}" y="${(Y(a.price) + 15).toFixed(1)}" fill="rgba(255,255,255,.7)" font-size="10" text-anchor="middle">сейчас</text>` : ''}<text x="${X(iN + ext).toFixed(1)}" y="${(Y(proj) + (w.next.bias > 0 ? -7 : 14)).toFixed(1)}" fill="${w.next.bias > 0 ? '#3ee6b0' : '#ff5f7e'}" font-size="10" text-anchor="end">прогноз</text></svg>`;
-    const conf = w.confidence >= 0.75 ? 'высокая' : w.confidence >= 0.55 ? 'средняя' : 'низкая';
-    T.push(tile('wave', '#e2c6ff', 'Волны Эллиотта', `Дальше: ${esc(pw.next)}`, `${svg}
-      <ul class="steps"><li><span>Сейчас</span><b>${esc(pw.now)}</b></li><li><span>Дальше</span><b>${esc(pw.next)}${tReach != null ? ` — ориентир ${fmt(tReach)}` : ''}</b></li><li><span>Уверенность</span><b>${conf}</b></li><li><span>Ломается</span><b>если цена уйдёт за ${fmt(w.next.invalid)}</b></li></ul>
-      <details class="more"><summary>Подробнее</summary><p>${esc(countTitle(w))}. ${ratioText(w).join(' · ')}. ${esc(w.next.phase)} Совпадение с правилами Эллиотта ${pct(w.confidence)}.</p></details>`)); }
-  else T.push(tile('wave', '#e2c6ff', 'Волны Эллиотта', 'чёткой структуры нет', '<p class="lead">Сейчас график не складывается в понятные волны — рынок без выраженного движения.</p>'));
+    const svg = __t("<svg viewBox=\"0 0 300 116\" class=\"wv\"><path d=\"{0}\" fill=\"none\" stroke=\"#d6aaff\" stroke-width=\"2.2\" stroke-linejoin=\"round\"/>\n      <path d=\"M{1},{2} L{3},{4}\" stroke=\"{5}\" stroke-width=\"2.2\" stroke-dasharray=\"5 4\" fill=\"none\"/>\n      {6}\n      <circle cx=\"{7}\" cy=\"{8}\" r=\"4\" fill=\"#fff\"/>{9}<text x=\"{10}\" y=\"{11}\" fill=\"{12}\" font-size=\"10\" text-anchor=\"end\">прогноз</text></svg>", [path, X(iN).toFixed(1), Y(a.price).toFixed(1), X(iN + ext).toFixed(1), Y(proj).toFixed(1), w.next.bias > 0 ? '#3ee6b0' : '#ff5f7e', L.map(l => `<circle cx="${X(l.i).toFixed(1)}" cy="${Y(l.p).toFixed(1)}" r="3.2" fill="#d6aaff"/><text x="${X(l.i).toFixed(1)}" y="${(Y(l.p) + (l.t === 'H' ? -7 : 14)).toFixed(1)}" fill="#fff" font-size="11" font-weight="700" text-anchor="middle">${l.label}</text>`).join(''), X(iN).toFixed(1), Y(a.price).toFixed(1), X(iN) - X(L[L.length - 1].i) > 22 ? __t("<text x=\"{0}\" y=\"{1}\" fill=\"rgba(255,255,255,.7)\" font-size=\"10\" text-anchor=\"middle\">сейчас</text>", [X(iN).toFixed(1), (Y(a.price) + 15).toFixed(1)]) : '', X(iN + ext).toFixed(1), (Y(proj) + (w.next.bias > 0 ? -7 : 14)).toFixed(1), w.next.bias > 0 ? '#3ee6b0' : '#ff5f7e']);
+    const conf = w.confidence >= 0.75 ? __t("высокая") : w.confidence >= 0.55 ? __t("средняя") : __t("низкая");
+    T.push(tile('wave', '#e2c6ff', __t("Волны Эллиотта"), __t("Дальше: {0}", [esc(pw.next)]), __t("{0}\n      <ul class=\"steps\"><li><span>Сейчас</span><b>{1}</b></li><li><span>Дальше</span><b>{2}{3}</b></li><li><span>Уверенность</span><b>{4}</b></li><li><span>Ломается</span><b>если цена уйдёт за {5}</b></li></ul>\n      <details class=\"more\"><summary>Подробнее</summary><p>{6}. {7}. {8} Совпадение с правилами Эллиотта {9}.</p></details>", [svg, esc(pw.now), esc(pw.next), tReach != null ? __t(" — ориентир {0}", [fmt(tReach)]) : '', conf, fmt(w.next.invalid), esc(countTitle(w)), ratioText(w).join(' · '), esc(w.next.phase), pct(w.confidence)]))); }
+  else T.push(tile('wave', '#e2c6ff', __t("Волны Эллиотта"), __t("чёткой структуры нет"), __t("<p class=\"lead\">Сейчас график не складывается в понятные волны — рынок без выраженного движения.</p>")));
   // Фибоначчи — с отметкой «сейчас»
   if (a.fib) { const f = a.fib, d = Math.max(0, f.depth), lv = f.levels.filter(x => x.kind === 'retr').slice().sort((x, y) => y.p - x.p);
     const nx = f.levels.filter(x => x.kind === 'retr' && x.r > d).sort((x, y) => x.r - y.r)[0];
     const rows = []; let put = false;
-    for (const x of lv) { if (!put && a.price > x.p) { rows.push(`<li class="now"><span>сейчас</span><i></i><b>${fmt(a.price)}</b></li>`); put = true; }
+    for (const x of lv) { if (!put && a.price > x.p) { rows.push(__t("<li class=\"now\"><span>сейчас</span><i></i><b>{0}</b></li>", [fmt(a.price)])); put = true; }
       rows.push(`<li class="${[0.382, 0.5, 0.618].includes(x.r) ? 'key' : ''}"><span>${Math.round(x.r * 100)}%</span><i></i><b>${fmt(x.p)}</b></li>`); }
-    if (!put) rows.push(`<li class="now"><span>сейчас</span><i></i><b>${fmt(a.price)}</b></li>`);
-    T.push(tile('fib', '#ffd678', 'Фибоначчи', `откат ${Math.round(d * 100)}%${nx ? ' · дальше ' + fmt(nx.p) : ''}`,
-      `<p class="lead">Последнее движение: ${fmt(f.a.p)} → ${fmt(f.b.p)}. Цена вернула ${Math.round(d * 100)}% этого хода. Откаты чаще всего останавливаются на 38%, 50% и 62% (выделены).</p><ul class="fb">${rows.join('')}</ul>`)); }
+    if (!put) rows.push(__t("<li class=\"now\"><span>сейчас</span><i></i><b>{0}</b></li>", [fmt(a.price)]));
+    T.push(tile('fib', '#ffd678', __t("Фибоначчи"), __t("откат {0}%{1}", [Math.round(d * 100), nx ? __t(" · дальше ") + fmt(nx.p) : '']),
+      __t("<p class=\"lead\">Последнее движение: {0} → {1}. Цена вернула {2}% этого хода. Откаты чаще всего останавливаются на 38%, 50% и 62% (выделены).</p><ul class=\"fb\">{3}</ul>", [fmt(f.a.p), fmt(f.b.p), Math.round(d * 100), rows.join('')]))); }
   // индикаторы — шкалы
   const n = a.now, rsi = n.rsi != null ? Math.round(n.rsi) : null, vs200 = n.s200 != null ? (a.price - n.s200) / n.s200 : null, vol = a.sigma * Math.sqrt(state.tf === '4h' ? 6 : state.tf === '1w' ? 1 / 7 : 1);
   const gauge = (t, val, pos, note) => `<div class="gg"><small>${t}</small><div class="gb"><i style="left:${uclamp(pos, 0, 100)}%"></i></div><b>${val}</b><span>${note}</span></div>`;
-  T.push(tile('ind', '#7cc7ff', 'Индикаторы', `RSI ${rsi ?? '—'} · ${vs200 != null ? (vs200 > 0 ? 'выше' : 'ниже') + ' SMA 200' : ''}`,
-    `<div class="gauges">${gauge('Сила покупателей (RSI)', rsi ?? '—', rsi ?? 50, rsi == null ? '' : rsi < 30 ? 'перепродан — часто отскок' : rsi > 70 ? 'перегрет — часто откат' : 'в норме')}
-    ${vs200 != null ? gauge('Цена против долгой средней', signPct(vs200), 50 + vs200 * 150, vs200 > 0 ? 'выше — долгий тренд вверх' : 'ниже — долгий тренд вниз') : ''}
-    ${gauge('Размах движений', num(vol * 100, 1) + '% в день', Math.min(100, vol * 100 / 6 * 100), vol < 0.015 ? 'спокойно' : vol < 0.035 ? 'обычно' : 'очень резко')}
-    ${state.fng ? gauge('Страх ↔ жадность', state.fng.v, state.fng.v, esc(state.fng.c)) : ''}</div>
-    <details class="more"><summary>Подробнее</summary><ul class="kv">${[['EMA 21', a.ind.E21[a.last]], ['SMA 50', n.s50], ['SMA 200', n.s200]].map(([k, x]) => `<li><span>${k}</span><b>${fmt(x)}</b><em class="${x != null && a.price > x ? 'pos' : 'neg'}">${x != null ? signPct((a.price - x) / x) : '—'}</em></li>`).join('')}<li><span>MACD</span><b>${n.hist > 0 ? 'выше сигнальной' : 'ниже сигнальной'}</b><em></em></li><li><span>От SMA 20</span><b>${num(a.z, 1)} ATR</b><em></em></li></ul></details>`));
+  T.push(tile('ind', '#7cc7ff', __t("Индикаторы"), `RSI ${rsi ?? '—'} · ${vs200 != null ? (vs200 > 0 ? __t("выше") : __t("ниже")) + ' SMA 200' : ''}`,
+    __t("<div class=\"gauges\">{0}\n    {1}\n    {2}\n    {3}</div>\n    <details class=\"more\"><summary>Подробнее</summary><ul class=\"kv\">{4}<li><span>MACD</span><b>{5}</b><em></em></li><li><span>От SMA 20</span><b>{6} ATR</b><em></em></li></ul></details>", [gauge(__t("Сила покупателей (RSI)"), rsi ?? '—', rsi ?? 50, rsi == null ? '' : rsi < 30 ? __t("перепродан — часто отскок") : rsi > 70 ? __t("перегрет — часто откат") : __t("в норме")), vs200 != null ? gauge(__t("Цена против долгой средней"), signPct(vs200), 50 + vs200 * 150, vs200 > 0 ? __t("выше — долгий тренд вверх") : __t("ниже — долгий тренд вниз")) : '', gauge(__t("Размах движений"), num(vol * 100, 1) + __t("% в день"), Math.min(100, vol * 100 / 6 * 100), vol < 0.015 ? __t("спокойно") : vol < 0.035 ? __t("обычно") : __t("очень резко")), state.fng ? gauge(__t("Страх ↔ жадность"), state.fng.v, state.fng.v, esc(state.fng.c)) : '', [['EMA 21', a.ind.E21[a.last]], ['SMA 50', n.s50], ['SMA 200', n.s200]].map(([k, x]) => `<li><span>${k}</span><b>${fmt(x)}</b><em class="${x != null && a.price > x ? 'pos' : 'neg'}">${x != null ? signPct((a.price - x) / x) : '—'}</em></li>`).join(''), n.hist > 0 ? __t("выше сигнальной") : __t("ниже сигнальной"), num(a.z, 1)])));
   const nv = a.newsS;
-  T.push(tile('news', '#9fb3ff', 'Новости', state.news.length ? `${state.news.length} · ${nv > 0.15 ? 'позитив' : nv < -0.15 ? 'негатив' : 'нейтрально'}` : 'нет свежих',
-    state.news.length ? `<ul class="nl">${state.news.map(x => `<li><em class="dot ${x.s > 0 ? 'u' : x.s < 0 ? 'd' : 's'}"></em><a href="${esc(x.link)}" target="_blank" rel="noopener">${esc(x.title)}</a><small>${esc(x.pub || '')}${x.t ? ' · ' + new Date(x.t * 1000).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' }) : ''}</small></li>`).join('')}</ul>` : '<p class="lead">Свежих публикаций нет — прогноз опирается только на график.</p>'));
+  T.push(tile('news', '#9fb3ff', __t("Новости"), state.news.length ? `${state.news.length} · ${nv > 0.15 ? __t("позитив") : nv < -0.15 ? __t("негатив") : __t("нейтрально")}` : __t("нет свежих"),
+    state.news.length ? `<ul class="nl">${state.news.map(x => `<li><em class="dot ${x.s > 0 ? 'u' : x.s < 0 ? 'd' : 's'}"></em><a href="${esc(x.link)}" target="_blank" rel="noopener">${esc(x.title)}</a><small>${esc(x.pub || '')}${x.t ? ' · ' + new Date(x.t * 1000).toLocaleDateString(LOC, { day: 'numeric', month: 'short' }) : ''}</small></li>`).join('')}</ul>` : __t("<p class=\"lead\">Свежих публикаций нет — прогноз опирается только на график.</p>")));
   $('#tiles').innerHTML = T.join('');
-  $('#src').textContent = `Котировки: ${SRC[state.market]}, обновлено ${state.at.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}. Пересчёт каждые 90 секунд.`;
+  $('#src').textContent = __t("Котировки: {0}, обновлено {1}. Пересчёт каждые 90 секунд.", [SRC[state.market], state.at.toLocaleTimeString(LOC, { hour: '2-digit', minute: '2-digit' })]);
+}
+
+function renderSpec() {
+  const el = $('#spec'), S = state.specSum;
+  if (!state.spec || !S) { el.hidden = true; return; }
+  el.hidden = false;
+  let pl = S.plan; const a0 = state.all['15m'] || state.all['1h'];
+  const D = S.dir, cls = D > 0 ? 'up' : D < 0 ? 'down' : 'side', main = D > 0 ? S.P.up : D < 0 ? S.P.down : S.P.side;
+  const lead = Math.abs(S.P.up - S.P.down), who = D > 0 ? __t("покупателей") : __t("продавцов"), side = D > 0 ? __t("лонг") : __t("шорт");
+  const tier = D === 0 || lead < 0.05 ? 0 : main >= 0.55 && S.agree >= Math.min(3, S.n) && !S.counter ? 2 : 1;
+  const conf = D > 0 ? ((a0.res[0] || {}).p || a0.price) : ((a0.sup[0] || {}).p || a0.price);
+  if (pl && tier === 1) { const risk = Math.abs(conf - pl.stop); pl = { ...pl, entry: conf, rr: risk > 0 && (D > 0 ? pl.t1 > conf : pl.t1 < conf) ? Math.abs(pl.t1 - conf) / risk : 0, pull: null, byConf: true }; }
+  const head = tier === 2 ? __t("Сильный перевес {0} — сценарий в {1}", [who, side]) : tier === 1 ? __t("Слабый перевес {0} — {1} только после подтверждения", [who, side]) : __t("Явного перевеса нет — лучше подождать");
+  const chip = (t, v, cl, sub) => `<span class="cp ${cl}"><small>${t}</small><b>${v}</b>${sub ? `<em>${sub}</em>` : ''}</span>`;
+  el.className = 'card glass specc ' + cls;
+  el.innerHTML = __t("<span class=\"kick\">⚡ Спекулятивный разбор · 15м + 1Ч, сверка с 4Ч и 1Д · горизонт до суток</span>\n    <h3>{0}</h3>\n    <p class=\"sub\">Общая вероятность {1} · таймфреймы согласны {2} из {3}{4}</p>\n    <div class=\"tri\"><i class=\"u\" style=\"width:{5}%\"></i><i class=\"s\" style=\"width:{6}%\"></i><i class=\"d\" style=\"width:{7}%\"></i></div>\n    <div class=\"tri-l\"><span>↗ Рост <b>{8}</b></span><span>→ Боковик <b>{9}</b></span><span>↘ Снижение <b>{10}</b></span></div>\n    <div class=\"tfgrid\">{11}</div>\n    {12}\n    {13}\n    <details class=\"more\"><summary>Как считается</summary><p>Каждый таймфрейм даёт свои вероятности (Монте-Карло до ближайших целей). Общая вероятность — логарифмический пул мнений с весами 15м 25%, 1Ч 30%, 4Ч 25%, 1Д 20%: когда графики согласны, уверенность растёт, когда спорят — падает. Стоп и цели — с часового графика, вход уточняется по 15-минутному. Это расчётный сценарий, а не рекомендация.</p></details>", [head, pct(main), S.agree, S.n, S.counter ? __t(" · <b class=\"neg\">против дневного тренда — риск выше</b>") : '', S.P.up * 100, S.P.side * 100, S.P.down * 100, pct(S.P.up), pct(S.P.side), pct(S.P.down), S.rows.map(r => `<div class="${r.bias > 0 ? 'u' : r.bias < 0 ? 'd' : 's'}${r.k === state.tf ? ' cur' : ''}" data-tf="${r.k}"><small>${tfName(r.k)}</small><b>${arrow(r.bias)} ${pct(r.p)}</b><span class="mini"><i class="u" style="width:${r.prob.up * 100}%"></i><i class="s" style="width:${r.prob.side * 100}%"></i><i class="d" style="width:${r.prob.down * 100}%"></i></span></div>`).join(''), tier === 1 ? __t("<p class=\"lead\">Подтверждение — закрытие 15-минутной свечи {0} <b>{1}</b>. Без него сигнал слишком слабый.</p>", [D > 0 ? __t("выше") : __t("ниже"), fmt(conf)]) : '', pl && tier > 0 ? __t("<h5>План сделки{0}</h5>\n      <div class=\"chips\">{1}{2}{3}{4}{5}</div>\n      {6}", [pl.rr < 1.5 ? __t(" · <span class=\"neg\">риск/прибыль слабый</span>") : '', chip(__t("вход"), fmt(pl.entry), '', pl.byConf ? __t("после пробоя") : pl.entry === a0.price ? __t("по рынку") : __t("от уровня")), chip(__t("стоп"), fmt(pl.stop), 'stop', signPct((pl.stop - pl.entry) / pl.entry)), chip(__t("цель 1"), fmt(pl.t1), cls, signPct((pl.t1 - pl.entry) / pl.entry)), pl.t2 ? chip(__t("цель 2"), fmt(pl.t2), cls, signPct((pl.t2 - pl.entry) / pl.entry)) : '', chip(__t("риск / прибыль"), '1 : ' + num(pl.rr, 1), pl.rr >= 2 ? 'up' : pl.rr >= 1.5 ? '' : 'down', pl.rr >= 2 ? __t("хорошо") : pl.rr >= 1.5 ? __t("приемлемо") : __t("слабо")), pl.pull ? __t("<p class=\"lead\">Сейчас входить невыгодно: стоп слишком далеко относительно цели. Лучше дождаться {0} к <b>{1}</b> — тогда риск/прибыль ≈ 1 : {2}.</p>", [D > 0 ? __t("отката") : __t("подъёма"), fmt(pl.pull), num(pl.rrPull, 1)]) : '']) : __t("<p class=\"lead\">Чётких условий для сделки нет: таймфреймы спорят между собой. Разумнее дождаться пробоя ближайшего уровня.</p>")]);
 }
 
 function hourlySvg(h) {
@@ -1320,65 +1361,46 @@ function hourlySvg(h) {
   const W = 300, H = 84, mid = H / 2, n = h.length, bw = W / n, mx = Math.max(1, ...h.map(x => Math.max(x.L, x.S)));
   const bars = h.map((x, i) => { const s = x.S / mx * (mid - 4), l = x.L / mx * (mid - 4);
     return `<rect x="${(i * bw + 1).toFixed(1)}" y="${(mid - s).toFixed(1)}" width="${Math.max(1, bw - 2).toFixed(1)}" height="${s.toFixed(1)}" fill="#5abeff"/><rect x="${(i * bw + 1).toFixed(1)}" y="${mid}" width="${Math.max(1, bw - 2).toFixed(1)}" height="${l.toFixed(1)}" fill="#ffaa46"/>`; }).join('');
-  return `<svg class="hbars" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">${bars}<line x1="0" x2="${W}" y1="${mid}" y2="${mid}" stroke="rgba(255,255,255,.25)"/></svg><div class="leg2"><span>▲ шорты</span><span>▼ лонги</span><span>по часам, ${new Date(h[0].t * 1000).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })} → сейчас</span></div>`;
+  return __t("<svg class=\"hbars\" viewBox=\"0 0 {0} {1}\" preserveAspectRatio=\"none\">{2}<line x1=\"0\" x2=\"{3}\" y1=\"{4}\" y2=\"{5}\" stroke=\"rgba(255,255,255,.25)\"/></svg><div class=\"leg2\"><span>▲ шорты</span><span>▼ лонги</span><span>по часам, {6} → сейчас</span></div>", [W, H, bars, W, mid, mid, new Date(h[0].t * 1000).toLocaleTimeString(LOC, { hour: '2-digit', minute: '2-digit' })]);
 }
 function liqTile(a) {
   const g = state.lg, L = state.liq, d = state.deriv;
   const ds = d ? SMC.derivSummary(d.oi, d.funding, d.longAcc, a.price, (() => { const b = state.data['4h']; return b && b.length > 43 ? b[b.length - 43].c : null; })()) : null;
-  let val = 'нет данных', body = '';
+  let val = __t("нет данных"), body = '';
   if (g && g.coin) {
     const c = g.coin, tot = c.long + c.short || 1;
-    val = `24 ч: ${usd(c.total || tot)} · ${c.short > c.long ? 'шорты ' + pct(c.short / tot) : 'лонги ' + pct(c.long / tot)}`;
-    body += `<p class="lead">За сутки биржи принудительно закрыли позиций с плечом на <b>${usd(c.total || tot)}</b>. ${c.short > c.long * 1.5 ? 'В основном выбивали продавцов (шорты) — цену толкали вверх.' : c.long > c.short * 1.5 ? 'В основном выбивали покупателей (лонги) — цену толкали вниз.' : 'Выбивали и покупателей, и продавцов примерно поровну.'}</p><h5>Ликвидировано за 24 часа · ${esc(g.base)}</h5><div class="split"><i class="l" style="width:${c.long / tot * 100}%"></i><i class="s" style="width:${c.short / tot * 100}%"></i></div>
-      <div class="leg2"><span>Лонги <b>${usd(c.long)}</b></span><span>Шорты <b>${usd(c.short)}</b></span>${g.market ? `<span>Весь рынок <b>${usd(g.market.total)}</b> (${pct(g.market.long / (g.market.total || 1))} лонги)</span>` : ''}</div>`;
+    val = __t("24 ч: {0} · {1}", [usd(c.total || tot), c.short > c.long ? __t("шорты ") + pct(c.short / tot) : __t("лонги ") + pct(c.long / tot)]);
+    body += __t("<p class=\"lead\">За сутки биржи принудительно закрыли позиций с плечом на <b>{0}</b>. {1}</p><h5>Ликвидировано за 24 часа · {2}</h5><div class=\"split\"><i class=\"l\" style=\"width:{3}%\"></i><i class=\"s\" style=\"width:{4}%\"></i></div>\n      <div class=\"leg2\"><span>Лонги <b>{5}</b></span><span>Шорты <b>{6}</b></span>{7}</div>", [usd(c.total || tot), c.short > c.long * 1.5 ? __t("В основном выбивали продавцов (шорты) — цену толкали вверх.") : c.long > c.short * 1.5 ? __t("В основном выбивали покупателей (лонги) — цену толкали вниз.") : __t("Выбивали и покупателей, и продавцов примерно поровну."), esc(g.base), c.long / tot * 100, c.short / tot * 100, usd(c.long), usd(c.short), g.market ? __t("<span>Весь рынок <b>{0}</b> ({1} лонги)</span>", [usd(g.market.total), pct(g.market.long / (g.market.total || 1))]) : '']);
     if (g.hourly && g.hourly.length) body += hourlySvg(g.hourly);
   }
   if (L) {
     const sh = L.shorts.slice().sort((x, y) => Math.abs(x.p - a.price) - Math.abs(y.p - a.price)).slice(0, 2).sort((x, y) => y.p - x.p);
     const lg2 = L.longs.slice().sort((x, y) => Math.abs(x.p - a.price) - Math.abs(y.p - a.price)).slice(0, 2).sort((x, y) => y.p - x.p);
     const mxu = Math.max(1, ...[...sh, ...lg2].map(x => x.usd));
-    const row = (x, k) => `<li class="${k}"><b>${fmt(x.p)}</b><span class="str"><i style="width:${Math.max(12, x.usd / mxu * 100)}%"></i></span><em>${usd(x.usd)}</em><small><span class="tg">${k === 'r' ? 'выбьет шорты' : 'выбьет лонги'}</span><span class="tg">${signPct((x.p - a.price) / a.price)}</span></small></li>`;
-    body += `<h5>Где ликвидируют дальше</h5><ul class="lad">${sh.map(x => row(x, 'r')).join('')}<li class="now"><b>${fmt(a.price)}</b><span class="str"></span><em>сейчас</em></li>${lg2.map(x => row(x, 's')).join('')}</ul>`;
+    const row = (x, k) => `<li class="${k}"><b>${fmt(x.p)}</b><span class="str"><i style="width:${Math.max(12, x.usd / mxu * 100)}%"></i></span><em>${usd(x.usd)}</em><small><span class="tg">${k === 'r' ? __t("выбьет шорты") : __t("выбьет лонги")}</span><span class="tg">${signPct((x.p - a.price) / a.price)}</span></small></li>`;
+    body += __t("<h5>Где ликвидируют дальше</h5><ul class=\"lad\">{0}<li class=\"now\"><b>{1}</b><span class=\"str\"></span><em>сейчас</em></li>{2}</ul>", [sh.map(x => row(x, 'r')).join(''), fmt(a.price), lg2.map(x => row(x, 's')).join('')]);
   }
-  body += '<details class="more"><summary>Подробнее: биржи, крупнейшие, деривативы</summary><div class="cols">';
-  if (g && g.exch && g.exch.length) body += `<div><h5>По биржам</h5><ul class="kv">${g.exch.slice(0, 6).map(x => `<li><span>${esc(x.ex)}</span><b>${usd(x.T)}</b><em>лонги ${pct(x.L / (x.T || 1))}</em></li>`).join('')}</ul></div>`;
-  if (g && g.largest && g.largest.length) body += `<div><h5>Крупнейшие за сутки</h5><ul class="kv">${g.largest.map(x => `<li><span>${esc(x.ex)} · ${new Date(x.t * 1000).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}</span><b>${usd(x.usd)}</b><em>${x.side === 'LONG' ? 'лонг' : 'шорт'} @ ${fmt(x.p)}</em></li>`).join('')}</ul></div>`;
-  if (ds) body += `<div><h5>Деривативы</h5><ul class="kv">
-      <li><span>Открытый интерес</span><b>${usd(ds.oiUsd)}</b><em class="${ds.oiCh >= 0 ? 'pos' : 'neg'}">${signPct(ds.oiCh)} за 7 дн.</em></li>
-      ${ds.funding != null ? `<li><span>Фандинг</span><b>${num(ds.funding * 100, 4)}%</b><em>${ds.funding > 0.0003 ? 'лонги перегреты' : ds.funding < -0.0001 ? 'шорты платят' : 'нейтрально'}</em></li>` : ''}
-      ${ds.lsAcc != null ? `<li><span>Аккаунтов в лонге</span><b>${pct(ds.lsAcc)}</b><em>${ds.lsAcc > 0.65 ? 'толпа в лонгах' : ds.lsAcc < 0.4 ? 'толпа в шортах' : 'баланс'}</em></li>` : ''}</ul><p class="note">${esc(ds.read)}</p></div>`;
-  body += `</div><p class="note">Факт — ликвидации с 12 бирж (MarginPad), по часам и биржам — CoinBoss. Будущие кластеры — ${L ? esc(L.src) : '—'}: это оценка. На графике полосы — будущие ликвидации, столбики у последней свечи — факт за 24 ч.</p></details>`;
-  return tile('liq', '#ffaa46', 'Ликвидации', val, body);
+  body += __t("<details class=\"more\"><summary>Подробнее: биржи, крупнейшие, деривативы</summary><div class=\"cols\">");
+  if (g && g.exch && g.exch.length) body += __t("<div><h5>По биржам</h5><ul class=\"kv\">{0}</ul></div>", [g.exch.slice(0, 6).map(x => __t("<li><span>{0}</span><b>{1}</b><em>лонги {2}</em></li>", [esc(x.ex), usd(x.T), pct(x.L / (x.T || 1))])).join('')]);
+  if (g && g.largest && g.largest.length) body += __t("<div><h5>Крупнейшие за сутки</h5><ul class=\"kv\">{0}</ul></div>", [g.largest.map(x => `<li><span>${esc(x.ex)} · ${new Date(x.t * 1000).toLocaleTimeString(LOC, { hour: '2-digit', minute: '2-digit' })}</span><b>${usd(x.usd)}</b><em>${x.side === 'LONG' ? __t("лонг") : __t("шорт")} @ ${fmt(x.p)}</em></li>`).join('')]);
+  if (ds) body += __t("<div><h5>Деривативы</h5><ul class=\"kv\">\n      <li><span>Открытый интерес</span><b>{0}</b><em class=\"{1}\">{2} за 7 дн.</em></li>\n      {3}\n      {4}</ul><p class=\"note\">{5}</p></div>", [usd(ds.oiUsd), ds.oiCh >= 0 ? 'pos' : 'neg', signPct(ds.oiCh), ds.funding != null ? __t("<li><span>Фандинг</span><b>{0}%</b><em>{1}</em></li>", [num(ds.funding * 100, 4), ds.funding > 0.0003 ? __t("лонги перегреты") : ds.funding < -0.0001 ? __t("шорты платят") : __t("нейтрально")]) : '', ds.lsAcc != null ? __t("<li><span>Аккаунтов в лонге</span><b>{0}</b><em>{1}</em></li>", [pct(ds.lsAcc), ds.lsAcc > 0.65 ? __t("толпа в лонгах") : ds.lsAcc < 0.4 ? __t("толпа в шортах") : __t("баланс")]) : '', esc(ds.read)]);
+  body += __t("</div><p class=\"note\">Факт — ликвидации с 12 бирж (MarginPad), по часам и биржам — CoinBoss. Будущие кластеры — {0}: это оценка. На графике полосы — будущие ликвидации, столбики у последней свечи — факт за 24 ч.</p></details>", [L ? esc(L.src) : '—']);
+  return tile('liq', '#ffaa46', __t("Ликвидации"), val, body);
 }
 function optTile(a) {
   const o = state.opt;
-  if (!o) return tile('opt', '#7cf0c8', 'Опционы и шорты', 'нет данных', '<p class="mut">Для этой бумаги данных опционов нет (индексы, валюты, сырьё и Мосбиржа). Ориентиры ликвидности — в плитке «Ордер-блоки и ликвидность».</p>');
+  if (!o) return tile('opt', '#7cf0c8', __t("Опционы и шорты"), __t("нет данных"), __t("<p class=\"mut\">Для этой бумаги данных опционов нет (индексы, валюты, сырьё и Мосбиржа). Ориентиры ликвидности — в плитке «Ордер-блоки и ликвидность».</p>"));
   const sh = o.short || {};
-  const val = o.callWall ? `коллы ${fmt(o.callWall)} · путы ${fmt(o.putWall)}` : sh.pctFloat != null ? `шорт ${pct(sh.pctFloat)} флоута` : 'нет данных';
-  return tile('opt', '#7cf0c8', 'Опционы и шорты', val, `<div class="cols">
-    ${o.callWall ? `<div><h5>Стены открытого интереса</h5><ul class="kv">
-      ${(o.callWalls || []).map(([k, oi]) => `<li><span>коллы</span><b>${fmt(k)}</b><em>${oi.toLocaleString('ru-RU')} OI · ${signPct((k - a.price) / a.price)}</em></li>`).join('')}
-      ${(o.putWalls || []).map(([k, oi]) => `<li><span>путы</span><b>${fmt(k)}</b><em>${oi.toLocaleString('ru-RU')} OI · ${signPct((k - a.price) / a.price)}</em></li>`).join('')}
-      <li><span>Max pain</span><b>${fmt(o.maxPain)}</b><em>${signPct((o.maxPain - a.price) / a.price)}</em></li>
-      <li><span>Put/Call по OI</span><b>${o.pcr != null ? num(o.pcr, 2) : '—'}</b><em>${o.pcr > 1.2 ? 'много защиты — страх' : o.pcr < 0.6 ? 'перекос в коллы — жадность' : 'баланс'}</em></li></ul></div>` : ''}
-    ${sh.pctFloat != null || sh.ratio != null ? `<div><h5>Шорт-интерес</h5><ul class="kv">
-      ${sh.pctFloat != null ? `<li><span>В шорте</span><b>${pct(sh.pctFloat)} флоута</b><em>${sh.pctFloat > 0.15 ? 'высокий — риск сквиза' : sh.pctFloat > 0.05 ? 'умеренный' : 'низкий'}</em></li>` : ''}
-      ${sh.ratio != null ? `<li><span>Дней на покрытие</span><b>${num(sh.ratio, 1)}</b><em></em></li>` : ''}
-      ${sh.shares && sh.prior ? `<li><span>За месяц</span><b>${signPct((sh.shares - sh.prior) / sh.prior)}</b><em>${sh.shares > sh.prior ? 'шортов больше' : 'шортов меньше'}</em></li>` : ''}</ul></div>` : ''}
-    </div><p class="note">На фондовом рынке биржи не раскрывают маржинальные позиции, поэтому «карты ликвидаций» нет. Её роль играют опционы: к экспирации цену часто притягивает max pain, а стены коллов и путов работают как сопротивление и поддержку. Высокий шорт-интерес — топливо для резкого роста. Данные — Yahoo Finance (опционы с экспирацией до 50 дней).</p>`);
+  const val = o.callWall ? __t("коллы {0} · путы {1}", [fmt(o.callWall), fmt(o.putWall)]) : sh.pctFloat != null ? __t("шорт {0} флоута", [pct(sh.pctFloat)]) : __t("нет данных");
+  return tile('opt', '#7cf0c8', __t("Опционы и шорты"), val, __t("<div class=\"cols\">\n    {0}\n    {1}\n    </div><p class=\"note\">На фондовом рынке биржи не раскрывают маржинальные позиции, поэтому «карты ликвидаций» нет. Её роль играют опционы: к экспирации цену часто притягивает max pain, а стены коллов и путов работают как сопротивление и поддержку. Высокий шорт-интерес — топливо для резкого роста. Данные — Yahoo Finance (опционы с экспирацией до 50 дней).</p>", [o.callWall ? __t("<div><h5>Стены открытого интереса</h5><ul class=\"kv\">\n      {0}\n      {1}\n      <li><span>Max pain</span><b>{2}</b><em>{3}</em></li>\n      <li><span>Put/Call по OI</span><b>{4}</b><em>{5}</em></li></ul></div>", [(o.callWalls || []).map(([k, oi]) => __t("<li><span>коллы</span><b>{0}</b><em>{1} OI · {2}</em></li>", [fmt(k), oi.toLocaleString(LOC), signPct((k - a.price) / a.price)])).join(''), (o.putWalls || []).map(([k, oi]) => __t("<li><span>путы</span><b>{0}</b><em>{1} OI · {2}</em></li>", [fmt(k), oi.toLocaleString(LOC), signPct((k - a.price) / a.price)])).join(''), fmt(o.maxPain), signPct((o.maxPain - a.price) / a.price), o.pcr != null ? num(o.pcr, 2) : '—', o.pcr > 1.2 ? __t("много защиты — страх") : o.pcr < 0.6 ? __t("перекос в коллы — жадность") : __t("баланс")]) : '', sh.pctFloat != null || sh.ratio != null ? __t("<div><h5>Шорт-интерес</h5><ul class=\"kv\">\n      {0}\n      {1}\n      {2}</ul></div>", [sh.pctFloat != null ? __t("<li><span>В шорте</span><b>{0} флоута</b><em>{1}</em></li>", [pct(sh.pctFloat), sh.pctFloat > 0.15 ? __t("высокий — риск сквиза") : sh.pctFloat > 0.05 ? __t("умеренный") : __t("низкий")]) : '', sh.ratio != null ? __t("<li><span>Дней на покрытие</span><b>{0}</b><em></em></li>", [num(sh.ratio, 1)]) : '', sh.shares && sh.prior ? __t("<li><span>За месяц</span><b>{0}</b><em>{1}</em></li>", [signPct((sh.shares - sh.prior) / sh.prior), sh.shares > sh.prior ? __t("шортов больше") : __t("шортов меньше")]) : '']) : '']));
 }
 function obTile(a) {
   const P = x => signPct((x - a.price) / a.price), bars = state.data[state.tf];
-  const obRow = (o, side) => `<li><span><em class="ob" style="display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;background:${side === 'bull' ? 'rgba(62,230,176,.7)' : 'rgba(255,95,126,.7)'}"></em>${dShort(bars[o.i].t)}</span><b>${fmt(o.bot)}–${fmt(o.top)}</b><em>${P(side === 'bull' ? o.top : o.bot)} · ${o.touches === 0 ? 'нетронут' : 'тест ×' + o.touches}</em></li>`;
+  const obRow = (o, side) => `<li><span><em class="ob" style="display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;background:${side === 'bull' ? 'rgba(62,230,176,.7)' : 'rgba(255,95,126,.7)'}"></em>${dShort(bars[o.i].t)}</span><b>${fmt(o.bot)}–${fmt(o.top)}</b><em>${P(side === 'bull' ? o.top : o.bot)} · ${o.touches === 0 ? __t("нетронут") : __t("тест ×") + o.touches}</em></li>`;
   const ob = a.ob, pl = a.pools;
   const sw = pl.sweeps.filter(x => a.last - x.i <= 20).filter((x, k, arr) => !arr.slice(0, k).some(y => Math.abs(y.i - x.i) <= 3)).slice(0, 2);
-  const val = (!ob.bear[0] && !ob.bull[0] ? 'зон рядом нет' : `${ob.bear[0] ? '▲ ' + fmt(ob.bear[0].bot) : '▲ —'} · ${ob.bull[0] ? '▼ ' + fmt(ob.bull[0].top) : '▼ —'}`) + (sw.length ? ' · сняты стопы' : '');
-  return tile('ob', '#ff8fa6', 'Ордер-блоки и ликвидность', val, `<p class="lead">Зоны, где крупные игроки оставили заявки, и места, где скопились стоп-приказы толпы. Цена часто возвращается к таким местам.</p><div class="cols">
-    <div>${!ob.bear.length && !ob.bull.length ? '<h5>Ордер-блоки</h5><p class="mut">Рядом с ценой активных зон нет.</p>' : `<h5>Продавец выше</h5>${ob.bear.length ? `<ul class="kv">${ob.bear.slice(0, 3).map(o => obRow(o, 'bear')).join('')}</ul>` : '<p class="mut">Актуальных зон продавца в досягаемости нет.</p>'}
-    <h5>Покупатель ниже</h5>${ob.bull.length ? `<ul class="kv">${ob.bull.slice(0, 3).map(o => obRow(o, 'bull')).join('')}</ul>` : '<p class="mut">Актуальных зон покупателя в досягаемости нет.</p>'}`}</div>
-    <div><h5>Скопления стопов</h5><ul class="kv">${pl.above.slice(0, 2).map(g => `<li><span>над хаями${g.n > 1 ? ' ×' + g.n : ''}</span><b>${fmt(g.edge)}</b><em>${P(g.edge)}</em></li>`).join('')}${pl.below.slice(0, 2).map(g => `<li><span>под лоу${g.n > 1 ? ' ×' + g.n : ''}</span><b>${fmt(g.edge)}</b><em>${P(g.edge)}</em></li>`).join('') || '<li><span>нет рядом</span><b></b><em></em></li>'}</ul>
-    ${sw.length ? `<h5>Сбор ликвидности</h5><ul class="kv">${sw.map(x => `<li><span>${dShort(bars[x.i].t)}</span><b>${x.side === 'sell' ? 'под' : 'над'} ${fmt(x.p)}</b><em>тень до ${fmt(x.ext)}</em><small>Закрытие вернулось ${x.side === 'sell' ? 'выше' : 'ниже'} — ложный пробой, стопы толпы забраны.</small></li>`).join('')}</ul>` : ''}</div></div>
-    <details class="more"><summary>Что это</summary><p>Ордер-блок — последняя встречная свеча перед импульсом, сломавшим структуру: там остались заявки крупного игрока. Показаны зоны за последние ${a.LB} бар. в пределах досягаемости${ob.far ? `; ещё ${ob.far} старых/далёких скрыты` : ''}.</p></details>`);
+  const val = (!ob.bear[0] && !ob.bull[0] ? __t("зон рядом нет") : `${ob.bear[0] ? '▲ ' + fmt(ob.bear[0].bot) : '▲ —'} · ${ob.bull[0] ? '▼ ' + fmt(ob.bull[0].top) : '▼ —'}`) + (sw.length ? __t(" · сняты стопы") : '');
+  return tile('ob', '#ff8fa6', __t("Ордер-блоки и ликвидность"), val, __t("<p class=\"lead\">Зоны, где крупные игроки оставили заявки, и места, где скопились стоп-приказы толпы. Цена часто возвращается к таким местам.</p><div class=\"cols\">\n    <div>{0}</div>\n    <div><h5>Скопления стопов</h5><ul class=\"kv\">{1}{2}</ul>\n    {3}</div></div>\n    <details class=\"more\"><summary>Что это</summary><p>Ордер-блок — последняя встречная свеча перед импульсом, сломавшим структуру: там остались заявки крупного игрока. Показаны зоны за последние {4} бар. в пределах досягаемости{5}.</p></details>", [!ob.bear.length && !ob.bull.length ? __t("<h5>Ордер-блоки</h5><p class=\"mut\">Рядом с ценой активных зон нет.</p>") : __t("<h5>Продавец выше</h5>{0}\n    <h5>Покупатель ниже</h5>{1}", [ob.bear.length ? `<ul class="kv">${ob.bear.slice(0, 3).map(o => obRow(o, 'bear')).join('')}</ul>` : __t("<p class=\"mut\">Актуальных зон продавца в досягаемости нет.</p>"), ob.bull.length ? `<ul class="kv">${ob.bull.slice(0, 3).map(o => obRow(o, 'bull')).join('')}</ul>` : __t("<p class=\"mut\">Актуальных зон покупателя в досягаемости нет.</p>")]), pl.above.slice(0, 2).map(g => __t("<li><span>над хаями{0}</span><b>{1}</b><em>{2}</em></li>", [g.n > 1 ? ' ×' + g.n : '', fmt(g.edge), P(g.edge)])).join(''), pl.below.slice(0, 2).map(g => __t("<li><span>под лоу{0}</span><b>{1}</b><em>{2}</em></li>", [g.n > 1 ? ' ×' + g.n : '', fmt(g.edge), P(g.edge)])).join('') || __t("<li><span>нет рядом</span><b></b><em></em></li>"), sw.length ? __t("<h5>Сбор ликвидности</h5><ul class=\"kv\">{0}</ul>", [sw.map(x => __t("<li><span>{0}</span><b>{1} {2}</b><em>тень до {3}</em><small>Закрытие вернулось {4} — ложный пробой, стопы толпы забраны.</small></li>", [dShort(bars[x.i].t), x.side === 'sell' ? __t("под") : __t("над"), fmt(x.p), fmt(x.ext), x.side === 'sell' ? __t("выше") : __t("ниже")])).join('')]) : '', a.LB, ob.far ? __t("; ещё {0} старых/далёких скрыты", [ob.far]) : '']));
 }
 function volTile(a) {
   const vp = a.vp, n = vp.v.length, mx = Math.max(...vp.v), W = 300, H = 150, bh = H / n;
@@ -1386,12 +1408,9 @@ function volTile(a) {
   const bars = vp.v.map((x, i) => { const p = vp.lo + vp.st * (i + 0.5), inVA = p >= vp.val && p <= vp.vah;
     return `<rect x="0" y="${(H - (i + 1) * bh).toFixed(1)}" width="${(x / mx * W * 0.92).toFixed(1)}" height="${Math.max(1, bh - 0.6).toFixed(1)}" fill="${inVA ? 'rgba(159,216,255,.55)' : 'rgba(159,216,255,.22)'}"/>`; }).join('');
   const lineAt = (p, c, t) => `<line x1="0" x2="${W}" y1="${y(p).toFixed(1)}" y2="${y(p).toFixed(1)}" stroke="${c}" stroke-width="1.2" stroke-dasharray="4 3"/><text x="${W - 2}" y="${(y(p) - 3).toFixed(1)}" fill="${c}" font-size="10" text-anchor="end">${t}</text>`;
-  const svg = `<svg viewBox="0 0 ${W} ${H}" style="width:100%;max-width:420px;height:150px;display:block" preserveAspectRatio="none">${bars}${lineAt(vp.poc, '#ffd678', 'POC')}${lineAt(a.price, '#fff', 'цена')}</svg>`;
-  const volLead = `<p class="lead">Больше всего торговали около <b>${fmt(vp.poc)}</b> — цена часто возвращается к этой отметке. Сейчас цена ${a.price > vp.vah ? 'выше основной зоны торгов' : a.price < vp.val ? 'ниже основной зоны торгов' : 'внутри основной зоны торгов'}.</p>`;
-  return tile('vol', '#9fd8ff', 'Профиль объёма', `больше всего сделок у ${fmt(vp.poc)}`, `${volLead}${svg}
-    <details class="more"><summary>Подробнее</summary><ul class="kv"><li><span>Верх зоны (VAH)</span><b>${fmt(vp.vah)}</b><em>${signPct((vp.vah - a.price) / a.price)}</em></li><li><span>Центр (POC)</span><b>${fmt(vp.poc)}</b><em>${signPct((vp.poc - a.price) / a.price)}</em></li><li><span>Низ зоны (VAL)</span><b>${fmt(vp.val)}</b><em>${signPct((vp.val - a.price) / a.price)}</em></li>
-    ${a.per.filter(x => Math.abs(x.p - a.price) / a.price <= Math.exp(2 * a.sigma * Math.sqrt(a.horizon)) - 1).map(x => `<li><span>${esc(x.name)}</span><b>${fmt(x.p)}</b><em>${signPct((x.p - a.price) / a.price)}</em></li>`).join('')}</ul>
-    <p class="note">Профиль за последние ${a.LB} бар.: зона стоимости (VAH–VAL) — где прошло 70% объёма. Вне зоны цена ищет возврат к ней или принятие нового диапазона.</p></details>`);
+  const svg = `<svg viewBox="0 0 ${W} ${H}" style="width:100%;max-width:420px;height:150px;display:block" preserveAspectRatio="none">${bars}${lineAt(vp.poc, '#ffd678', 'POC')}${lineAt(a.price, '#fff', __t("цена"))}</svg>`;
+  const volLead = __t("<p class=\"lead\">Больше всего торговали около <b>{0}</b> — цена часто возвращается к этой отметке. Сейчас цена {1}.</p>", [fmt(vp.poc), a.price > vp.vah ? __t("выше основной зоны торгов") : a.price < vp.val ? __t("ниже основной зоны торгов") : __t("внутри основной зоны торгов")]);
+  return tile('vol', '#9fd8ff', __t("Профиль объёма"), __t("больше всего сделок у {0}", [fmt(vp.poc)]), __t("{0}{1}\n    <details class=\"more\"><summary>Подробнее</summary><ul class=\"kv\"><li><span>Верх зоны (VAH)</span><b>{2}</b><em>{3}</em></li><li><span>Центр (POC)</span><b>{4}</b><em>{5}</em></li><li><span>Низ зоны (VAL)</span><b>{6}</b><em>{7}</em></li>\n    {8}</ul>\n    <p class=\"note\">Профиль за последние {9} бар.: зона стоимости (VAH–VAL) — где прошло 70% объёма. Вне зоны цена ищет возврат к ней или принятие нового диапазона.</p></details>", [volLead, svg, fmt(vp.vah), signPct((vp.vah - a.price) / a.price), fmt(vp.poc), signPct((vp.poc - a.price) / a.price), fmt(vp.val), signPct((vp.val - a.price) / a.price), a.per.filter(x => Math.abs(x.p - a.price) / a.price <= Math.exp(2 * a.sigma * Math.sqrt(a.horizon)) - 1).map(x => `<li><span>${esc(x.name)}</span><b>${fmt(x.p)}</b><em>${signPct((x.p - a.price) / a.price)}</em></li>`).join(''), a.LB]));
 }
 
 function drawChart() {
@@ -1405,7 +1424,7 @@ function drawChart() {
     rightPriceScale: { borderVisible: false, scaleMargins: { top: 0.08, bottom: 0.2 } },
     timeScale: { borderVisible: false, timeVisible: state.tf === '4h', rightOffset: 4 },
     crosshair: { mode: 0, vertLine: { color: 'rgba(255,255,255,.25)', labelBackgroundColor: '#3b3470' }, horzLine: { color: 'rgba(255,255,255,.25)', labelBackgroundColor: '#3b3470' } },
-    localization: { locale: 'ru-RU', priceFormatter: fmt }, handleScale: { axisPressedMouseMove: true }
+    localization: { locale: LOC, priceFormatter: fmt }, handleScale: { axisPressedMouseMove: true }
   });
   const pf = { type: 'price', precision: prec, minMove: Math.pow(10, -prec) };
   const cs = chart.addCandlestickSeries({ upColor: '#3ee6b0', downColor: '#ff5f7e', borderVisible: false, wickUpColor: '#3ee6b0', wickDownColor: '#ff5f7e', priceFormat: pf });
@@ -1426,16 +1445,16 @@ function drawChart() {
     line({ color: 'rgba(214,170,255,.9)', lineWidth: 2 }).setData([start, ...w.labels].map(p => ({ time: bars[p.i].t, value: p.p })));
     for (const l of w.labels) marks.push({ time: bars[l.i].t, position: l.t === 'H' ? 'aboveBar' : 'belowBar', color: '#e2c6ff', shape: 'circle', text: l.label, size: 0.6 });
   }
-  if (L.ma) for (const c of a.crosses) marks.push({ time: bars[c.i].t, position: c.type === 'golden' ? 'belowBar' : 'aboveBar', color: c.type === 'golden' ? '#3ee6b0' : '#ff5f7e', shape: c.type === 'golden' ? 'arrowUp' : 'arrowDown', text: c.type === 'golden' ? 'Золотой крест' : 'Крест смерти' });
-  for (const dv of a.divs) marks.push({ time: bars[dv.i].t, position: dv.type === 'bear' ? 'aboveBar' : 'belowBar', color: '#ffd678', shape: dv.type === 'bear' ? 'arrowDown' : 'arrowUp', text: 'Дивергенция' });
+  if (L.ma) for (const c of a.crosses) marks.push({ time: bars[c.i].t, position: c.type === 'golden' ? 'belowBar' : 'aboveBar', color: c.type === 'golden' ? '#3ee6b0' : '#ff5f7e', shape: c.type === 'golden' ? 'arrowUp' : 'arrowDown', text: c.type === 'golden' ? __t("Золотой крест") : __t("Крест смерти") });
+  for (const dv of a.divs) marks.push({ time: bars[dv.i].t, position: dv.type === 'bear' ? 'aboveBar' : 'belowBar', color: '#ffd678', shape: dv.type === 'bear' ? 'arrowDown' : 'arrowUp', text: __t("Дивергенция") });
   if (L.liq) {
-    for (const x of a.pools.sweeps.filter(x => a.last - x.i <= 20).filter((x, k, arr) => !arr.slice(0, k).some(y => Math.abs(y.i - x.i) <= 3)).slice(0, 2)) marks.push({ time: bars[x.i].t, position: x.side === 'sell' ? 'belowBar' : 'aboveBar', color: '#ffd678', shape: x.side === 'sell' ? 'arrowUp' : 'arrowDown', text: innerWidth < 600 ? 'Сбор' : 'Сбор ликвидности' });
+    for (const x of a.pools.sweeps.filter(x => a.last - x.i <= 20).filter((x, k, arr) => !arr.slice(0, k).some(y => Math.abs(y.i - x.i) <= 3)).slice(0, 2)) marks.push({ time: bars[x.i].t, position: x.side === 'sell' ? 'belowBar' : 'aboveBar', color: '#ffd678', shape: x.side === 'sell' ? 'arrowUp' : 'arrowDown', text: innerWidth < 600 ? __t("Сбор") : __t("Сбор ликвидности") });
     const lgst = null;
     if (lgst && lgst.length) {
       const agg = new Map();
       for (const e of lgst) { let i = N - 1; while (i > 0 && bars[i].t > e.t) i--; const g = agg.get(i) || { long: 0, short: 0 }; g[e.side === 'LONG' ? 'long' : 'short'] += e.usd; agg.set(i, g); }
       [...agg.entries()].slice(0, 2).forEach(([i, g]) => { const lg = g.long >= g.short;
-        marks.push({ time: bars[i].t, position: lg ? 'belowBar' : 'aboveBar', color: lg ? '#ffaa46' : '#5abeff', shape: 'square', text: innerWidth < 600 ? '' : `Ликв. ${lg ? 'лонгов' : 'шортов'} ${usd(Math.max(g.long, g.short))}` }); });
+        marks.push({ time: bars[i].t, position: lg ? 'belowBar' : 'aboveBar', color: lg ? '#ffaa46' : '#5abeff', shape: 'square', text: innerWidth < 600 ? '' : __t("Ликв. {0} {1}", [lg ? __t("лонгов") : __t("шортов"), usd(Math.max(g.long, g.short))]) }); });
     }
   }
   const seenM = new Set(); const mk = marks.filter(m => { const k = m.time + m.position + m.text; if (seenM.has(k)) return false; seenM.add(k); return true; });
@@ -1444,7 +1463,7 @@ function drawChart() {
   const taken = L.fc && a.wave ? [...a.wave.next.targets, a.wave.next.invalid] : [];
   if (L.fib && a.fib) for (const f of a.fib.levels) {
     const key = [0.382, 0.5, 0.618, 1.618].includes(f.r) && !taken.some(t => Math.abs(t - f.p) < a.atr * 0.3);
-    cs.createPriceLine({ price: f.p, color: f.kind === 'ext' ? 'rgba(255,180,90,.45)' : 'rgba(255,214,120,.38)', lineWidth: 1, lineStyle: 2, axisLabelVisible: key, title: (key ? 'Ф ' : '') + String(f.r).replace('.', ',') });
+    cs.createPriceLine({ price: f.p, color: f.kind === 'ext' ? 'rgba(255,180,90,.45)' : 'rgba(255,214,120,.38)', lineWidth: 1, lineStyle: 2, axisLabelVisible: key, title: (key ? __t("Ф ") : '') + String(f.r).replace('.', ',') });
   }
   if (L.lv) {
     a.res.forEach((l, i) => cs.createPriceLine({ price: l.p, color: 'rgba(255,95,126,.55)', lineWidth: l.fib ? 2 : 1, lineStyle: 0, axisLabelVisible: i === 0, title: 'R' + (i + 1) }));
@@ -1462,8 +1481,8 @@ function drawChart() {
     }
     line({ color: col, lineWidth: 2, lineStyle: 2, pointMarkersVisible: true }).setData(pts);
     if (main.key !== 'side') {
-      main.targets.forEach((t, j) => cs.createPriceLine({ price: t.p, color: main.bias > 0 ? 'rgba(62,230,176,.9)' : 'rgba(255,95,126,.9)', lineWidth: 1, lineStyle: 3, axisLabelVisible: true, title: `Цель ${j + 1} · ${pct(t.touch)}` }));
-      cs.createPriceLine({ price: main.invalid, color: 'rgba(255,255,255,.6)', lineWidth: 1, lineStyle: 1, axisLabelVisible: true, title: 'Отмена' });
+      main.targets.forEach((t, j) => cs.createPriceLine({ price: t.p, color: main.bias > 0 ? 'rgba(62,230,176,.9)' : 'rgba(255,95,126,.9)', lineWidth: 1, lineStyle: 3, axisLabelVisible: true, title: __t("Цель {0} · {1}", [j + 1, pct(t.touch)]) }));
+      cs.createPriceLine({ price: main.invalid, color: 'rgba(255,255,255,.6)', lineWidth: 1, lineStyle: 1, axisLabelVisible: true, title: __t("Отмена") });
     }
     const up = [], dn = [];
     for (let j = 0; j <= H; j += Math.max(1, Math.round(H / 24))) { const k = a.sigma * Math.sqrt(j); up.push({ time: tAt(N - 1 + j), value: a.price * Math.exp(k) }); dn.push({ time: tAt(N - 1 + j), value: a.price * Math.exp(-k) }); }
@@ -1497,7 +1516,7 @@ function paintOverlay(cs) {
   const a = state.a, L = state.layers, ts = chart.timeScale(), plotW = ts.width(), plotH = H - (ts.height ? ts.height() : 28);
   g.save(); g.beginPath(); g.rect(0, 0, plotW, plotH); g.clip();
   g.font = '600 10px Onest, system-ui, sans-serif'; g.textBaseline = 'top';
-  if (L.ob) for (const [arr, fill, line, tag] of [[a.ob.bull, 'rgba(62,230,176,.13)', 'rgba(62,230,176,.55)', 'OB спрос'], [a.ob.bear, 'rgba(255,95,126,.13)', 'rgba(255,95,126,.55)', 'OB предложение']]) {
+  if (L.ob) for (const [arr, fill, line, tag] of [[a.ob.bull, 'rgba(62,230,176,.13)', 'rgba(62,230,176,.55)', __t("OB спрос")], [a.ob.bear, 'rgba(255,95,126,.13)', 'rgba(255,95,126,.55)', __t("OB предложение")]]) {
     for (const o of arr.slice(0, 3)) {
       const x0 = ts.logicalToCoordinate(o.i), y0 = cs.priceToCoordinate(o.top), y1 = cs.priceToCoordinate(o.bot);
       if (x0 == null || y0 == null || y1 == null) continue;
@@ -1505,13 +1524,13 @@ function paintOverlay(cs) {
       if (w <= 0) continue;
       g.fillStyle = fill; g.fillRect(x, y0, w, h);
       g.strokeStyle = line; g.lineWidth = 1; g.strokeRect(x + .5, y0 + .5, w - 1, h - 1);
-      g.fillStyle = line; g.fillText(plotW < 500 ? 'OB' : tag + (o.touches ? '' : ' · нетронут'), x + 4, y0 + 2);
+      g.fillStyle = line; g.fillText(plotW < 500 ? 'OB' : tag + (o.touches ? '' : __t(" · нетронут")), x + 4, y0 + 2);
     }
   }
   if (L.liq) {
     const Lq = state.liq, maxW = Math.min(150, plotW * 0.2);
     if (Lq && Lq.bins.length) {
-      const bh = Math.max(2, Math.abs(cs.priceToCoordinate(a.price) - cs.priceToCoordinate(a.price + Lq.bin)));
+      const bh = Math.min(7, Math.max(2, Math.abs(cs.priceToCoordinate(a.price) - cs.priceToCoordinate(a.price + Lq.bin))));
       for (const b of Lq.bins) {
         const y = cs.priceToCoordinate(b.p); if (y == null || y < 0 || y > plotH) continue;
         const v = b.w; if (v < 0.05) continue;
@@ -1524,7 +1543,7 @@ function paintOverlay(cs) {
         for (const c of [Lq.longs.slice().sort((x, y) => y.usd - x.usd)[0], Lq.shorts.slice().sort((x, y) => y.usd - x.usd)[0]].filter(Boolean)) {
           const y = cs.priceToCoordinate(c.p); if (y == null || y < 8 || y > plotH - 8 || used.some(u => Math.abs(u - y) < 14)) continue; used.push(y);
           g.fillStyle = c.p < a.price ? '#ffc98a' : '#a9dcff';
-          g.fillText(`${c.p < a.price ? 'лонги' : 'шорты'} ${usd(c.usd)}`, plotW - maxW - 6, y - 6);
+          g.fillText(`${c.p < a.price ? __t("лонги") : __t("шорты")} ${usd(c.usd)}`, plotW - maxW - 6, y - 6);
         }
         g.textAlign = 'left'; }
     }
@@ -1533,7 +1552,7 @@ function paintOverlay(cs) {
       const bin = a.price * 0.0025, m = new Map();
       for (const b of R.buckets) { const k = Math.round(b.p / bin); const o = m.get(k) || { p: k * bin, long: 0, short: 0 }; o.long += b.long; o.short += b.short; m.set(k, o); }
       const arr = [...m.values()], mx = Math.max(1, ...arr.map(x => x.long + x.short)), w2 = Math.min(120, plotW * 0.16);
-      const bh2 = Math.max(2, Math.abs(cs.priceToCoordinate(a.price) - cs.priceToCoordinate(a.price + bin)) - 1);
+      const bh2 = Math.min(6, Math.max(2, Math.abs(cs.priceToCoordinate(a.price) - cs.priceToCoordinate(a.price + bin)) - 1));
       for (const x of arr) {
         const y = cs.priceToCoordinate(x.p); if (y == null || y < 0 || y > plotH) continue;
         const wl = x.long / mx * w2, wsx = x.short / mx * w2;
@@ -1541,14 +1560,14 @@ function paintOverlay(cs) {
         if (wsx > 0.5) { g.fillStyle = 'rgba(90,190,255,.9)'; g.fillRect(xl - 4 - wl - wsx, y - bh2 / 2, wsx, bh2); }
       }
       if (plotW >= 500) { const top = arr.slice().sort((p, q) => (q.long + q.short) - (p.long + p.short))[0];
-        if (top) { const y = cs.priceToCoordinate(top.p); if (y != null) { g.textAlign = 'right'; g.fillStyle = '#fff'; g.fillText(`24 ч: ${usd(top.long + top.short)}`, xl - 6 - (top.long + top.short) / mx * w2, y - 5); g.textAlign = 'left'; } } }
+        if (top) { const y = cs.priceToCoordinate(top.p); if (y != null) { g.textAlign = 'right'; g.fillStyle = '#fff'; g.fillText(__t("24 ч: {0}", [usd(top.long + top.short)]), xl - 6 - (top.long + top.short) / mx * w2, y - 5); g.textAlign = 'left'; } } }
     }
     g.setLineDash([3, 4]); g.lineWidth = 1;
     for (const p of [...a.pools.above.slice(0, 2), ...a.pools.below.slice(0, 2)]) {
       const y = cs.priceToCoordinate(p.edge), x0 = ts.logicalToCoordinate(p.last);
       if (y == null || x0 == null) continue;
       g.strokeStyle = 'rgba(255,214,120,.7)'; g.beginPath(); g.moveTo(Math.max(0, x0), y); g.lineTo(plotW, y); g.stroke();
-      g.fillStyle = 'rgba(255,214,120,.9)'; if (plotW >= 500) g.fillText(p.t === 'H' ? 'стопы над хаями' : 'стопы под лоу', Math.max(2, x0) + 4, p.t === 'H' ? y - 13 : y + 2);
+      g.fillStyle = 'rgba(255,214,120,.9)'; if (plotW >= 500) g.fillText(p.t === 'H' ? __t("стопы над хаями") : __t("стопы под лоу"), Math.max(2, x0) + 4, p.t === 'H' ? y - 13 : y + 2);
     }
     g.setLineDash([]);
   }
@@ -1557,23 +1576,41 @@ function paintOverlay(cs) {
 
 function copySummary() {
   const a = state.a; if (!a) return;
-  const v = verdict(a), t = [`${state.disp} · ${TF[state.tf].name} · ${fmt(a.price)} · горизонт ${HOR[state.tf]}`, v.h, `Рост ${pct(a.prob.up)} / боковик ${pct(a.prob.side)} / снижение ${pct(a.prob.down)}`,
-    ...a.scenarios.map(s => `${s.title} (${pct(s.p)}): ${s.targets.map(x => fmt(x.p) + (x.why && s.key !== 'side' ? ' [' + x.why + ']' : '')).join(' → ')}${s.invalid != null ? ', отмена ' + fmt(s.invalid) : ''}`),
-    `Ордер-блоки: продавец ${a.ob.bear.slice(0, 2).map(o => fmt(o.bot) + '–' + fmt(o.top)).join(', ') || '—'}; покупатель ${a.ob.bull.slice(0, 2).map(o => fmt(o.bot) + '–' + fmt(o.top)).join(', ') || '—'}`,
-    state.liq ? `Ликвидации (оценка): шорты ${state.liq.shorts.map(x => fmt(x.p) + ' ' + usd(x.usd)).join(', ') || '—'}; лонги ${state.liq.longs.map(x => fmt(x.p) + ' ' + usd(x.usd)).join(', ') || '—'}` : '',
-    `Сопротивления: ${a.res.map(l => fmt(l.p)).join(', ') || '—'}; поддержки: ${a.sup.map(l => fmt(l.p)).join(', ') || '—'}`, '', ...story(a)].filter(x => x !== '').join('\n');
-  navigator.clipboard.writeText(t).then(() => { const b = $('#copy'); b.textContent = 'Скопировано'; setTimeout(() => b.textContent = 'Скопировать разбор', 1600); }).catch(() => {});
+  const v = verdict(a), t = [__t("{0} · {1} · {2} · горизонт {3}", [state.disp, TF[state.tf].name, fmt(a.price), HOR[state.tf]]), v.h, __t("Рост {0} / боковик {1} / снижение {2}", [pct(a.prob.up), pct(a.prob.side), pct(a.prob.down)]),
+    ...a.scenarios.map(s => `${s.title} (${pct(s.p)}): ${s.targets.map(x => fmt(x.p) + (x.why && s.key !== 'side' ? ' [' + x.why + ']' : '')).join(' → ')}${s.invalid != null ? __t(", отмена ") + fmt(s.invalid) : ''}`),
+    __t("Ордер-блоки: продавец {0}; покупатель {1}", [a.ob.bear.slice(0, 2).map(o => fmt(o.bot) + '–' + fmt(o.top)).join(', ') || '—', a.ob.bull.slice(0, 2).map(o => fmt(o.bot) + '–' + fmt(o.top)).join(', ') || '—']),
+    state.liq ? __t("Ликвидации (оценка): шорты {0}; лонги {1}", [state.liq.shorts.map(x => fmt(x.p) + ' ' + usd(x.usd)).join(', ') || '—', state.liq.longs.map(x => fmt(x.p) + ' ' + usd(x.usd)).join(', ') || '—']) : '',
+    __t("Сопротивления: {0}; поддержки: {1}", [a.res.map(l => fmt(l.p)).join(', ') || '—', a.sup.map(l => fmt(l.p)).join(', ') || '—']), '', ...story(a)].filter(x => x !== '').join('\n');
+  navigator.clipboard.writeText(t).then(() => { const b = $('#copy'); b.textContent = __t("Скопировано"); setTimeout(() => b.textContent = __t("Скопировать разбор"), 1600); }).catch(() => {});
 }
 
 /* ---------- события ---------- */
 $('#f').addEventListener('submit', e => { e.preventDefault(); const q = $('#q').value; $('#q').blur(); run(q); });
 $('#quick').addEventListener('click', e => { const b = e.target.closest('[data-q]'); if (!b) return; $('#q').value = b.dataset.q; run(b.dataset.q); });
-$('#tfs').addEventListener('click', e => { const b = e.target.closest('[data-tf]'); if (!b || b.disabled) return; state.tf = b.dataset.tf; compute(); });
+$('#tfs').addEventListener('click', e => {
+  if (e.target.closest('[data-spec]')) { toggleSpec(); return; }
+  const b = e.target.closest('[data-tf]'); if (!b || b.disabled) return; state.tf = b.dataset.tf; compute(); });
+$('#spec').addEventListener('click', e => { const b = e.target.closest('.tfgrid [data-tf]'); if (!b || b.dataset.tf === state.tf || !state.data[b.dataset.tf]) return; state.tf = b.dataset.tf; compute(); });
+async function loadIntra() {
+  const [m15, h1] = await Promise.all(['15m', '1h'].map(k => getBars(state.market, state.sym, k).then(x => x.bars).catch(() => null)));
+  state.data['15m'] = m15; state.data['1h'] = h1;
+}
+async function toggleSpec() {
+  state.spec = !state.spec; store.set('az_spec', state.spec ? '1' : '');
+  if (state.spec) {
+    if (!state.data['15m'] || !state.data['1h']) { setStatus('load', __t("Загружаю 15-минутный и часовой графики…")); await loadIntra(); setStatus(); }
+    state.tf = state.data['15m'] ? '15m' : '1h';
+  } else state.tf = '1d';
+  compute();
+}
 $('#verdict').addEventListener('click', e => { const b = e.target.closest('.mtf [data-tf]'); if (!b || b.dataset.tf === state.tf) return; state.tf = b.dataset.tf; compute(); scrollTo({ top: 0, behavior: 'smooth' }); });
 $('#layers').addEventListener('click', e => { const b = e.target.closest('[data-ly]'); if (!b) return; state.layers[b.dataset.ly] = !state.layers[b.dataset.ly]; b.classList.toggle('on'); drawChart(); });
 $('#copy').addEventListener('click', copySummary);
 document.addEventListener('toggle', e => { const d = e.target; if (d && d.dataset && d.dataset.k) state.open[d.dataset.k] = d.open; }, true);
 $('#proxy').value = store.get('az_proxy') || '';
+$('#lang').textContent = LANG === 'en' ? 'RU' : 'EN';
+$('#lang').addEventListener('click', () => { try { localStorage.setItem('az_lang', LANG === 'en' ? 'ru' : 'en'); } catch (e) {} location.reload(); });
+state.spec = store.get('az_spec') === '1';
 $('#proxy').addEventListener('change', e => store.set('az_proxy', e.target.value.trim()));
 addEventListener('hashchange', () => { const h = decodeURIComponent(location.hash.slice(1)); if (h && h.toUpperCase() !== state.q) { $('#q').value = h; run(h); } });
 
