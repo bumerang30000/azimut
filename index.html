@@ -26,7 +26,25 @@ body{margin:0;min-height:100vh;color:var(--ink);font:16px/1.55 Onest,system-ui,-
 @media (prefers-reduced-motion:reduce){.sky i{animation:none}.spin{animation:none!important}}
 .glass{background:linear-gradient(140deg,rgba(255,255,255,.11),rgba(255,255,255,.035));-webkit-backdrop-filter:blur(22px) saturate(160%);backdrop-filter:blur(22px) saturate(160%);border:1px solid var(--line);border-radius:var(--r);box-shadow:0 18px 50px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.16)}
 .wrap{max-width:1240px;margin:0 auto;padding:max(18px,env(safe-area-inset-top)) max(4vw,14px) max(28px,env(safe-area-inset-bottom))}
-.top{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.top{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-top:var(--tg-content-safe-area-inset-top,0px)}
+.me{display:flex;align-items:center;gap:12px;min-width:0;flex:1;padding:8px 14px 8px 8px;border-radius:999px;border:1px solid var(--line);color:var(--ink);font:inherit;text-align:left;cursor:pointer}
+.me .mt{min-width:0}.me b{display:block;font-size:16px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.me small{display:block;font-size:12.5px;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.av{width:44px;height:44px;border-radius:50%;object-fit:cover;flex:none;box-shadow:0 0 0 2px rgba(201,167,255,.55),0 4px 14px rgba(120,80,255,.35);background:#1a1838}
+.av.ini{display:grid;place-items:center;font-weight:700;font-size:16px;background:linear-gradient(135deg,#7b5cff,#3ea6ff);color:#fff}.av.ini svg{width:22px;height:22px;fill:none;stroke:#fff;stroke-width:1.8}
+.prem{font-style:normal;color:#ffd678;font-size:13px}
+.quota{display:flex;align-items:center;gap:10px;padding:6px 14px 6px 6px;border-radius:999px;border:1px solid var(--line);flex:none}
+.quota .ql small{display:block;font-size:11.5px;color:var(--mut);line-height:1.2}.quota .ql b{display:block;font-size:13.5px;line-height:1.25;white-space:nowrap}
+.quota.empty{border-color:rgba(255,95,126,.55)}
+.qr{position:relative;width:40px;height:40px;display:grid;place-items:center}.qr svg{position:absolute;inset:0;transform:rotate(-90deg)}
+.qr circle{fill:none;stroke-width:3.5;stroke-linecap:round}.qr .bg{stroke:rgba(255,255,255,.12)}.qr b{font-size:14px;position:relative}.qr.inf b{font-size:20px;color:var(--up)}
+@media (max-width:560px){.quota .ql{display:none}.quota{padding:4px}.me{padding:6px 12px 6px 6px}}
+.profp{margin:-4px 0 14px}.profp .ph{display:flex;gap:14px;align-items:center}.profp .ph .av{width:64px;height:64px;font-size:22px}
+.profp .ph b{display:block;font-size:19px}.profp .ph small{display:block;color:var(--mut);font-size:13px}.profp .ph small.ok{color:var(--up)}
+.profp .x{margin-left:auto;align-self:flex-start;width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.06);color:var(--ink);font-size:20px;line-height:1;cursor:pointer}
+.pstats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin:14px 0 6px}.pstats>div{padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08)}
+.pstats small{display:block;font-size:12px;color:var(--mut)}.pstats b{font-size:16px}
+.profp h5{margin:14px 0 8px;font-size:13px;color:var(--mut);text-transform:uppercase;letter-spacing:.04em}.ptk{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+html.tg .langb{height:34px}
 .langb{margin-left:auto;min-width:52px;height:38px;padding:0 14px;border-radius:999px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:var(--ink);font:600 14px/1 inherit;cursor:pointer;letter-spacing:.04em}.langb:hover{background:rgba(255,255,255,.16)}
 .logo{width:38px;height:38px;flex:none}
 .top b{font-size:20px;font-weight:700;letter-spacing:-.01em}.top span{color:var(--mut);font-size:14px}
@@ -220,10 +238,11 @@ details[open]>summary .chev{transform:rotate(180deg)}
 <div class="sky" aria-hidden="true"><i></i><i></i><i></i></div>
 <main class="wrap">
   <div class="top">
-    <svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="18" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.18)"/><path d="M12 44 24 28l9 9 19-21" fill="none" stroke="#c9a7ff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="52" cy="16" r="4" fill="#9fd8ff"/></svg>
-    <div><b>Азимут</b><br><span>Волны, Фибоначчи и уровни по любому тикеру</span></div>
+    <button id="me" class="me glass" type="button" aria-label="Профиль"></button>
+    <div id="quota" class="quota glass"></div>
     <button id="lang" class="langb" type="button" aria-label="Language"></button>
   </div>
+  <section id="profp" class="card glass profp" hidden></section>
   <form id="f" class="glass" autocomplete="off">
     <input id="q" name="q" inputmode="text" autocapitalize="characters" spellcheck="false" placeholder="Тикер: BTC, AAPL, SBER…" aria-label="Тикер">
     <button class="go" type="submit">Разобрать</button>
@@ -255,6 +274,7 @@ details[open]>summary .chev{transform:rotate(180deg)}
     </section>
   </div>
 </main>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script src="i18n.js"></script>
 <script src="smc.js"></script>
 <script>/* Аналитический движок: индикаторы, зигзаг, волны Эллиотта, Фибоначчи, уровни, вероятности */
@@ -1036,6 +1056,7 @@ async function run(q, silent) {
   if (!silent) { setStatus('load', __t("Ищу {0} на биржах…", [esc(q.toUpperCase())])); $('#out').hidden = true; }
   try {
     let r = state.q === q.toUpperCase() && state.market ? null : await resolve(q);
+    if (r && !silent) { if (!(await accUse(r.sym))) { showLimit(); return; } hap('i', 'light'); }
     if (r) { state = { ...state, q: q.toUpperCase(), market: r.market, sym: r.sym, data: { '1d': r.first.bars }, meta: r.first.meta || {} }; }
     else { const f = await getBars(state.market, state.sym, '1d'); state.data['1d'] = f.bars; state.meta = f.meta || state.meta; }
     if (!silent) setStatus('load', __t("Считаю волны, уровни и сценарии…"));
@@ -1631,8 +1652,112 @@ state.spec = store.get('az_spec') === '1';
 $('#proxy').addEventListener('change', e => store.set('az_proxy', e.target.value.trim()));
 addEventListener('hashchange', () => { const h = decodeURIComponent(location.hash.slice(1)); if (h && h.toUpperCase() !== state.q) { $('#q').value = h; run(h); } });
 
-const start = decodeURIComponent(location.hash.slice(1)) || store.get('az_last') || 'BTC';
-$('#q').value = start; run(start);
+/* ---------- Telegram Mini App: аккаунт, профиль, дневной лимит ---------- */
+const TG = window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initData ? window.Telegram.WebApp : null;
+const DAY_LIMIT = 10;
+const acc = { user: null, verified: false, mode: 'local', limit: DAY_LIMIT, used: 0, left: DAY_LIMIT, tickers: [], resetAt: 0, total: 0, admin: false, ready: false };
+const hap = (k, v) => { try { if (TG && TG.HapticFeedback) k === 'n' ? TG.HapticFeedback.notificationOccurred(v) : k === 's' ? TG.HapticFeedback.selectionChanged() : TG.HapticFeedback.impactOccurred(v || 'light'); } catch (e) {} };
+const utcDay = () => new Date().toISOString().slice(0, 10).replace(/-/g, '');
+const nextReset = () => { const n = new Date(); return Date.UTC(n.getUTCFullYear(), n.getUTCMonth(), n.getUTCDate() + 1); };
+function tgSetup() {
+  if (!TG) return;
+  try { TG.ready(); TG.expand(); } catch (e) {}
+  try { if (TG.isVersionAtLeast && TG.isVersionAtLeast('7.7')) TG.disableVerticalSwipes(); } catch (e) {}
+  try { TG.setHeaderColor('#0a0a1c'); TG.setBackgroundColor('#07071a'); if (TG.isVersionAtLeast('7.10')) TG.setBottomBarColor('#07071a'); } catch (e) {}
+  document.documentElement.classList.add('tg');
+  // внешние ссылки открываем через Telegram, чтобы не терять мини-приложение
+  document.addEventListener('click', e => { const a = e.target.closest('a[target="_blank"]'); if (a && TG.openLink) { e.preventDefault(); TG.openLink(a.href); } });
+}
+/* локальный/облачный учёт: облако Telegram (CloudStorage) или localStorage в браузере */
+const cloud = {
+  get: k => new Promise(r => { if (TG && TG.CloudStorage && TG.isVersionAtLeast('6.9')) TG.CloudStorage.getItem(k, (e, v) => r(e ? null : v)); else r(store.get(k)); }),
+  set: (k, v) => new Promise(r => { if (TG && TG.CloudStorage && TG.isVersionAtLeast('6.9')) TG.CloudStorage.setItem(k, v, () => r()); else { store.set(k, v); r(); } })
+};
+async function softLoad() {
+  let l = []; try { l = JSON.parse(await cloud.get('az_d_' + utcDay()) || '[]'); } catch (e) {}
+  acc.tickers = Array.isArray(l) ? l : []; acc.used = acc.tickers.length; acc.left = Math.max(0, DAY_LIMIT - acc.used); acc.resetAt = nextReset();
+}
+async function accInit() {
+  tgSetup();
+  const u = TG && TG.initDataUnsafe && TG.initDataUnsafe.user;
+  if (u) acc.user = { id: String(u.id), first: u.first_name || '', last: u.last_name || '', username: u.username || '', photo: u.photo_url || '', premium: !!u.is_premium };
+  acc.mode = TG ? 'cloud' : 'local';
+  if (TG && ONLINE) {
+    try {
+      const r = await fetch('/api/user?a=me', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ initData: TG.initData }) });
+      const j = await r.json();
+      if (r.ok) {
+        acc.user = { ...acc.user, ...j.user }; acc.verified = j.verified; acc.admin = !!j.admin;
+        if (j.storage) { acc.mode = 'server'; acc.limit = j.limit; acc.used = j.used; acc.left = j.left; acc.tickers = j.tickers || []; acc.resetAt = j.resetAt; acc.total = j.total || 0; acc.since = j.since; }
+      }
+    } catch (e) {}
+  }
+  if (acc.mode !== 'server') await softLoad();
+  acc.ready = true; renderTop();
+}
+/* списать анализ: true — можно анализировать, false — лимит исчерпан */
+async function accUse(ticker) {
+  const t = String(ticker || '').toUpperCase();
+  if (acc.admin) return true;
+  if (acc.mode === 'server') {
+    try {
+      const r = await fetch('/api/user?a=use', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ initData: TG.initData, ticker: t }) });
+      const j = await r.json();
+      if (r.status === 429) { Object.assign(acc, { used: j.used, left: 0, tickers: j.tickers || acc.tickers, resetAt: j.resetAt }); renderTop(); return false; }
+      if (r.ok && j.ok) { Object.assign(acc, { used: j.used, left: j.left, tickers: j.tickers || acc.tickers, resetAt: j.resetAt }); if (!j.repeat) acc.total = (acc.total || 0) + 1; renderTop(); return true; }
+    } catch (e) {}
+    return true;   // сервер недоступен — не мешаем работе
+  }
+  await softLoad();
+  if (acc.tickers.includes(t)) return true;
+  if (acc.tickers.length >= DAY_LIMIT) { renderTop(); return false; }
+  acc.tickers.push(t); await cloud.set('az_d_' + utcDay(), JSON.stringify(acc.tickers));
+  acc.used = acc.tickers.length; acc.left = Math.max(0, DAY_LIMIT - acc.used); renderTop();
+  return true;
+}
+const initials = u => ((u.first || '?')[0] + ((u.last || '')[0] || '')).toUpperCase();
+function avatar(u, size) {
+  if (u && u.photo) return `<img class="av" src="${esc(u.photo)}" alt="" width="${size}" height="${size}" referrerpolicy="no-referrer" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'av ini',textContent:'${esc(initials(u))}'}))">`;
+  return `<span class="av ini">${u ? esc(initials(u)) : '<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>'}</span>`;
+}
+const resetTime = () => new Date(acc.resetAt || nextReset()).toLocaleTimeString(LOC, { hour: '2-digit', minute: '2-digit' });
+function ring() {
+  if (acc.admin || acc.limit == null) return `<span class="qr inf"><b>∞</b></span>`;
+  const left = acc.left ?? DAY_LIMIT, f = Math.max(0, Math.min(1, left / (acc.limit || DAY_LIMIT))), C = 2 * Math.PI * 15;
+  const col = left === 0 ? 'var(--dn)' : left <= 2 ? '#ffd678' : 'var(--up)';
+  return `<span class="qr"><svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="15" class="bg"/><circle cx="18" cy="18" r="15" class="fg" style="stroke:${col};stroke-dasharray:${(C * f).toFixed(1)} ${C.toFixed(1)}"/></svg><b>${left}</b></span>`;
+}
+function renderTop() {
+  const u = acc.user;
+  const name = u ? [u.first, u.last].filter(Boolean).join(' ') || ('@' + u.username) : __t("Гость");
+  const sub = u ? (u.username ? '@' + esc(u.username) : 'ID ' + esc(u.id)) : __t("Откройте в Telegram, чтобы сохранить профиль");
+  $('#me').innerHTML = `${avatar(u, 44)}<span class="mt"><b>${esc(name)}${u && u.premium ? ' <i class="prem" title="Telegram Premium">★</i>' : ''}</b><small>${sub}</small></span>`;
+  $('#quota').innerHTML = `${ring()}<span class="ql"><small>${__t("Анализов сегодня")}</small><b>${acc.admin || acc.limit == null ? __t("без лимита") : __t("осталось {0} из {1}", [acc.left ?? DAY_LIMIT, acc.limit || DAY_LIMIT])}</b></span>`;
+  $('#quota').classList.toggle('empty', !acc.admin && acc.left === 0);
+  if (!$('#profp').hidden) renderProfile();
+}
+function renderProfile() {
+  const u = acc.user;
+  const modeTxt = acc.mode === 'server' ? (acc.verified ? __t("профиль подтверждён Telegram") : __t("профиль Telegram")) : acc.mode === 'cloud' ? __t("учёт в облаке Telegram") : __t("учёт в этом браузере");
+  $('#profp').innerHTML = `<div class="ph">${avatar(u, 64)}<div><b>${u ? esc([u.first, u.last].filter(Boolean).join(' ')) : __t("Гость")}</b><small>${u ? (u.username ? '@' + esc(u.username) + ' · ' : '') + 'ID ' + esc(u.id) : __t("Профиль доступен при запуске из Telegram")}</small><small class="ok">${modeTxt}</small></div><button class="x" id="profx" aria-label="${__t("Закрыть")}">×</button></div>
+    <div class="pstats"><div><small>${__t("Тариф")}</small><b>${acc.admin ? __t("Администратор") : __t("Бесплатный")}</b></div><div><small>${__t("Сегодня")}</small><b>${acc.used ?? 0}${acc.admin || acc.limit == null ? '' : ' / ' + (acc.limit || DAY_LIMIT)}</b></div><div><small>${__t("Всего анализов")}</small><b>${acc.mode === 'server' ? acc.total || 0 : '—'}</b></div><div><small>${__t("Лимит обновится")}</small><b>${resetTime()}</b></div></div>
+    <h5>${__t("Разобрано сегодня")}</h5>
+    <div class="ptk">${acc.tickers.length ? acc.tickers.map(t => `<button class="chip" data-q="${esc(t.replace(/USDT$/, ''))}">${esc(t.replace(/USDT$/, ''))}</button>`).join('') : `<span class="mut">${__t("Пока ничего — начните с любого тикера")}</span>`}</div>
+    <p class="note">${__t("Повторный разбор тикера в течение дня, смена таймфрейма и автообновление лимит не расходуют.")}</p>`;
+}
+function showLimit() {
+  hap('n', 'error');
+  const tk = acc.tickers.map(t => `<button class="chip" data-q="${esc(t.replace(/USDT$/, ''))}">${esc(t.replace(/USDT$/, ''))}</button>`).join('');
+  setStatus('err', `${__t("Дневной лимит исчерпан: {0} из {0} анализов. Новые анализы будут доступны в {1}.", [acc.limit || DAY_LIMIT, resetTime()])}${tk ? `<br><span class="mut">${__t("Без ограничений доступны тикеры, разобранные сегодня:")}</span><span class="ptk">${tk}</span>` : ''}`);
+}
+
+$('#me').addEventListener('click', () => { const p = $('#profp'); p.hidden = !p.hidden; if (!p.hidden) renderProfile(); hap('i', 'light'); });
+$('#quota').addEventListener('click', () => { $('#profp').hidden = false; renderProfile(); });
+$('#profp').addEventListener('click', e => { if (e.target.closest('#profx')) { $('#profp').hidden = true; return; } const c = e.target.closest('[data-q]'); if (c) { $('#profp').hidden = true; $('#q').value = c.dataset.q; run(c.dataset.q); } });
+$('#status').addEventListener('click', e => { const c = e.target.closest('[data-q]'); if (c) { $('#q').value = c.dataset.q; run(c.dataset.q); } });
+renderTop();
+const start = decodeURIComponent((TG && TG.initDataUnsafe && TG.initDataUnsafe.start_param) || location.hash.slice(1)) || store.get('az_last') || 'BTC';
+accInit().finally(() => { $('#q').value = start; run(start); });
 }
 </script>
 </body>
