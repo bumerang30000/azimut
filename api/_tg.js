@@ -1,6 +1,7 @@
 // Проверка подлинности данных Telegram Mini App (initData).
 // 1) BOT_TOKEN задан — классическая проверка HMAC-SHA256 (secret = HMAC("WebAppData", token)).
 // 2) Задан только BOT_ID — проверка Ed25519-подписи Telegram (токен бота не нужен).
+// Если проверка настроена, initData без подписи отклоняется.
 // 3) Ничего не задано — данные принимаются без проверки (verified: false).
 import crypto from 'node:crypto';
 
@@ -37,6 +38,8 @@ export function parseInitData(raw, env = process.env) {
     try { verified = crypto.verify(null, Buffer.from(dcs), ed25519Key(env.TG_PUBKEY || (env.TG_TEST_ENV ? TG_PUB.test : TG_PUB.prod)), b64url(signature)); } catch (e) { verified = false; }
     method = 'ed25519';
     if (!verified) return { ok: false, reason: 'badsig' };
+  } else if (env.BOT_ID || token) {
+    return { ok: false, reason: 'unsigned' };   // проверка настроена — данные без подписи не принимаем
   }
   if (verified && !fresh) return { ok: false, reason: 'expired' };
   return { ok: true, verified, method, user: {
