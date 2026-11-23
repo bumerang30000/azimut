@@ -229,9 +229,9 @@ details[open]>summary .chev{transform:rotate(180deg)}
     <button class="go" type="submit">Разобрать</button>
   </form>
   <div id="quick">
-    <button class="chip" data-q="BTC">BTC</button><button class="chip" data-q="ETH">ETH</button><button class="chip" data-q="SOL">SOL</button><button class="chip" data-q="TON">TON</button>
+    <button class="chip" data-q="BTC">BTC</button><button class="chip" data-q="ETH">ETH</button><button class="chip" data-q="SOL">SOL</button><button class="chip" data-q="GRAM">GRAM</button>
     <button class="chip" data-q="NVDA">NVDA</button><button class="chip" data-q="AAPL">AAPL</button><button class="chip" data-q="TSLA">TSLA</button>
-    <button class="chip" data-q="SBER">SBER</button><button class="chip" data-q="GAZP">GAZP</button><button class="chip" data-q="GC=F">Золото</button><button class="chip" data-q="^GSPC">S&amp;P 500</button>
+    <button class="chip" data-q="SBER">SBER</button><button class="chip" data-q="GAZP">GAZP</button><button class="chip" data-q="GC=F">Золото</button><button class="chip" data-q="PAXG">PAXG</button><button class="chip" data-q="BZ=F">Brent</button><button class="chip" data-q="CL=F">WTI</button><button class="chip" data-q="NG=F">Газ</button><button class="chip" data-q="SI=F">Серебро</button><button class="chip" data-q="^GSPC">S&amp;P 500</button>
   </div>
   <div id="status" class="status glass" hidden></div>
 
@@ -803,7 +803,13 @@ const TF = {
 const MOEX = new Set('SBER SBERP GAZP LKOH ROSN NVTK GMKN YDEX YNDX TATN TATNP MGNT MTSS ALRS CHMF NLMK PLZL SNGS SNGSP VTBR MOEX AFLT PHOR RUAL IRAO HYDR OZON TCSG FIVE X5 PIKK SMLT MAGN BSPB SFIN AFKS RTKM CBOM ENPG HHRU POSI ASTR WUSH SOFL VKCO IMOEX MOEXBC RTSI FEES UPRO MSNG TRNFP SELG BELU MTLR FLOT LENT AQUA GLTR'.split(' '));
 const STOCKS = new Set('AAPL MSFT NVDA TSLA AMZN GOOGL GOOG META NFLX AMD INTC COIN MSTR SPY QQQ DIA IWM AVGO ORCL CRM ADBE PLTR UBER BABA JPM BAC WMT KO PEP DIS NKE V MA PYPL SHOP SQ HOOD IBM CSCO QCOM MU SMCI ARM TSM ASML BA XOM CVX PFE JNJ MRNA LLY GME AMC RIVN LCID NIO SNOW'.split(' '));
 const SRC = { crypto: 'Binance', stock: 'Yahoo Finance', moex: __t("Московская биржа") };
-const MK = { crypto: __t("Криптовалюта"), stock: __t("Фондовый рынок"), moex: __t("Мосбиржа") };
+const MK = { crypto: __t("Криптовалюта"), stock: __t("Фондовый рынок"), moex: __t("Мосбиржа"), fut: __t("Товарный фьючерс") };
+/* Товарные фьючерсы (ближайший контракт, Yahoo Finance) и удобные синонимы ввода */
+const FUT = { 'BZ=F': __t("Нефть Brent"), 'CL=F': __t("Нефть WTI"), 'NG=F': __t("Природный газ"), 'GC=F': __t("Золото"), 'SI=F': __t("Серебро"), 'HG=F': __t("Медь"), 'PL=F': __t("Платина"), 'PA=F': __t("Палладий"), 'ZW=F': __t("Пшеница"), 'ZC=F': __t("Кукуруза"), 'KC=F': __t("Кофе"), 'CC=F': __t("Какао"), 'SB=F': __t("Сахар") };
+const FUT_EN = { 'BZ=F': 'Brent crude oil', 'CL=F': 'WTI crude oil', 'NG=F': 'natural gas', 'GC=F': 'gold', 'SI=F': 'silver', 'HG=F': 'copper', 'PL=F': 'platinum', 'PA=F': 'palladium', 'ZW=F': 'wheat', 'ZC=F': 'corn', 'KC=F': 'coffee', 'CC=F': 'cocoa', 'SB=F': 'sugar' };
+const ALIAS = { BRENT: 'BZ=F', 'НЕФТЬ': 'BZ=F', 'БРЕНТ': 'BZ=F', OIL: 'BZ=F', WTI: 'CL=F', CRUDE: 'CL=F', GAS: 'NG=F', NATGAS: 'NG=F', 'ГАЗ': 'NG=F', GOLD: 'GC=F', 'ЗОЛОТО': 'GC=F', XAU: 'GC=F', XAUUSD: 'GC=F', SILVER: 'SI=F', 'СЕРЕБРО': 'SI=F', XAG: 'SI=F', XAGUSD: 'SI=F', COPPER: 'HG=F', 'МЕДЬ': 'HG=F', PLATINUM: 'PL=F', PALLADIUM: 'PA=F', WHEAT: 'ZW=F', CORN: 'ZC=F', COFFEE: 'KC=F', COCOA: 'CC=F', SUGAR: 'SB=F', TON: 'GRAM', TONCOIN: 'GRAM', SPX: '^GSPC', SP500: '^GSPC', NASDAQ: '^IXIC', NDX: '^NDX', DOW: '^DJI', DXY: 'DX-Y.NYB' };
+/* Переименованные монеты: история старого тикера дошивается перед новым (обмен 1:1) */
+const LEGACY = { GRAMUSDT: 'TONUSDT' };
 
 let state = { q: '', market: null, sym: null, disp: null, meta: {}, data: {}, tf: '1d', a: null, news: [], fng: null, mtf: {}, spec: false, specSum: null, layers: { ma: true, wave: true, fib: false, lv: true, ob: true, liq: true, fc: true }, deriv: null, liq: null, lg: null, opt: null, open: {}, at: null };
 let chart = null, timer = null;
@@ -820,7 +826,7 @@ const signPct = x => (x >= 0 ? '+' : '−') + num(Math.abs(x) * 100, 2) + '%';
 
 /* ---------- сеть ---------- */
 const ONLINE = location.protocol.startsWith('http');
-const CRYPTO_NAMES = { BTC: 'Bitcoin', ETH: 'Ethereum', SOL: 'Solana', TON: 'Toncoin', XRP: 'XRP', BNB: 'BNB', DOGE: 'Dogecoin', ADA: 'Cardano', AVAX: 'Avalanche', LINK: 'Chainlink', DOT: 'Polkadot', TRX: 'TRON', LTC: 'Litecoin', SUI: 'Sui', NEAR: 'NEAR Protocol', APT: 'Aptos', ARB: 'Arbitrum', OP: 'Optimism', PEPE: 'Pepe', SHIB: 'Shiba Inu' };
+const CRYPTO_NAMES = { BTC: 'Bitcoin', ETH: 'Ethereum', SOL: 'Solana', TON: 'Toncoin', GRAM: 'Gram Toncoin', PAXG: 'PAX Gold', XRP: 'XRP', BNB: 'BNB', DOGE: 'Dogecoin', ADA: 'Cardano', AVAX: 'Avalanche', LINK: 'Chainlink', DOT: 'Polkadot', TRX: 'TRON', LTC: 'Litecoin', SUI: 'Sui', NEAR: 'NEAR Protocol', APT: 'Aptos', ARB: 'Arbitrum', OP: 'Optimism', PEPE: 'Pepe', SHIB: 'Shiba Inu' };
 async function fetchJSON(url, ms = 12000) {
   const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), ms);
   try {
@@ -855,8 +861,18 @@ async function getCrypto(sym, tf) {
   for (const h of ['https://data-api.binance.vision', 'https://api.binance.com', 'https://api1.binance.com']) {
     try {
       const j = await fetchJSON(`${h}/api/v3/klines?symbol=${sym}&interval=${t.bin}&limit=1000`);
-      if (Array.isArray(j) && j.length) return j.map(k => ({ t: Math.floor(k[0] / 1000), o: +k[1], h: +k[2], l: +k[3], c: +k[4], v: +k[5] }));
-    } catch (e) { if (e.body && e.body.code === -1121) throw new Error('nosym'); }
+      if (Array.isArray(j) && j.length) {
+        let bars = j.map(k => ({ t: Math.floor(k[0] / 1000), o: +k[1], h: +k[2], l: +k[3], c: +k[4], v: +k[5] }));
+        if (Date.now() / 1000 - bars[bars.length - 1].t > Math.max(3 * 86400, t.step * 3)) throw Object.assign(new Error('nosym'), { stale: true });
+        if (LEGACY[sym] && bars.length < 1000) {
+          try {
+            const old = await fetchJSON(`${h}/api/v3/klines?symbol=${LEGACY[sym]}&interval=${t.bin}&endTime=${bars[0].t * 1000 - 1}&limit=${1000 - bars.length}`);
+            if (Array.isArray(old) && old.length) bars = old.map(k => ({ t: Math.floor(k[0] / 1000), o: +k[1], h: +k[2], l: +k[3], c: +k[4], v: +k[5] })).concat(bars);
+          } catch (e) {}
+        }
+        return bars;
+      }
+    } catch (e) { if (e.stale || (e.body && e.body.code === -1121)) break; }
   }
   const j = await fetchJSON(`https://api.bybit.com/v5/market/kline?category=spot&symbol=${sym}&interval=${t.byb}&limit=1000`);
   const l = j?.result?.list; if (!l || !l.length) throw new Error('nosym');
@@ -906,7 +922,8 @@ async function getBars(market, sym, tf) {
 }
 
 async function resolve(q) {
-  const s = q.trim().toUpperCase().replace(/\s+/g, '');
+  let s = q.trim().toUpperCase().replace(/\s+/g, '');
+  if (ALIAS[s]) s = ALIAS[s];
   const cryptoSym = s.replace(/[-/]/g, '').replace(/USD$/, 'USDT');
   const cs = /(USDT|USDC|FDUSD|BTC|ETH)$/.test(cryptoSym) && cryptoSym.length > 5 ? cryptoSym : cryptoSym + 'USDT';
   let order;
@@ -930,7 +947,7 @@ async function getNews(market, sym, name) {
   const out = [];
   if (ONLINE) {
     const base = sym.replace(/(USDT|USDC|FDUSD)$/, '');
-    const g = market === 'crypto' ? `${CRYPTO_NAMES[base] || base} crypto` : market === 'moex' && LANG !== 'en' ? `${name || sym} акции` : `${name || sym} stock`;
+    const g = market === 'crypto' ? `${CRYPTO_NAMES[base] || base} crypto` : market === 'moex' && LANG !== 'en' ? `${name || sym} акции` : FUT_EN[sym] ? `${FUT_EN[sym]} price` : `${name || sym} stock`;
     try {
       const j = await fetchJSON(`/api/news?q=${encodeURIComponent(q)}&g=${encodeURIComponent(g)}&lang=${market === 'moex' && LANG !== 'en' ? 'ru' : 'en'}`, 15000);
       out.push(...(j.news || []));
@@ -1037,7 +1054,7 @@ async function run(q, silent) {
     state.liq = null;
     if (lg && lg.fwdRaw) state.liq = { ...liqBins(lg.fwdRaw, px), src: __t("MarginPad · 12 бирж") };
     else { try { if (deriv && h4 && window.SMC) { const m = SMC.liqMap(h4, deriv.oi, deriv.taker); if (m) state.liq = { bins: m.bins, bin: m.bin, longs: m.longs, shorts: m.shorts, src: __t("модель по OI ") + deriv.src }; } } catch (e) {} }
-    state.disp = state.market === 'crypto' ? state.sym.replace(/(USDT|USDC|FDUSD|BTC|ETH)$/, '/$1') : state.sym;
+    state.disp = state.market === 'crypto' ? state.sym.replace(/(USDT|USDC|FDUSD|BTC|ETH)$/, '/$1') : FUT[state.sym] || state.sym;
     if (!state.data[state.tf]) state.tf = state.spec ? (state.data['15m'] ? '15m' : state.data['1h'] ? '1h' : '1d') : '1d';
     store.set('az_last', state.q);
     try { if (/^[A-Z0-9]+$/.test(state.q)) history.replaceState(null, '', '#' + state.q); } catch (e) {}
@@ -1273,7 +1290,7 @@ const shortSrc = x => x.replace(__t("кластер ликвидаций"), __t(
 function render() {
   const a = state.a, bars = state.data[state.tf], last = bars[bars.length - 1], prev = bars[bars.length - 2];
   const ch = (last.c - prev.c) / prev.c, v = verdict(a), main = a.scenarios[0];
-  $('#hero').innerHTML = __t("\n    <div class=\"h-id\"><span class=\"badge\">{0}</span><h2>{1}</h2><p>{2}</p></div>\n    <div class=\"h-px\"><b>{3}</b><span class=\"{4}\">{5} за {6}</span></div>", [MK[state.market], esc(state.disp), esc(state.meta.longName || state.meta.shortName || ''), fmt(last.c), ch >= 0 ? 'pos' : 'neg', signPct(ch), TF[state.tf].name.toLowerCase()]);
+  $('#hero').innerHTML = __t("\n    <div class=\"h-id\"><span class=\"badge\">{0}</span><h2>{1}</h2><p>{2}</p></div>\n    <div class=\"h-px\"><b>{3}</b><span class=\"{4}\">{5} за {6}</span></div>", [FUT[state.sym] ? MK.fut : MK[state.market], esc(state.disp), esc(FUT[state.sym] ? __t("ближайший контракт · {0}", [state.sym]) : (state.meta.longName || state.meta.shortName || '')), fmt(last.c), ch >= 0 ? 'pos' : 'neg', signPct(ch), TF[state.tf].name.toLowerCase()]);
   $('#tfs').innerHTML = tfList().map(k => `<button class="tf ${k === state.tf ? 'on' : ''}" data-tf="${k}" ${state.data[k] ? '' : 'disabled'}>${tfName(k)}</button>`).join('') + __t("<button class=\"tf spb {0}\" data-spec=\"1\" title=\"Разбор на 15-минутном и часовом графиках со сверкой со старшими таймфреймами\">⚡ Спекулянт</button>", [state.spec ? 'on' : '']);
   renderSpec();
   $('#layers').innerHTML = [['ma', __t("Средние")], ['wave', __t("Волны")], ['lv', __t("Уровни")], ['ob', __t("Ордер-блоки")], ['liq', __t("Ликвидации")], ['fib', __t("Фибо")], ['fc', __t("Прогноз")]].map(([k, n]) => `<button class="chip ${state.layers[k] ? 'on' : ''}" data-ly="${k}">${n}</button>`).join('');
