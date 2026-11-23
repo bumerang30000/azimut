@@ -1,14 +1,14 @@
 // Свечи акций, индексов, валют и сырья. Ответ в «родном» формате Yahoo chart — клиенту без разницы, откуда данные
 import { yf, UA, cors } from './_yahoo.js';
-const DAYS = { '1y': 365, '2y': 730, '5y': 1826, '10y': 3652, 'max': 365 * 40 };
-const OK_INT = new Set(['60m', '1h', '1d', '1wk', '1mo']);
+const DAYS = { '60d': 59, '1y': 365, '2y': 730, '5y': 1826, '10y': 3652, 'max': 365 * 40 };
+const OK_INT = new Set(['15m', '60m', '1h', '1d', '1wk', '1mo']);
 
 export default async function handler(req, res) {
   const symbol = String(req.query.symbol || '').trim().slice(0, 32);
   const range = DAYS[req.query.range] ? req.query.range : '5y';
   const interval = OK_INT.has(req.query.interval) ? req.query.interval : '1d';
   if (!symbol) { cors(res, 0); return res.status(400).json({ error: 'symbol' }); }
-  cors(res, interval === '60m' || interval === '1h' ? 60 : 300);
+  cors(res, interval === '15m' ? 30 : interval === '60m' || interval === '1h' ? 60 : 300);
 
   // 1) библиотека yahoo-finance2
   try {
