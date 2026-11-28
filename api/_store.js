@@ -20,14 +20,25 @@ export async function readBody(req) {
 }
 
 /* ---------- Supabase ---------- */
-async function rpc(fn, args) {
+export async function rpc(fn, args) {
   const h = { apikey: SB_KEY, 'Content-Type': 'application/json' };
   if (!SB_KEY.startsWith('sb_')) h.Authorization = `Bearer ${SB_KEY}`;   // старые JWT-ключи; новые sb_secret_ — только в apikey
   const r = await fetch(`${SB_URL}/rest/v1/rpc/${fn}`, { method: 'POST', headers: h, body: JSON.stringify(args), signal: AbortSignal.timeout(7000) });
   if (!r.ok) throw new Error('supabase ' + r.status + ' ' + (await r.text()).slice(0, 200));
   return r.json();
 }
-const prof = u => ({ p_user: u.id, p_name: [u.first, u.last].filter(Boolean).join(' ').slice(0, 128), p_username: u.username || '', p_photo: u.photo || '', p_premium: !!u.premium, p_lang: u.lang || '' });
+export const prof = u => ({ p_user: u.id, p_name: [u.first, u.last].filter(Boolean).join(' ').slice(0, 128), p_username: u.username || '', p_photo: u.photo || '', p_premium: !!u.premium, p_lang: u.lang || '' });
+
+export const hasSb = !!(SB_URL && SB_KEY);
+// запрос к таблицам Supabase (PostgREST) с серверным ключом
+export async function sb(path, { method = 'GET', body, prefer } = {}) {
+  const h = { apikey: SB_KEY, 'Content-Type': 'application/json' };
+  if (!SB_KEY.startsWith('sb_')) h.Authorization = `Bearer ${SB_KEY}`;
+  if (prefer) h.Prefer = prefer;
+  const r = await fetch(`${SB_URL}/rest/v1/${path}`, { method, headers: h, body: body == null ? undefined : JSON.stringify(body), signal: AbortSignal.timeout(7000) });
+  if (!r.ok) throw new Error('supabase ' + r.status + ' ' + (await r.text()).slice(0, 200));
+  const t = await r.text(); return t ? JSON.parse(t) : null;
+}
 
 /* ---------- Upstash Redis ---------- */
 async function pipe(cmds) {
