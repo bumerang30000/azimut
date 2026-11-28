@@ -164,6 +164,13 @@ details input{width:100%;margin-top:8px;background:rgba(0,0,0,.25);border:1px so
 .cp{display:flex;flex-direction:column;padding:8px 12px;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);min-width:92px}
 .cp small{font-size:11.5px;color:var(--mut)}.cp b{font-size:16px}.cp em{font-style:normal;font-size:12px;color:var(--mut)}
 .kv.ent li{grid-template-columns:minmax(0,1fr) auto auto}.kv.ent li span{min-width:0}.kv.ent li b{white-space:nowrap}.kv.ent li.now{background:rgba(255,214,120,.12)}.kv.ent li em{font-weight:700}
+.cp{position:relative}.cp:has(.bell){padding-right:40px}.cp .bell{position:absolute;top:6px;right:6px;margin:0}
+.bell{display:inline-grid;place-items:center;width:28px;height:28px;margin:0 6px 0 0;padding:0;border-radius:50%;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.06);font-size:14px;line-height:1;cursor:pointer;vertical-align:middle;filter:grayscale(1) opacity(.75);transition:.15s}
+.bell:hover{filter:none}.bell.on{filter:none;background:rgba(255,214,120,.22);border-color:rgba(255,214,120,.7);box-shadow:0 0 10px rgba(255,214,120,.35)}
+.toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);max-width:min(92vw,520px);padding:12px 16px;border-radius:16px;background:rgba(20,18,48,.94);border:1px solid rgba(255,255,255,.16);color:var(--ink);font-size:14px;box-shadow:0 10px 30px rgba(0,0,0,.45);opacity:0;pointer-events:none;transition:.25s;z-index:50}
+.toast.show{opacity:1;transform:translateX(-50%)}
+.alist{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:6px}.alist li{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08)}
+.alist li b{white-space:nowrap}.alist li small{color:var(--mut);flex:1;min-width:0}.alist li.done{opacity:.6}.alist .x{width:28px;height:28px;font-size:17px;margin-left:auto}
 .cp.up{border-color:rgba(62,230,176,.45)}.cp.down{border-color:rgba(255,95,126,.45)}.cp.stop{border-style:dashed;border-color:rgba(255,255,255,.35)}
 .why{list-style:none;margin:0 0 6px;padding:0}.scx .why li,.why li{display:block;border:0;font-size:14px;line-height:1.4;padding:5px 0 5px 16px;position:relative;color:var(--mut)}.why li b{color:var(--ink);font-weight:600}
 .why li::before{content:'';position:absolute;left:2px;top:12px;width:6px;height:6px;border-radius:50%;background:currentColor}
@@ -244,6 +251,7 @@ details[open]>summary .chev{transform:rotate(180deg)}
     <button id="lang" class="langb" type="button" aria-label="Language"></button>
   </div>
   <section id="profp" class="card glass profp" hidden></section>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <form id="f" class="glass" autocomplete="off">
     <input id="q" name="q" inputmode="text" autocapitalize="characters" spellcheck="false" placeholder="Тикер: BTC, AAPL, SBER…" aria-label="Тикер">
     <button class="go" type="submit">Разобрать</button>
@@ -1430,22 +1438,24 @@ function renderSpec() {
   const tier = D === 0 || lead < 0.05 ? 0 : main >= 0.55 && S.agree >= Math.min(3, S.n) && !S.counter ? 2 : 1;
   const conf = D > 0 ? ((a0.res[0] || {}).p || a0.price) : ((a0.sup[0] || {}).p || a0.price);
   const head = tier === 2 ? __t("Сильный перевес {0} — сценарий в {1}", [who, side]) : tier === 1 ? __t("Слабый перевес {0} — {1} только после подтверждения", [who, side]) : __t("Явного перевеса нет — лучше подождать");
-  const chip = (t, v, cl, sub) => `<span class="cp ${cl}"><small>${t}</small><b>${v}</b>${sub ? `<em>${sub}</em>` : ''}</span>`;
+  const chip = (t, v, cl, sub, bl) => `<span class="cp ${cl}">${bl || ''}<small>${t}</small><b>${v}</b>${sub ? `<em>${sub}</em>` : ''}</span>`;
   el.className = 'card glass specc ' + cls;
+  state.alertCtx = pl && tier > 0 ? { dir: D, p: +main.toFixed(3), t1: pl.t1, t2: pl.t2, stop: pl.stop } : null;
   let planHtml = __t("<p class=\"lead\">Чётких условий для сделки нет: таймфреймы спорят между собой. Разумнее дождаться пробоя ближайшего уровня.</p>");
   if (pl && tier > 0) {
     const ent = (tier === 1 ? [pl.conf, ...pl.limits] : [pl.market, ...pl.limits]).filter(e => e.rr > 0);
     const best = ent.length ? ent.reduce((b, e) => e.rr * (0.35 + 0.65 * e.fill) > b.rr * (0.35 + 0.65 * b.fill) ? e : b) : null;
     const rrCls = r => r >= 2 ? 'pos' : r >= 1.5 ? '' : 'neg';
     const pctTo = (x, e) => signPct((x - e) / e);
-    const rows = ent.map(e => `<li${e === best ? ' class="now"' : ''}><span>${e === best ? '★ ' : ''}${esc(e.label)}</span><b>${fmt(e.p)}</b><em class="${rrCls(e.rr)}">1 : ${num(e.rr, 1)}</em><small>${e.kind === 'market' ? __t("исполнение сразу") : __t("шанс исполнения ≈ {0}", [pct(e.fill)])} · ${__t("стоп {0}", [pctTo(pl.stop, e.p)])}${e.rr2 ? ' · ' + __t("до цели 2 — 1 : {0}", [num(e.rr2, 1)]) : ''} · ${__t("от обычного стопа 1 : {0}", [num(e.rrO, 1)])}</small></li>`).join('');
+    if (best) state.alertCtx.rr = +best.rr.toFixed(2);
+    const rows = ent.map(e => `<li${e === best ? ' class="now"' : ''}><span>${e.kind === 'market' ? '' : bell(e.p, e.kind === 'conf' ? 'conf' : 'entry', (e.kind === 'conf' ? '' : __t("вход") + ': ') + e.label)}${e === best ? '★ ' : ''}${esc(e.label)}</span><b>${fmt(e.p)}</b><em class="${rrCls(e.rr)}">1 : ${num(e.rr, 1)}</em><small>${e.kind === 'market' ? __t("исполнение сразу") : __t("шанс исполнения ≈ {0}", [pct(e.fill)])} · ${__t("стоп {0}", [pctTo(pl.stop, e.p)])}${e.rr2 ? ' · ' + __t("до цели 2 — 1 : {0}", [num(e.rr2, 1)]) : ''} · ${__t("от обычного стопа 1 : {0}", [num(e.rrO, 1)])}</small></li>`).join('');
     const mags = pl.hunt.mags.map(m => `${fmt(m.p)} — ${esc(m.why)}`).join('; ');
     const wider = Math.abs(pl.stop - pl.stop0) / Math.abs(pl.market.p - pl.stop0);
-    planHtml = __t("<h5>План сделки{0}</h5>\n      <div class=\"chips\">{1}{2}{3}{4}</div>", [best && best.rr < 1.5 ? __t(" · <span class=\"neg\">риск/прибыль слабый</span>") : '', chip(__t("цель 1"), fmt(pl.t1), cls, best ? pctTo(pl.t1, best.p) : ''), pl.t2 ? chip(__t("цель 2"), fmt(pl.t2), cls, best ? pctTo(pl.t2, best.p) : '') : '', chip(__t("безопасный стоп"), fmt(pl.stop), 'stop', best ? pctTo(pl.stop, best.p) : ''), best ? chip(__t("риск / прибыль"), '1 : ' + num(best.rr, 1), best.rr >= 2 ? 'up' : best.rr >= 1.5 ? '' : 'down', __t("от лучшей точки")) : ''])
-      + __t("<h5>Точки входа</h5>\n      <ul class=\"kv ent\">{0}</ul>\n      <p class=\"note\">★ — лучшая точка: соотношение риск/прибыль взвешено с шансом, что цена до неё дойдёт. Риск считается до безопасного стопа.</p>", [rows || `<li><span>${__t("Подходящих точек нет")}</span><b>—</b><em></em></li>`])
+    planHtml = __t("<h5>План сделки{0}</h5>\n      <div class=\"chips\">{1}{2}{3}{4}</div>", [best && best.rr < 1.5 ? __t(" · <span class=\"neg\">риск/прибыль слабый</span>") : '', chip(__t("цель 1"), fmt(pl.t1), cls, best ? pctTo(pl.t1, best.p) : '', bell(pl.t1, 'target', __t("цель 1"))), pl.t2 ? chip(__t("цель 2"), fmt(pl.t2), cls, best ? pctTo(pl.t2, best.p) : '', bell(pl.t2, 'target', __t("цель 2"))) : '', chip(__t("безопасный стоп"), fmt(pl.stop), 'stop', best ? pctTo(pl.stop, best.p) : '', bell(pl.stop, 'stop', __t("безопасный стоп"))), best ? chip(__t("риск / прибыль"), '1 : ' + num(best.rr, 1), best.rr >= 2 ? 'up' : best.rr >= 1.5 ? '' : 'down', __t("от лучшей точки")) : ''])
+      + __t("<h5>Точки входа</h5>\n      <ul class=\"kv ent\">{0}</ul>\n      <p class=\"note\">★ — лучшая точка: соотношение риск/прибыль взвешено с шансом, что цена до неё дойдёт. Риск считается до безопасного стопа. 🔔 — бот пришлёт сообщение в Telegram, когда цена дойдёт до уровня.</p>", [rows || `<li><span>${__t("Подходящих точек нет")}</span><b>—</b><em></em></li>`])
       + __t("<h5>Безопасные стопы</h5>\n      <ul class=\"kv\"><li><span>Обычный стоп</span><b>{0}</b><em class=\"neg\">{1}</em><small>Очевидное место за уровнем отмены — здесь стоит большинство стопов, рынок часто выбивает их проколом.</small></li><li class=\"now\"><span>Безопасный стоп</span><b>{2}</b><em class=\"neg\">{3}</em><small>За местами скопления стопов ({4}) плюс запас {5} ATR часового графика{6}.</small></li><li><span>Зона выбивания</span><b>{7} – {8}</b><em></em><small>Проколы в эту зону без закрытия свечи — обычный сбор стопов. Выход — по закрытию часовой свечи за безопасным стопом.</small></li></ul>\n      <p class=\"note\">Стоп шире обычного на {9}: чтобы сумма риска не выросла, объём позиции — примерно ×{10} от обычного.</p>", [fmt(pl.stop0), pctTo(pl.stop0, pl.market.p), fmt(pl.stop), pctTo(pl.stop, pl.market.p), mags, num(pl.buf, 1), pl.sweeps ? __t(" — средняя глубина недавних проколов {0} ATR", [num(pl.avgDep, 1)]) : '', fmt(Math.min(pl.hunt.from, pl.hunt.to)), fmt(Math.max(pl.hunt.from, pl.hunt.to)), pct(wider), num(pl.size, 2)]);
   }
-  el.innerHTML = __t("<span class=\"kick\">⚡ Спекулятивный разбор · 15м + 1Ч, сверка с 4Ч и 1Д · горизонт до суток</span>\n    <h3>{0}</h3>\n    <p class=\"sub\">Общая вероятность {1} · таймфреймы согласны {2} из {3}{4}</p>\n    <div class=\"tri\"><i class=\"u\" style=\"width:{5}%\"></i><i class=\"s\" style=\"width:{6}%\"></i><i class=\"d\" style=\"width:{7}%\"></i></div>\n    <div class=\"tri-l\"><span>↗ Рост <b>{8}</b></span><span>→ Боковик <b>{9}</b></span><span>↘ Снижение <b>{10}</b></span></div>\n    <div class=\"tfgrid\">{11}</div>\n    {12}\n    {13}\n    <details class=\"more\"><summary>Как считается</summary><p>Каждый таймфрейм даёт свои вероятности (Монте-Карло до ближайших целей). Общая вероятность — логарифмический пул мнений с весами 15м 25%, 1Ч 30%, 4Ч 25%, 1Д 20%: когда графики согласны, уверенность растёт, когда спорят — падает. Стоп и цели — с часового графика, вход уточняется по 15-минутному. Это расчётный сценарий, а не рекомендация.</p></details>", [head, pct(main), S.agree, S.n, S.counter ? __t(" · <b class=\"neg\">против дневного тренда — риск выше</b>") : '', S.P.up * 100, S.P.side * 100, S.P.down * 100, pct(S.P.up), pct(S.P.side), pct(S.P.down), S.rows.map(r => `<div class="${r.bias > 0 ? 'u' : r.bias < 0 ? 'd' : 's'}${r.k === state.tf ? ' cur' : ''}" data-tf="${r.k}"><small>${tfName(r.k)}</small><b>${arrow(r.bias)} ${pct(r.p)}</b><span class="mini"><i class="u" style="width:${r.prob.up * 100}%"></i><i class="s" style="width:${r.prob.side * 100}%"></i><i class="d" style="width:${r.prob.down * 100}%"></i></span></div>`).join(''), tier === 1 ? __t("<p class=\"lead\">Подтверждение — закрытие 15-минутной свечи {0} <b>{1}</b>. Без него сигнал слишком слабый.</p>", [D > 0 ? __t("выше") : __t("ниже"), fmt(conf)]) : '', planHtml]);
+  el.innerHTML = __t("<span class=\"kick\">⚡ Спекулятивный разбор · 15м + 1Ч, сверка с 4Ч и 1Д · горизонт до суток</span>\n    <h3>{0}</h3>\n    <p class=\"sub\">Общая вероятность {1} · таймфреймы согласны {2} из {3}{4}</p>\n    <div class=\"tri\"><i class=\"u\" style=\"width:{5}%\"></i><i class=\"s\" style=\"width:{6}%\"></i><i class=\"d\" style=\"width:{7}%\"></i></div>\n    <div class=\"tri-l\"><span>↗ Рост <b>{8}</b></span><span>→ Боковик <b>{9}</b></span><span>↘ Снижение <b>{10}</b></span></div>\n    <div class=\"tfgrid\">{11}</div>\n    {12}\n    {13}\n    <details class=\"more\"><summary>Как считается</summary><p>Каждый таймфрейм даёт свои вероятности (Монте-Карло до ближайших целей). Общая вероятность — логарифмический пул мнений с весами 15м 25%, 1Ч 30%, 4Ч 25%, 1Д 20%: когда графики согласны, уверенность растёт, когда спорят — падает. Стоп и цели — с часового графика, вход уточняется по 15-минутному. Это расчётный сценарий, а не рекомендация.</p></details>", [head, pct(main), S.agree, S.n, S.counter ? __t(" · <b class=\"neg\">против дневного тренда — риск выше</b>") : '', S.P.up * 100, S.P.side * 100, S.P.down * 100, pct(S.P.up), pct(S.P.side), pct(S.P.down), S.rows.map(r => `<div class="${r.bias > 0 ? 'u' : r.bias < 0 ? 'd' : 's'}${r.k === state.tf ? ' cur' : ''}" data-tf="${r.k}"><small>${tfName(r.k)}</small><b>${arrow(r.bias)} ${pct(r.p)}</b><span class="mini"><i class="u" style="width:${r.prob.up * 100}%"></i><i class="s" style="width:${r.prob.side * 100}%"></i><i class="d" style="width:${r.prob.down * 100}%"></i></span></div>`).join(''), tier === 1 ? __t("<p class=\"lead\">Подтверждение — закрытие 15-минутной свечи {0} <b>{1}</b>. Без него сигнал слишком слабый.</p>", [D > 0 ? __t("выше") : __t("ниже"), fmt(conf)]) + `<p class="lead">${bell(conf, 'conf', D > 0 ? __t("подтверждение лонга") : __t("подтверждение шорта"))}${__t("Уведомить в Telegram, когда цена дойдёт до уровня подтверждения")}</p>` : '', planHtml]);
 }
 
 function hourlySvg(h) {
@@ -1747,6 +1757,7 @@ async function accInit() {
     } catch (e) {}
   }
   if (acc.mode !== 'server') await softLoad();
+  if (acc.verified) await loadAlerts();
   acc.ready = true; renderTop();
 }
 /* списать анализ: true — можно анализировать, false — лимит исчерпан */
@@ -1797,13 +1808,66 @@ function renderProfile() {
     <div class="pstats"><div><small>${__t("Тариф")}</small><b>${acc.admin ? __t("Администратор") : __t("Бесплатный")}</b></div><div><small>${__t("Сегодня")}</small><b>${acc.used ?? 0}${acc.admin || acc.limit == null ? '' : ' / ' + (acc.limit || DAY_LIMIT)}</b></div><div><small>${__t("Всего анализов")}</small><b>${acc.mode === 'server' ? acc.total || 0 : '—'}</b></div><div><small>${__t("Лимит обновится")}</small><b>${resetTime()}</b></div></div>
     <h5>${__t("Разобрано сегодня")}</h5>
     <div class="ptk">${acc.tickers.length ? acc.tickers.map(t => `<button class="chip" data-q="${esc(t.replace(/USDT$/, ''))}">${esc(t.replace(/USDT$/, ''))}</button>`).join('') : `<span class="mut">${__t("Пока ничего — начните с любого тикера")}</span>`}</div>
-    <p class="note">${__t("Повторный разбор тикера в течение дня, смена таймфрейма и автообновление лимит не расходуют.")}</p>`;
+    <p class="note">${__t("Повторный разбор тикера в течение дня, смена таймфрейма и автообновление лимит не расходуют.")}</p>${alertsHtml()}`;
 }
 function showLimit() {
   hap('n', 'error');
   const tk = acc.tickers.map(t => `<button class="chip" data-q="${esc(t.replace(/USDT$/, ''))}">${esc(t.replace(/USDT$/, ''))}</button>`).join('');
   setStatus('err', `${__t("Дневной лимит исчерпан: {0} из {0} анализов. Новые анализы будут доступны в {1}.", [acc.limit || DAY_LIMIT, resetTime()])}${tk ? `<br><span class="mut">${__t("Без ограничений доступны тикеры, разобранные сегодня:")}</span><span class="ptk">${tk}</span>` : ''}`);
 }
+
+/* ---------- Ценовые уведомления: бот пишет в Telegram, когда цена дошла до уровня ---------- */
+acc.alerts = [];
+let toastT = 0;
+function toast(html, ms = 4200) { const t = $('#toast'); t.innerHTML = html; t.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), ms); }
+const alertDisp = () => state.market === 'crypto' ? String(state.sym).replace(/USDT$/, '') : state.sym;
+const findAlert = p => acc.alerts.find(a => !a.fired_at && a.market === state.market && a.sym === state.sym && Math.abs(a.price / p - 1) < 0.0005);
+function bell(p, kind, label) {
+  if (!(p > 0)) return '';
+  const on = !!findAlert(p);
+  return `<button class="bell${on ? ' on' : ''}" type="button" data-al="${p}" data-k="${kind}" data-l="${esc(label)}" title="${on ? __t("Убрать уведомление") : __t("Уведомить в Telegram")}" aria-label="${__t("Уведомить в Telegram")}">🔔</button>`;
+}
+async function alertApi(a, body) {
+  const r = await fetch('/api/alerts?a=' + a, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ initData: TG.initData, ...body }) });
+  const j = await r.json().catch(() => ({})); if (!r.ok) throw Object.assign(new Error(j.error || r.status), { j }); return j;
+}
+async function loadAlerts() { if (!TG || !ONLINE) return; try { const j = await alertApi('list', {}); acc.alerts = j.alerts || []; acc.botOk = j.bot; } catch (e) {} }
+let writeOk = null;
+const askWrite = () => new Promise(res => { if (writeOk !== null) return res(writeOk); try { if (TG.isVersionAtLeast && TG.isVersionAtLeast('6.9') && TG.requestWriteAccess) TG.requestWriteAccess(ok => res(writeOk = !!ok)); else res(writeOk = true); } catch (e) { res(writeOk = true); } });
+function refreshBells() { if (state.spec) renderSpec(); if (!$('#profp').hidden) renderProfile(); }
+async function toggleAlert(btn) {
+  const p = +btn.dataset.al, kind = btn.dataset.k, label = btn.dataset.l;
+  if (!TG || !ONLINE) return toast(__t("Уведомления присылает бот — откройте Азимут в Telegram."));
+  if (!acc.verified) return toast(__t("Не удалось подтвердить профиль Telegram — перезапустите мини-приложение."));
+  const ex = findAlert(p);
+  btn.disabled = true; hap('i', 'light');
+  try {
+    if (ex) { const j = await alertApi('del', { id: ex.id }); acc.alerts = j.alerts || []; toast(__t("Уведомление снято: {0} {1}", [alertDisp(), fmt(p)])); }
+    else {
+      if (!(await askWrite())) { btn.disabled = false; return toast(__t("Разрешите боту писать вам — иначе уведомление не придёт.")); }
+      const now = state.all && (state.all['15m'] || state.all['1h']) ? (state.all['15m'] || state.all['1h']).price : state.a.price;
+      const j = await alertApi('add', { market: state.market, sym: state.sym, disp: alertDisp(), price: p, now, kind, label, lang: LANG, ctx: state.alertCtx });
+      acc.alerts = j.alerts || acc.alerts; hap('n', 'success');
+      toast(j.bot === false ? __t("Уведомление сохранено, но бот ещё не подключён к рассылке — сообщите администратору.") : __t("Готово: бот напишет в Telegram, когда {0} будет {1} {2}.", [alertDisp(), p >= now ? __t("выше") : __t("ниже"), fmt(p)]));
+    }
+  } catch (e) {
+    hap('n', 'error');
+    toast(e.message === 'max' ? __t("Достигнут предел — {0} активных уведомлений. Удалите лишние в профиле.", [e.j.max]) : __t("Не удалось сохранить уведомление, попробуйте ещё раз."));
+  }
+  refreshBells();
+}
+function alertsHtml() {
+  if (!TG) return '';
+  const act = acc.alerts.filter(a => !a.fired_at), done = acc.alerts.filter(a => a.fired_at).slice(0, 5);
+  const li = (a, d) => `<li${d ? ' class="done"' : ''}><b>${esc(a.disp)} ${a.cond === 'above' ? '≥' : '≤'} ${fmt(a.price)}</b><small>${esc(a.label || '')}${d ? ' · ' + __t("сработало {0}", [new Date(a.fired_at).toLocaleString(LOC, { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })]) : ''}</small>${d ? '' : `<button class="x" data-del="${a.id}" aria-label="${__t("Удалить")}">×</button>`}</li>`;
+  return `<h5>${__t("Уведомления")} · ${act.length}</h5>${act.length || done.length ? `<ul class="alist">${act.map(a => li(a)).join('')}${done.map(a => li(a, 1)).join('')}</ul>` : `<span class="mut">${__t("Нажмите 🔔 у уровня в плане сделки — бот напишет, когда цена до него дойдёт")}</span>`}`;
+}
+$('#spec').addEventListener('click', e => { const b = e.target.closest('.bell'); if (b) { e.stopPropagation(); toggleAlert(b); } });
+$('#profp').addEventListener('click', async e => {
+  const d = e.target.closest('[data-del]'); if (!d) return; e.stopPropagation(); d.disabled = true;
+  try { const j = await alertApi('del', { id: +d.dataset.del }); acc.alerts = j.alerts || []; } catch (x) { toast(__t("Не удалось удалить уведомление.")); }
+  refreshBells();
+});
 
 $('#me').addEventListener('click', () => { const p = $('#profp'); p.hidden = !p.hidden; if (!p.hidden) renderProfile(); hap('i', 'light'); });
 $('#quota').addEventListener('click', () => { $('#profp').hidden = false; renderProfile(); });
