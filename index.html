@@ -163,7 +163,7 @@ details input{width:100%;margin-top:8px;background:rgba(0,0,0,.25);border:1px so
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin:2px 0 10px}
 .cp{display:flex;flex-direction:column;padding:8px 12px;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);min-width:92px}
 .cp small{font-size:11.5px;color:var(--mut)}.cp b{font-size:16px}.cp em{font-style:normal;font-size:12px;color:var(--mut)}
-.kv.ent li{grid-template-columns:minmax(0,1fr) auto auto}.kv.ent li span{min-width:0}.kv.ent li b{white-space:nowrap}.kv.ent li.now{background:rgba(255,214,120,.12)}.kv.ent li em{font-weight:700}
+.kv.ent li{grid-template-columns:minmax(0,1fr) auto auto}.kv.ent li span{min-width:0}.kv.ent li b{white-space:nowrap}.kv.ent li.now{background:rgba(255,214,120,.12)}.kv.ent li.bad{opacity:.62}.kv.ent li em{font-weight:700}
 .cp{position:relative}.cp:has(.bell){padding-right:40px}.cp .bell{position:absolute;top:6px;right:6px;margin:0}
 .bell{display:inline-grid;place-items:center;width:28px;height:28px;margin:0 6px 0 0;padding:0;border-radius:50%;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.06);font-size:14px;line-height:1;cursor:pointer;vertical-align:middle;filter:grayscale(1) opacity(.75);transition:.15s}
 .bell:hover{filter:none}.bell.on{filter:none;background:rgba(255,214,120,.22);border-color:rgba(255,214,120,.7);box-shadow:0 0 10px rgba(255,214,120,.35)}
@@ -1122,55 +1122,71 @@ function compute() {
 const tfList = () => state.spec ? ['15m', '1h', '4h'] : ['4h', '1d', '1w'];
 const tfName = k => state.market === 'moex' && k === '15m' ? __t("10м") : TF[k].name;
 
-/* План сделки: точки входа, обычный и безопасный стоп, риск/прибыль от каждой точки.
-   Безопасный стоп ставится за местами скопления чужих стопов (пулы ликвидности у экстремумов,
-   кластеры ликвидаций, круглые числа, очевидный структурный стоп) с запасом на типичную
-   глубину прокола — рынок часто «собирает» такие стопы и только потом идёт в сторону сценария. */
-function tradePlan(a0, a1, dir, sc) {
+/* План сделки. Для каждой точки входа считается свой стоп и свои цели:
+   • стоп — за ближайшей структурой позади точки входа (а не за дальней отменой сценария)
+     и за местами скопления чужих стопов (пулы ликвидности, ликвидации, круглые числа)
+     с запасом на типичную глубину прокола — рынок часто «собирает» такие стопы;
+   • цели — реальные уровни по направлению сделки; для каждой Монте-Карло считает шанс
+     дойти до цели раньше стопа (с учётом перевеса сценария);
+   • матожидание в R = p·RR − (1 − p). Точка рекомендуется, только если RR ≥ 1,5 и матожидание > 0. */
+function tradePlan(a0, a1, dir, sc, P) {
   const price = a0.price, A = a1.atr || a0.atr * 2;
   const adv = (x, y) => dir * (y - x);                   // насколько x дальше y против сделки
-  const t1 = sc.targets[0].p, t2 = sc.targets[1] ? sc.targets[1].p : null;
+  // перевес сценария учитываем осторожно: половина от расчётного, не больше 62%
+  const edge = P ? Math.min(0.62, Math.max(0.4, 0.5 + 0.5 * ((dir > 0 ? P.up : P.down) / Math.max(1e-6, P.up + P.down) - 0.5))) : 0.5;
   const fill = p => Math.abs(p - price) / price < 0.0008 ? 1 : E.touchProb(price, p, a0.sigma, a0.horizon);
-  // 1) обычный (структурный) стоп — отмена сценария на часовом графике
+  const step = Math.pow(10, Math.floor(Math.log10(price)) - 1);
+  const H = Math.max(a1.horizon || 24, 36), SG = a1.sigma || a0.sigma * 2;
+  // отмена сценария на часовом графике — дальняя граница для любого стопа
   let s0 = sc.invalid;
   if (s0 == null || adv(s0, price) < A * 0.3) { const lv = (dir > 0 ? a1.sup : a1.res)[0]; s0 = lv && adv(lv.p, price) > A * 0.3 ? lv.p - dir * A * 0.15 : price - dir * A * 2; }
-  // 2) места скопления стопов рядом с обычным стопом
-  const zoneIn = s0 + dir * A * 0.6, zoneOut = s0 - dir * A * 1.6;
-  const inZone = p => adv(p, zoneIn) >= 0 && adv(p, zoneOut) <= 0;
-  const mags = [{ p: s0, why: __t("очевидный стоп") }];
-  for (const a of [a0, a1]) for (const g of (dir > 0 ? a.pools.below : a.pools.above)) if (inZone(g.edge)) mags.push({ p: g.edge, why: g.n > 1 ? __t("равные {0} ×{1}", [dir > 0 ? __t("лоу") : __t("хаи"), g.n]) : dir > 0 ? __t("стопы под лоу") : __t("стопы над хаями") });
-  const lq = a1.liq && (dir > 0 ? a1.liq.longs : a1.liq.shorts);
-  if (lq && lq.length) { const mx = Math.max(...lq.map(x => x.usd || 0), 1); lq.filter(x => (x.usd || 0) >= mx * 0.25 && inZone(x.p)).forEach(x => mags.push({ p: x.p, why: dir > 0 ? __t("ликвидации лонгов") : __t("ликвидации шортов") })); }
-  const step = Math.pow(10, Math.floor(Math.log10(price)) - 1);
-  for (const r of [Math.floor(s0 / step) * step, Math.ceil(s0 / step) * step]) if (inZone(r) && !mags.some(m => Math.abs(m.p - r) < A * 0.1)) mags.push({ p: r, why: __t("круглое число") });
-  // идём от обычного стопа наружу, пока соседние скопления стоят плотно (разрыв ≤ 0,8 ATR)
-  let far = mags[0];
-  for (const m of mags.filter(m => adv(m.p, s0) > 0).sort((x, y) => adv(x.p, y.p) < 0 ? -1 : 1)) { if (adv(m.p, far.p) <= A * 0.8) far = m; else break; }
-  // 3) типичная глубина прокола по недавним снятиям ликвидности
+  // типичная глубина прокола по недавним снятиям ликвидности
   const dep = [];
   for (const a of [a0, a1]) for (const w of a.pools.sweeps) if (w.side === (dir > 0 ? 'sell' : 'buy')) dep.push(Math.abs(w.ext - w.p) / (a.atr || A));
   const avgDep = dep.length ? dep.reduce((x, y) => x + y, 0) / dep.length : 0.3;
-  const buf = Math.min(1, Math.max(0.3, avgDep * 1.25));
-  let safe = far.p - dir * A * buf;
-  // круглое число рядом со стопом (чуть до или чуть после) — тоже магнит: ставим стоп за ним
-  for (const r of [Math.floor(safe / step) * step, Math.ceil(safe / step) * step]) { const d = adv(r, safe); if (d > -A * 0.15 && d <= A * 0.4) safe = r - dir * A * 0.2; }
-  // 4) точки входа: рынок, подтверждённые уровни между ценой и стопом, вход после пробоя
-  const src = [...(dir > 0 ? a0.dnL : a0.upL), ...(dir > 0 ? a1.dnL : a1.upL)]
-    .filter(o => adv(o.p, price) >= price * 0.0015 && adv(s0, o.p) >= A * 0.5).sort((x, y) => y.w - x.w);
-  const lv = []; for (const o of src) { const g = lv.find(x => Math.abs(x.p - o.p) <= A * 0.35); if (g) { g.w += o.w; o.src.forEach(z => { if (!g.src.includes(z)) g.src.push(z); }); } else lv.push({ p: o.p, w: o.w, src: [...o.src] }); }
+  const buf = Math.min(0.8, Math.max(0.25, avgDep * 1.2));
+  const lq = a1.liq && (dir > 0 ? a1.liq.longs : a1.liq.shorts), lqMax = lq && lq.length ? Math.max(...lq.map(x => x.usd || 0), 1) : 0;
+  // безопасный стоп за структурой anchor: идём наружу по плотной цепочке скоплений стопов
+  function safeBeyond(anchor, zoneW) {
+    const zoneIn = anchor + dir * A * 0.4, zoneOut = anchor - dir * A * zoneW;
+    const inZone = p => adv(p, zoneIn) >= 0 && adv(p, zoneOut) <= 0;
+    const mags = [{ p: anchor, why: __t("очевидный стоп") }];
+    for (const a of [a0, a1]) for (const g of (dir > 0 ? a.pools.below : a.pools.above)) if (inZone(g.edge)) mags.push({ p: g.edge, why: g.n > 1 ? __t("равные {0} ×{1}", [dir > 0 ? __t("лоу") : __t("хаи"), g.n]) : dir > 0 ? __t("стопы под лоу") : __t("стопы над хаями") });
+    if (lq) lq.filter(x => (x.usd || 0) >= lqMax * 0.25 && inZone(x.p)).forEach(x => mags.push({ p: x.p, why: dir > 0 ? __t("ликвидации лонгов") : __t("ликвидации шортов") }));
+    for (const r of [Math.floor(anchor / step) * step, Math.ceil(anchor / step) * step]) if (inZone(r) && !mags.some(m => Math.abs(m.p - r) < A * 0.1)) mags.push({ p: r, why: __t("круглое число") });
+    let far = mags[0];
+    for (const m of mags.filter(m => adv(m.p, anchor) > 0).sort((x, y) => adv(x.p, y.p) < 0 ? -1 : 1)) { if (adv(m.p, far.p) <= A * 0.6) far = m; else break; }
+    let stop = far.p - dir * A * buf;
+    for (const r of [Math.floor(stop / step) * step, Math.ceil(stop / step) * step]) { const d = adv(r, stop); if (d > -A * 0.12 && d <= A * 0.3) stop = r - dir * A * 0.15; }
+    return { anchor, stop, far, mags: mags.filter(m => adv(m.p, far.p) <= 0).filter((m, i, x) => x.findIndex(y => Math.abs(y.p - m.p) < A * 0.1) === i).sort((x, y) => adv(x.p, y.p) < 0 ? -1 : 1) };
+  }
+  // уровни (свинги, Фибо, ордер-блоки, объём) по обе стороны
+  const merge = arr => { const out = []; for (const o of arr.slice().sort((x, y) => y.w - x.w)) { const g = out.find(x => Math.abs(x.p - o.p) <= A * 0.3); if (g) { g.w += o.w; o.src.forEach(z => { if (!g.src.includes(z)) g.src.push(z); }); } else out.push({ p: o.p, w: o.w, src: [...o.src] }); } return out; };
+  const behind = merge([...(dir > 0 ? a0.dnL : a0.upL), ...(dir > 0 ? a1.dnL : a1.upL)]);
+  const ahead = merge([...(dir > 0 ? a0.upL : a0.dnL), ...(dir > 0 ? a1.upL : a1.dnL), ...sc.targets.map(t => ({ p: t.p, w: 2, src: [__t("цель сценария")] }))]);
+  // структура позади точки входа: ближайший уровень не ближе 0,35 ATR, но не дальше отмены сценария
+  const anchorFor = p => { const c = behind.filter(o => adv(o.p, p) >= A * 0.35 && adv(o.p, s0) <= 0).sort((x, y) => adv(x.p, y.p) < 0 ? -1 : 1)[0]; return c ? c.p : s0; };
+  const tilt = p0 => p0 * edge / (p0 * edge + (1 - p0) * (1 - edge));
+  const winP = (e, t, st) => { const r = dir > 0 ? SMC.race(e, t, st, SG, H, 0, 1500) : SMC.race(e, st, t, SG, H, 0, 1500); return tilt(dir > 0 ? r.up / Math.max(1e-6, r.up + r.down) : r.down / Math.max(1e-6, r.up + r.down)) * (1 - r.side); };
   const mk = (p, kind, label) => {
-    const rS = adv(safe, p), rO = adv(s0, p), rew = dir * (t1 - p);
-    return { p, kind, label, fill: fill(p), rr: rS > 0 && rew > 0 ? rew / rS : 0, rrO: rO > 0 && rew > 0 ? rew / rO : 0, rr2: t2 && rS > 0 ? Math.max(0, dir * (t2 - p)) / rS : null };
+    const sb = safeBeyond(anchorFor(p), 1.0), stop = sb.stop, risk = adv(stop, p);
+    const tg = ahead.filter(o => dir * (o.p - p) >= Math.max(A * 0.4, risk * 0.6)).sort((x, y) => dir * (x.p - y.p))
+      .filter(o => E.touchProb(p, o.p, SG, H) >= 0.12).slice(0, 6)
+      .map(o => { const rr = dir * (o.p - p) / risk, pw = winP(p, o.p, stop); return { p: o.p, src: o.src, rr, pw, ev: pw * rr - (1 - pw) }; });
+    const main = tg.filter(t => t.rr >= 1).sort((x, y) => y.ev - x.ev)[0] || tg[tg.length - 1] || null;
+    const first = main ? tg.find(t => t.rr >= 0.8 && dir * (t.p - main.p) < 0) || null : null;
+    const o = { p, kind, label, fill: fill(p), stop, risk: risk / p, sb, t1: first ? first.p : main ? main.p : null, t2: main ? main.p : null,
+      rr: main ? main.rr : 0, rr1: first ? first.rr : null, pw: main ? main.pw : 0, ev: main ? main.ev : -1 };
+    o.ok = o.rr >= 1.5 && o.ev > 0.05;
+    return o;
   };
-  const limits = lv.map(o => ({ ...o, sc: o.w * (0.3 + fill(o.p)) })).sort((x, y) => y.sc - x.sc).slice(0, 2)
+  const lv = behind.filter(o => adv(o.p, price) >= price * 0.0015 && adv(s0, o.p) >= A * 0.5);
+  const limits = lv.map(o => ({ ...o, sc: o.w * (0.3 + fill(o.p)) })).sort((x, y) => y.sc - x.sc).slice(0, 3)
     .sort((x, y) => adv(x.p, y.p) < 0 ? -1 : 1).map(o => mk(o.p, 'limit', o.src.slice(0, 2).join(' + ')));
   const cl = dir > 0 ? a0.res[0] : a0.sup[0];
   const conf = mk(cl ? cl.p : price, 'conf', __t("после пробоя"));
   const market = mk(price, 'market', __t("по рынку"));
-  const riskO = adv(s0, price), riskS = adv(safe, price);
-  return { dir, t1, t2, stop0: s0, stop: safe, market, limits, conf, buf, avgDep, sweeps: dep.length,
-    hunt: { from: s0 + dir * A * 0.1, to: safe, mags: mags.filter(m => adv(m.p, far.p) <= 0).filter((m, i, x) => x.findIndex(y => Math.abs(y.p - m.p) < A * 0.1) === i).sort((x, y) => adv(x.p, y.p) < 0 ? -1 : 1) },
-    size: riskS > 0 && riskO > 0 ? riskO / riskS : 1 };
+  return { dir, stop0: s0, market, limits, conf, buf, avgDep, sweeps: dep.length, edge };
 }
 
 /* Спекулятивная сводка: логарифмический пул мнений по таймфреймам 15м/1Ч/4Ч/1Д
@@ -1188,7 +1204,7 @@ function specSummary(all) {
   // план: уровни берём с часового графика, вход уточняем по 15-минутному
   const a1 = all['1h'] || all['15m'], a0 = all['15m'] || a1;
   let plan = null;
-  if (dir !== 0 && a1) { const sc = a1.scenarios.find(x => x.bias === dir); if (sc) plan = tradePlan(a0, a1, dir, sc); }
+  if (dir !== 0 && a1) { const sc = a1.scenarios.find(x => x.bias === dir); if (sc) plan = tradePlan(a0, a1, dir, sc, P); }
   const hiBias = all['1d'] && all['1d'].scenarios[0] ? all['1d'].scenarios[0].bias : 0;
   return { P, dir, rows, agree, n: rows.length, plan, counter: dir !== 0 && hiBias !== 0 && hiBias !== dir };
 }
@@ -1440,20 +1456,29 @@ function renderSpec() {
   const head = tier === 2 ? __t("Сильный перевес {0} — сценарий в {1}", [who, side]) : tier === 1 ? __t("Слабый перевес {0} — {1} только после подтверждения", [who, side]) : __t("Явного перевеса нет — лучше подождать");
   const chip = (t, v, cl, sub, bl) => `<span class="cp ${cl}">${bl || ''}<small>${t}</small><b>${v}</b>${sub ? `<em>${sub}</em>` : ''}</span>`;
   el.className = 'card glass specc ' + cls;
-  state.alertCtx = pl && tier > 0 ? { dir: D, p: +main.toFixed(3), t1: pl.t1, t2: pl.t2, stop: pl.stop } : null;
+  // контекст для уведомлений: у каждой точки входа свой стоп, цели и риск/прибыль
+  state.alertCtx = null; state.alertCtxs = {};
+  const ctxOf = e => ({ dir: D, p: +main.toFixed(3), entry: e.p, stop: e.stop, t1: e.t1, t2: e.t2, rr: +e.rr.toFixed(2), pw: +e.pw.toFixed(2), ok: e.ok });
   let planHtml = __t("<p class=\"lead\">Чётких условий для сделки нет: таймфреймы спорят между собой. Разумнее дождаться пробоя ближайшего уровня.</p>");
   if (pl && tier > 0) {
-    const ent = (tier === 1 ? [pl.conf, ...pl.limits] : [pl.market, ...pl.limits]).filter(e => e.rr > 0);
-    const best = ent.length ? ent.reduce((b, e) => e.rr * (0.35 + 0.65 * e.fill) > b.rr * (0.35 + 0.65 * b.fill) ? e : b) : null;
+    const ent = (tier === 1 ? [pl.conf, ...pl.limits] : [pl.market, ...pl.limits]).filter(e => e.t2 != null);
+    [pl.conf, pl.market, ...pl.limits].forEach(e => { if (e.t2 != null) state.alertCtxs[String(e.p)] = ctxOf(e); });
+    const score = e => (e.ok ? 1 : 0) * 10 + e.ev * (0.35 + 0.65 * e.fill);
+    const best = ent.length ? ent.reduce((b, e) => score(e) > score(b) ? e : b) : null;
+    if (best) state.alertCtx = ctxOf(best);
     const rrCls = r => r >= 2 ? 'pos' : r >= 1.5 ? '' : 'neg';
     const pctTo = (x, e) => signPct((x - e) / e);
-    if (best) state.alertCtx.rr = +best.rr.toFixed(2);
-    const rows = ent.map(e => `<li${e === best ? ' class="now"' : ''}><span>${e.kind === 'market' ? '' : bell(e.p, e.kind === 'conf' ? 'conf' : 'entry', (e.kind === 'conf' ? '' : __t("вход") + ': ') + e.label)}${e === best ? '★ ' : ''}${esc(e.label)}</span><b>${fmt(e.p)}</b><em class="${rrCls(e.rr)}">1 : ${num(e.rr, 1)}</em><small>${e.kind === 'market' ? __t("исполнение сразу") : __t("шанс исполнения ≈ {0}", [pct(e.fill)])} · ${__t("стоп {0}", [pctTo(pl.stop, e.p)])}${e.rr2 ? ' · ' + __t("до цели 2 — 1 : {0}", [num(e.rr2, 1)]) : ''} · ${__t("от обычного стопа 1 : {0}", [num(e.rrO, 1)])}</small></li>`).join('');
-    const mags = pl.hunt.mags.map(m => `${fmt(m.p)} — ${esc(m.why)}`).join('; ');
-    const wider = Math.abs(pl.stop - pl.stop0) / Math.abs(pl.market.p - pl.stop0);
-    planHtml = __t("<h5>План сделки{0}</h5>\n      <div class=\"chips\">{1}{2}{3}{4}</div>", [best && best.rr < 1.5 ? __t(" · <span class=\"neg\">риск/прибыль слабый</span>") : '', chip(__t("цель 1"), fmt(pl.t1), cls, best ? pctTo(pl.t1, best.p) : '', bell(pl.t1, 'target', __t("цель 1"))), pl.t2 ? chip(__t("цель 2"), fmt(pl.t2), cls, best ? pctTo(pl.t2, best.p) : '', bell(pl.t2, 'target', __t("цель 2"))) : '', chip(__t("безопасный стоп"), fmt(pl.stop), 'stop', best ? pctTo(pl.stop, best.p) : '', bell(pl.stop, 'stop', __t("безопасный стоп"))), best ? chip(__t("риск / прибыль"), '1 : ' + num(best.rr, 1), best.rr >= 2 ? 'up' : best.rr >= 1.5 ? '' : 'down', __t("от лучшей точки")) : ''])
-      + __t("<h5>Точки входа</h5>\n      <ul class=\"kv ent\">{0}</ul>\n      <p class=\"note\">★ — лучшая точка: соотношение риск/прибыль взвешено с шансом, что цена до неё дойдёт. Риск считается до безопасного стопа. 🔔 — бот пришлёт сообщение в Telegram, когда цена дойдёт до уровня.</p>", [rows || `<li><span>${__t("Подходящих точек нет")}</span><b>—</b><em></em></li>`])
-      + __t("<h5>Безопасные стопы</h5>\n      <ul class=\"kv\"><li><span>Обычный стоп</span><b>{0}</b><em class=\"neg\">{1}</em><small>Очевидное место за уровнем отмены — здесь стоит большинство стопов, рынок часто выбивает их проколом.</small></li><li class=\"now\"><span>Безопасный стоп</span><b>{2}</b><em class=\"neg\">{3}</em><small>За местами скопления стопов ({4}) плюс запас {5} ATR часового графика{6}.</small></li><li><span>Зона выбивания</span><b>{7} – {8}</b><em></em><small>Проколы в эту зону без закрытия свечи — обычный сбор стопов. Выход — по закрытию часовой свечи за безопасным стопом.</small></li></ul>\n      <p class=\"note\">Стоп шире обычного на {9}: чтобы сумма риска не выросла, объём позиции — примерно ×{10} от обычного.</p>", [fmt(pl.stop0), pctTo(pl.stop0, pl.market.p), fmt(pl.stop), pctTo(pl.stop, pl.market.p), mags, num(pl.buf, 1), pl.sweeps ? __t(" — средняя глубина недавних проколов {0} ATR", [num(pl.avgDep, 1)]) : '', fmt(Math.min(pl.hunt.from, pl.hunt.to)), fmt(Math.max(pl.hunt.from, pl.hunt.to)), pct(wider), num(pl.size, 2)]);
+    const size = e => Math.min(100, 1 / Math.max(e.risk, 1e-4));
+    const rows = ent.map(e => `<li class="${e === best && e.ok ? 'now' : ''}${e.ok ? '' : ' bad'}"><span>${e.kind === 'market' ? '' : bell(e.p, e.kind === 'conf' ? 'conf' : 'entry', (e.kind === 'conf' ? '' : __t("вход") + ': ') + e.label)}${e === best && e.ok ? '★ ' : ''}${esc(e.label)}</span><b>${fmt(e.p)}</b><em class="${rrCls(e.rr)}">1 : ${num(e.rr, 1)}</em><small>${e.kind === 'market' ? __t("исполнение сразу") : e.kind === 'conf' ? __t("вход после закрытия 15-минутной свечи за уровнем") : __t("шанс исполнения ≈ {0}", [pct(e.fill)])} · ${__t("стоп {0} ({1})", [fmt(e.stop), pctTo(e.stop, e.p)])} · ${__t("цель {0} ({1})", [fmt(e.t2), pctTo(e.t2, e.p)])}${e.t1 !== e.t2 && e.t1 ? ' · ' + __t("частичная фиксация {0}", [fmt(e.t1)]) : ''}<br>${__t("шанс дойти до цели раньше стопа ≈ {0} · матожидание {1}R", [pct(e.pw), (e.ev >= 0 ? '+' : '−') + num(Math.abs(e.ev), 2)])} · ${e.ok ? `<b class="pos">${__t("выгодно")}</b>` : `<b class="neg">${__t("невыгодно — пропустить")}</b>`}</small></li>`).join('');
+    const okAny = ent.some(e => e.ok);
+    if (best) {
+      const sb = best.sb, mags = sb.mags.map(m => `${fmt(m.p)} — ${esc(m.why)}`).join('; ');
+      const wider = Math.abs(best.stop - sb.anchor) / Math.max(1e-9, Math.abs(best.p - sb.anchor));
+      planHtml = __t("<h5>План сделки{0}</h5>\n      <div class=\"chips\">{1}{2}{3}{4}</div>", [okAny ? '' : __t(" · <span class=\"neg\">невыгодно — лучше пропустить</span>"), best.t1 !== best.t2 && best.t1 ? chip(__t("цель 1"), fmt(best.t1), cls, pctTo(best.t1, best.p), bell(best.t1, 'target', __t("цель 1"))) : '', chip(best.t1 !== best.t2 && best.t1 ? __t("цель 2") : __t("цель"), fmt(best.t2), cls, pctTo(best.t2, best.p), bell(best.t2, 'target', __t("цель"))), chip(__t("безопасный стоп"), fmt(best.stop), 'stop', pctTo(best.stop, best.p), bell(best.stop, 'stop', __t("безопасный стоп"))), chip(__t("риск / прибыль"), '1 : ' + num(best.rr, 1), best.ok ? (best.rr >= 2 ? 'up' : '') : 'down', __t("шанс ≈ {0}", [pct(best.pw)]))])
+        + (okAny ? '' : __t("<p class=\"lead\">Ни одна точка входа не даёт риск/прибыль от 1 : 1,5 с положительным матожиданием: цель слишком близко относительно безопасного стопа. Сделку лучше пропустить или дождаться цены ближе к стопу.</p>"))
+        + __t("<h5>Точки входа</h5>\n      <ul class=\"kv ent\">{0}</ul>\n      <p class=\"note\">У каждой точки свой стоп (за ближайшей структурой и скоплением чужих стопов) и своя цель. Матожидание = шанс × прибыль − (1 − шанс) × риск, в долях риска (R). Рекомендуются точки с риск/прибыль от 1 : 1,5 и матожиданием больше нуля. Объём: при риске 1% депозита позиция ≈ 1% ÷ (расстояние до стопа). 🔔 — бот пришлёт сообщение в Telegram.</p>", [rows || `<li><span>${__t("Подходящих точек нет")}</span><b>—</b><em></em></li>`])
+        + __t("<h5>Безопасные стопы</h5>\n      <ul class=\"kv\"><li><span>Обычный стоп</span><b>{0}</b><em class=\"neg\">{1}</em><small>Очевидное место за ближайшей структурой — здесь стоит большинство стопов, рынок часто выбивает их проколом.</small></li><li class=\"now\"><span>Безопасный стоп</span><b>{2}</b><em class=\"neg\">{3}</em><small>За местами скопления стопов ({4}) плюс запас {5} ATR часового графика{6}.</small></li><li><span>Зона выбивания</span><b>{7} – {8}</b><em></em><small>Проколы в эту зону без закрытия свечи — обычный сбор стопов. Выход — по закрытию часовой свечи за безопасным стопом.</small></li></ul>\n      <p class=\"note\">Для лучшей точки входа ({9}): стоп шире обычного на {10}. При риске 1% депозита объём позиции ≈ {11}% депозита.</p>", [fmt(sb.anchor), pctTo(sb.anchor, best.p), fmt(best.stop), pctTo(best.stop, best.p), mags, num(pl.buf, 1), pl.sweeps ? __t(" — средняя глубина недавних проколов {0} ATR", [num(pl.avgDep, 1)]) : '', fmt(Math.min(sb.anchor, best.stop)), fmt(Math.max(sb.anchor, best.stop)), fmt(best.p), pct(wider), num(size(best), 0)]);
+    }
   }
   el.innerHTML = __t("<span class=\"kick\">⚡ Спекулятивный разбор · 15м + 1Ч, сверка с 4Ч и 1Д · горизонт до суток</span>\n    <h3>{0}</h3>\n    <p class=\"sub\">Общая вероятность {1} · таймфреймы согласны {2} из {3}{4}</p>\n    <div class=\"tri\"><i class=\"u\" style=\"width:{5}%\"></i><i class=\"s\" style=\"width:{6}%\"></i><i class=\"d\" style=\"width:{7}%\"></i></div>\n    <div class=\"tri-l\"><span>↗ Рост <b>{8}</b></span><span>→ Боковик <b>{9}</b></span><span>↘ Снижение <b>{10}</b></span></div>\n    <div class=\"tfgrid\">{11}</div>\n    {12}\n    {13}\n    <details class=\"more\"><summary>Как считается</summary><p>Каждый таймфрейм даёт свои вероятности (Монте-Карло до ближайших целей). Общая вероятность — логарифмический пул мнений с весами 15м 25%, 1Ч 30%, 4Ч 25%, 1Д 20%: когда графики согласны, уверенность растёт, когда спорят — падает. Стоп и цели — с часового графика, вход уточняется по 15-минутному. Это расчётный сценарий, а не рекомендация.</p></details>", [head, pct(main), S.agree, S.n, S.counter ? __t(" · <b class=\"neg\">против дневного тренда — риск выше</b>") : '', S.P.up * 100, S.P.side * 100, S.P.down * 100, pct(S.P.up), pct(S.P.side), pct(S.P.down), S.rows.map(r => `<div class="${r.bias > 0 ? 'u' : r.bias < 0 ? 'd' : 's'}${r.k === state.tf ? ' cur' : ''}" data-tf="${r.k}"><small>${tfName(r.k)}</small><b>${arrow(r.bias)} ${pct(r.p)}</b><span class="mini"><i class="u" style="width:${r.prob.up * 100}%"></i><i class="s" style="width:${r.prob.side * 100}%"></i><i class="d" style="width:${r.prob.down * 100}%"></i></span></div>`).join(''), tier === 1 ? __t("<p class=\"lead\">Подтверждение — закрытие 15-минутной свечи {0} <b>{1}</b>. Без него сигнал слишком слабый.</p>", [D > 0 ? __t("выше") : __t("ниже"), fmt(conf)]) + `<p class="lead">${bell(conf, 'conf', D > 0 ? __t("подтверждение лонга") : __t("подтверждение шорта"))}${__t("Уведомить в Telegram, когда цена дойдёт до уровня подтверждения")}</p>` : '', planHtml]);
 }
@@ -1846,9 +1871,9 @@ async function toggleAlert(btn) {
     else {
       if (!(await askWrite())) { btn.disabled = false; return toast(__t("Разрешите боту писать вам — иначе уведомление не придёт.")); }
       const now = state.all && (state.all['15m'] || state.all['1h']) ? (state.all['15m'] || state.all['1h']).price : state.a.price;
-      const j = await alertApi('add', { market: state.market, sym: state.sym, disp: alertDisp(), price: p, now, kind, label, lang: LANG, ctx: state.alertCtx });
+      const j = await alertApi('add', { market: state.market, sym: state.sym, disp: alertDisp(), price: p, now, kind, label, lang: LANG, ctx: (state.alertCtxs && state.alertCtxs[String(p)]) || state.alertCtx });
       acc.alerts = j.alerts || acc.alerts; hap('n', 'success');
-      toast(j.bot === false ? __t("Уведомление сохранено, но бот ещё не подключён к рассылке — сообщите администратору.") : __t("Готово: бот напишет в Telegram, когда {0} будет {1} {2}.", [alertDisp(), p >= now ? __t("выше") : __t("ниже"), fmt(p)]));
+      toast(j.bot === false ? __t("Уведомление сохранено, но бот ещё не подключён к рассылке — сообщите администратору.") : kind === 'conf' ? __t("Готово: бот напишет в Telegram, когда 15-минутная свеча {0} закроется {1} {2}, — с готовым планом входа.", [alertDisp(), p >= now ? __t("выше") : __t("ниже"), fmt(p)]) : __t("Готово: бот напишет в Telegram, когда {0} будет {1} {2}.", [alertDisp(), p >= now ? __t("выше") : __t("ниже"), fmt(p)]));
     }
   } catch (e) {
     hap('n', 'error');
