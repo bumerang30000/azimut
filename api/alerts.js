@@ -98,33 +98,65 @@ async function bars(market, sym, from) {
 }
 
 const L = {
-  ru: { reached: 'достиг', above: 'выше', below: 'ниже', now: 'Сейчас', since: 'с момента установки', plan: 'Разбор на момент установки', long: 'лонг', short: 'шорт',
-    scen: 'Сценарий', prob: 'вероятность', tg: 'Цели', stop: 'Безопасный стоп', rr: 'Риск/прибыль', open: 'Открыть свежий разбор', cond: 'Условие: цена',
-    hint: { entry: 'Цена у точки входа — оцените реакцию на уровне перед входом.', conf: 'Уровень подтверждения пробит — для входа дождитесь закрытия 15-минутной свечи за ним.',
-      target: 'Цель достигнута — разумно зафиксировать часть позиции и подтянуть стоп.', stop: 'Цена у безопасного стопа — сценарий под угрозой, проверьте позицию.', level: 'Цена достигла уровня.' } },
-  en: { reached: 'reached', above: 'above', below: 'below', now: 'Now', since: 'since the alert was set', plan: 'Analysis at the time of setting', long: 'long', short: 'short',
-    scen: 'Scenario', prob: 'probability', tg: 'Targets', stop: 'Safe stop', rr: 'Risk/reward', open: 'Open fresh analysis', cond: 'Condition: price',
-    hint: { entry: 'Price is at the entry point — check the reaction at the level before entering.', conf: 'The confirmation level is broken — wait for a 15-minute close beyond it before entering.',
-      target: 'Target reached — consider taking partial profit and tightening the stop.', stop: 'Price is at the safe stop — the scenario is at risk, review the position.', level: 'Price reached the level.' } }
+  ru: { above: 'выше', below: 'ниже', now: 'Сейчас', since: 'с момента установки', long: 'лонг', short: 'шорт', open: 'Открыть свежий разбор',
+    conf: (d, s, side, lvl, c) => `✅ <b>${d}</b>: сигнал на ${s} подтверждён\n15-минутная свеча закрылась ${side} ${lvl} (закрытие ${c})`,
+    entry: (d, p, l) => `🎯 <b>${d}</b> у точки входа ${p}${l ? ` · ${l}` : ''}`,
+    target: (d, p, l) => `🏁 <b>${d}</b>: ${l || 'цель'} ${p} достигнута\nРазумно зафиксировать часть позиции и перенести стоп в безубыток.`,
+    stop: (d, p) => `⛔ <b>${d}</b> у безопасного стопа ${p}\nСценарий под угрозой — проверьте позицию.`,
+    level: (d, p, cond) => `🔔 <b>${d}</b> ${cond} ${p}`,
+    plan: 'План входа', entryAt: 'Вход сейчас ≈', entryLvl: 'Вход', stopL: 'Стоп', tgt: 'Цель', part: 'частичная фиксация', rr: 'Риск/прибыль', chance: 'шанс',
+    size: x => `При риске 1% депозита объём позиции ≈ ${x}% депозита.`,
+    vStop: '⚠ Цена уже за стопом — вход отменён.',
+    vFar: lvl => `⚠ Цена ушла от уровня: риск/прибыль ниже 1 : 1,5 — вход невыгоден. Дождитесь отката к ${lvl}.`,
+    vBad: '⚠ Соотношение риск/прибыль ниже 1 : 1,5 — вход невыгоден, лучше пропустить.',
+    vOk: 'Соотношение выгодное. Стоп ставьте сразу при входе.' },
+  en: { above: 'above', below: 'below', now: 'Now', since: 'since the alert was set', long: 'long', short: 'short', open: 'Open fresh analysis',
+    conf: (d, s, side, lvl, c) => `✅ <b>${d}</b>: ${s} signal confirmed\nA 15-minute candle closed ${side} ${lvl} (close ${c})`,
+    entry: (d, p, l) => `🎯 <b>${d}</b> at the entry point ${p}${l ? ` · ${l}` : ''}`,
+    target: (d, p, l) => `🏁 <b>${d}</b>: ${l || 'target'} ${p} reached\nConsider taking partial profit and moving the stop to breakeven.`,
+    stop: (d, p) => `⛔ <b>${d}</b> at the safe stop ${p}\nThe scenario is at risk — review the position.`,
+    level: (d, p, cond) => `🔔 <b>${d}</b> ${cond} ${p}`,
+    plan: 'Entry plan', entryAt: 'Entry now ≈', entryLvl: 'Entry', stopL: 'Stop', tgt: 'Target', part: 'partial take', rr: 'Risk/reward', chance: 'chance',
+    size: x => `Risking 1% of the account, position size ≈ ${x}% of the account.`,
+    vStop: '⚠ Price is already beyond the stop — entry cancelled.',
+    vFar: lvl => `⚠ Price has moved away from the level: risk/reward is below 1 : 1.5 — entry is not worth it. Wait for a pullback to ${lvl}.`,
+    vBad: '⚠ Risk/reward is below 1 : 1.5 — skip this entry.',
+    vOk: 'The ratio is favourable. Place the stop right away.' }
 };
 function fmt(x, lang) {
   const d = x >= 1000 ? 0 : x >= 100 ? 1 : x >= 1 ? 2 : x >= 0.01 ? 4 : 6;
   return Number(x).toLocaleString(lang === 'en' ? 'en-US' : 'ru-RU', { minimumFractionDigits: d, maximumFractionDigits: d });
 }
 const pct = (x, lang) => (x > 0 ? '+' : x < 0 ? '−' : '') + Math.abs(x * 100).toLocaleString(lang === 'en' ? 'en-US' : 'ru-RU', { maximumFractionDigits: 2 }) + '%';
+const num1 = (x, lang) => Number(x).toFixed(1).replace('.', lang === 'en' ? '.' : ',');
 const esc = s => String(s).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
 
-function message(al, hit, last) {
-  const lg = al.lang === 'en' ? 'en' : 'ru', T = L[lg], c = al.ctx || {};
-  const lines = [`🔔 <b>${esc(al.disp)}</b> ${T.reached} ${fmt(al.price, lg)}${al.label ? ` · ${esc(al.label)}` : ''}`,
-    `${T.cond} ${al.cond === 'above' ? T.above : T.below} ${fmt(al.price, lg)}`,
-    `${T.now}: <b>${fmt(last, lg)}</b>${al.start_price ? ` (${pct(last / al.start_price - 1, lg)} ${T.since})` : ''}`, '', T.hint[al.kind] || T.hint.level];
-  if (c.dir) {
-    lines.push('', `<b>${T.plan}</b>`, `${T.scen}: ${c.dir > 0 ? T.long : T.short}${c.p ? `, ${T.prob} ${Math.round(c.p * 100)}%` : ''}`);
-    if (c.t1) lines.push(`${T.tg}: ${fmt(c.t1, lg)}${c.t2 ? ' / ' + fmt(c.t2, lg) : ''}`);
-    if (c.stop) lines.push(`${T.stop}: ${fmt(c.stop, lg)}`);
-    if (c.rr) lines.push(`${T.rr}: 1 : ${Number(c.rr).toFixed(1).replace('.', lg === 'en' ? '.' : ',')}`);
-  }
+// план входа от цены e: стоп и цели берутся из разбора на момент установки, риск/прибыль пересчитывается
+function planLines(c, e, lg, T, live, lvl) {
+  const dir = c.dir, out = [];
+  if (!dir || !c.stop || !(c.t2 || c.t1)) return out;
+  const tg = c.t2 || c.t1, risk = dir * (e - c.stop), rew = dir * (tg - e), rr = risk > 0 && rew > 0 ? rew / risk : 0;
+  out.push('', `<b>${T.plan} (${dir > 0 ? T.long : T.short})</b>`, `${live ? T.entryAt : T.entryLvl} <b>${fmt(e, lg)}</b>`,
+    `${T.stopL}: ${fmt(c.stop, lg)} (${pct(c.stop / e - 1, lg)})`,
+    `${T.tgt}: ${fmt(tg, lg)} (${pct(tg / e - 1, lg)})${c.t1 && c.t1 !== tg ? ` · ${T.part} ${fmt(c.t1, lg)}` : ''}`,
+    `${T.rr}: <b>1 : ${num1(rr, lg)}</b>${c.pw ? ` · ${T.chance} ≈ ${Math.round(c.pw * 100)}%` : ''}`);
+  if (risk <= 0) out.push(T.vStop);
+  else if (rr < 1.5) out.push(live && lvl ? T.vFar(fmt(lvl, lg)) : T.vBad);
+  else { out.push(T.vOk); out.push(T.size(Math.min(100, Math.round(1 / (risk / e))))); }
+  return out;
+}
+function message(al, last, close) {
+  const lg = al.lang === 'en' ? 'en' : 'ru', T = L[lg], c = al.ctx || {}, d = esc(al.disp), P = fmt(al.price, lg);
+  let lines;
+  if (al.kind === 'conf') {
+    lines = [T.conf(d, c.dir > 0 ? T.long : c.dir < 0 ? T.short : (al.cond === 'above' ? T.long : T.short), al.cond === 'above' ? T.above : T.below, P, fmt(close ?? last, lg))];
+    lines.push(...planLines(c, close ?? last, lg, T, true, al.price));
+  } else if (al.kind === 'entry') {
+    lines = [T.entry(d, P, esc(al.label || '')), `${T.now}: <b>${fmt(last, lg)}</b>`];
+    lines.push(...planLines(c, al.price, lg, T, false));
+  } else if (al.kind === 'target') lines = [T.target(d, P, esc(al.label || '')), `${T.now}: <b>${fmt(last, lg)}</b>`];
+  else if (al.kind === 'stop') lines = [T.stop(d, P), `${T.now}: <b>${fmt(last, lg)}</b>`];
+  else lines = [T.level(d, P, al.cond === 'above' ? T.above : T.below), `${T.now}: <b>${fmt(last, lg)}</b>${al.start_price ? ` (${pct(last / al.start_price - 1, lg)} ${T.since})` : ''}`];
   return lines.join('\n');
 }
 async function send(al, text) {
@@ -154,10 +186,19 @@ async function check(req, res) {
     for (const al of list) {
       const since = Math.floor(Date.parse(al.checked_at) / 60000) * 60, seg = bs.filter(b => b.t >= since);
       if (!seg.length) { okIds.push(al.id); continue; }
-      const hi = Math.max(...seg.map(b => b.h)), lo = Math.min(...seg.map(b => b.l));
-      const hit = al.cond === 'above' ? hi >= al.price : lo <= al.price;
+      let hit, close = null;
+      if (al.kind === 'conf' && al.market !== 'moex') {
+        // подтверждение — только по закрытию 15-минутной свечи за уровнем (последняя минута каждой четверти часа)
+        const nowS = Date.now() / 1000;
+        const ends = seg.filter(b => Math.round(b.t) % 900 === 840 && b.t + 60 <= nowS);
+        const c = ends.find(b => al.cond === 'above' ? b.c > al.price : b.c < al.price);
+        hit = !!c; if (c) close = c.c;
+      } else {
+        const hi = Math.max(...seg.map(b => b.h)), lo = Math.min(...seg.map(b => b.l));
+        hit = al.cond === 'above' ? hi >= al.price : lo <= al.price;
+      }
       if (!hit) { okIds.push(al.id); continue; }
-      const err = await send(al, message(al, hit, last)).catch(e => String(e.message));
+      const err = await send(al, message(al, last, close)).catch(e => String(e.message));
       await sb(`az_alerts?id=eq.${al.id}`, { method: 'PATCH', body: { fired_at: nowIso, fired_price: last, checked_at: nowIso, send_error: err } }).catch(() => {});
       fired++; if (err) errors++;
     }
